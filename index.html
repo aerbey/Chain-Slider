@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
@@ -8,6 +8,11 @@
 
 		<meta name="viewport" content="width=device-width">
 
+        <style>
+            .inner {
+                padding:0px !important; background:none; left:30%; top:30%; position:absolute;
+            }
+        </style>
 		
 		<script>try{Typekit.load();}catch(e){}</script>
 	</head>
@@ -17,20 +22,21 @@
 		<div class="banner" style="height:600px; overflow:hidden;">
 			<ul>
 				<li style="width:25%;  height:400px; position:relative; float:left;">
-					<video   autoplay loop width="100%">
-					<source src="video.mp4" type="video/mp4" >
+					<video autoplay loop  width="100%"  >
+					    <source src="video.mp4" type="video/mp4" >
+                         Your browser does not support the video tag.
 					</video>
-					 <div class="inner" style="padding:0px; background:none; left:30%; top:30%;   position:absolute;  ">
-						<h1>Fluid, flexible, fantastically minimal.</h1>
-						<p>Use any HTML in your slides, extend with CSS. You have full control.</p>
+					 <div class="inner">
+						<h1 animate="true" animate-type="linear" animate-delay="3050" animate-speed="300" anime-left="30%">Fluid, flexible, fantastically minimal.</h1>
+						<p animate="true" animate-type="swing" animate-delay="6000" animate-speed="300" anime-left="30%">Use any HTML in your slides, extend with CSS. You have full control.</p>
 
-						<a class="btn" href="#download">Download</a>
+						<a animate="true" animate-type="swing" animate-delay="10500" animate-speed="300" anime-left="30%" class="btn" href="#download">Download</a>
 					</div>
 					
 				</li>
 
 				<li style="background-image: url('img/wood.jpg'); width:25%">
-					<div class="inner">
+					<div class="inner" animate="true" animate-type="swing" animate-delay="100" animate-speed="500" animate-left="32.5%">
 						<h1>Fluid, flexible, fantastically minimal.</h1>
 						<p>Use any HTML in your slides, extend with CSS. You have full control.</p>
 
@@ -39,11 +45,11 @@
 				</li>
 
 				<li style="background-image: url('img/subway.jpg'); width:25%">
-					<div class="inner">
-						<h1>Open-source.</h1>
-						<p>Everything to do with Unslider is hosted on GitHub.</p>
+					<div class="inner" animate="true" animate-type="swing" animate-delay="1000" animate-speed="500" animate-left="59.3%">
+						<h1 animate="true" animate-type="swing" animate-delay="0" animate-speed="300" anime-left="30%">Open-source.</h1>
+						<p animate="true" animate-type="swing" animate-delay="500" animate-speed="300" anime-left="30%">Everything to do with Unslider is hosted on GitHub.</p>
 
-						<a class="btn" href="//github.com/idiot/unslider">Contribute</a>
+						<a animate="true" animate-type="swing" animate-delay="1000" animate-speed="300" anime-left="30%" class="btn" href="//github.com/idiot/unslider">Contribute</a>
 					</div>
 				</li>
 
@@ -220,8 +226,8 @@ data.dots();</pre>
 		<script src="http://stephband.info/jquery.event.move/js/jquery.event.move.js"></script>
 		<script src="http://stephband.info/jquery.event.swipe/js/jquery.event.swipe.js"></script>
 
-		<script src="unslider.min.js"></script>
-		
+		<!--<script src="unslider.min.js"></script>-->
+		<script src="unslider.js"></script>
 		<script>
 			if(window.chrome) {
 				$('.banner li').css('background-size', '100% 100%');
@@ -233,7 +239,11 @@ data.dots();</pre>
 				arrows: true,
 				fluid: true,
 				dots: true,
-				keys: true
+				keys: true,
+				textAnimation: true,
+				complete: function (ei, target) {
+
+				}
 			});
 
 			//  Find any element starting with a # in the URL

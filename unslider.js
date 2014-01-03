@@ -40,6 +40,7 @@
             _.el = el;
             _.ul = el.find(_.o.items);
             _.max = [el.outerWidth() | 0, el.outerHeight() | 0];
+            var index=0;
             _.li = _.ul.find(_.o.item).each(function (index) {
                 var me = $(this),
 					width = me.outerWidth(),
@@ -48,8 +49,13 @@
                 //  Set the max values
                 if (width > _.max[0]) _.max[0] = width;
                 if (height > _.max[1]) _.max[1] = height;
+                me.find(_.o.texContainer).each(function () {
+                    checkPosition($(this), index);
+                });
+                index++;
             });
 
+            anime(el.find('li:first'), 0);
 
             //  Cached vars
             var o = _.o,
@@ -123,6 +129,7 @@
                     e.type.toLowerCase() == 'swipeleft' ? _.next() : _.prev();
                 });
             };
+
 
             return _;
         };
@@ -230,26 +237,22 @@
                 var speed = _div.attr('animate-speed');
                 var delay = _div.attr('animate-delay');
                 var easings = _div.attr('animate-type');
-                var left = _div.attr('animate-left');
                 var height = _div.attr('animate-height');
 
                 speed = speed == null || speed == undefined ? 500 : parseInt(speed);
                 delay = delay == null || delay == undefined ? 100 : parseInt(delay);
-                easings = easings == null || easings == undefined ? "swing" : easings;
-                left = left == null || left == undefined ? "30%" : left;
+                easings = easings == null || easings == undefined ? "swing" : easings;                
                 height = height == null || height == undefined ? _div.outerHeight() : height;
 
-                var options = {};
+                //var options = {};
+                var opt = checkPosition(_div, index);
+                opt.height = height;
 
+                //var lf = _div.parent().parent().css('left').replace('-', '');
 
-                var lf = _div.parent().parent().css('left').replace('-', '');
+                _div.css('display', 'block');//.css('left', lf);////.css('height', '0');
 
-                _div.css('display', 'none').css('left', lf);////.css('height', '0');
-
-                _div.delay(delay).animate({
-                    left: '+' + left,
-                    height: "show"//"+" + height
-                }, speed,
+                _div.delay(delay).animate(opt, speed,
                 easings,
                 function (datas) {
                     var d = datas;
@@ -259,17 +262,146 @@
                 });
             }
             else {
-                //var lf = parseFloat(_div.parents('ul').css('left').replace('-', '').replace('px', ''));
-                //var sw = window.screen.width;
-                //var hg = _div.width();
-                //var lft = ((sw * index) - hg) / 2;
-                //_div.css('left', lft + 'px');
-
+                checkPosition(_div, index);
                 _div.find('[animate="true"]').each(function () {
                     anime($(this), index);
                 });
             }
         }
+
+        function checkPosition(_div, index) {
+            var p = _div.attr('position');
+            var p_l = _div.attr('position-left');
+            var p_r = _div.attr('position-right');
+            var p_t = _div.attr('position-top');
+            var p_b = _div.attr('position-bottom');
+
+            var options = {};
+            if (p != null && p != "") {
+                var arr = p.split(' ');
+                if (arr.length > 1) {
+                    var left = arr[0];
+                    var top = "";
+                    try {
+                        top = arr[1];
+                    } catch (e) {
+                        top = "top";
+                    }
+
+                    options = calculatePos(_div, index, options, arr[0], true, "left");
+                    options = calculatePos(_div, index, options, arr[1], false, "top");
+                }
+            }
+            else {
+                if (p_l != null && p_l != "")
+                    options = calculatePos(_div, index, options, p_l, true, "left");
+
+                if (p_r != null && p_r != "")
+                    options = calculatePos(_div, index, options, p_r, true, "right");
+
+                if (p_t != null && p_t != "")
+                    options = calculatePos(_div, index, options, p_t, false, "top");
+
+                if (p_b != null && p_b != "")
+                    options = calculatePos(_div, index, options, p_b, false, "bottom");
+
+            }
+            return options;
+        }
+
+        function calculatePos(_div, index, options, val, isHorizontal, attr) {
+            var w = window.screen.width;
+            var h = _div.parents('li:first').height();
+            var dw = _div.width();
+            var dh = _div.height();
+            if (isHorizontal) {
+                switch (val.toLowerCase()) {
+                    case "left":
+                        var _l = w * index;
+                        _div.css('left', _l);
+                        break;
+
+                    case "right":
+                        var _l = (w * (index + 1)) - dw;
+                        _div.css('left', _l);
+                        break;
+
+                    case "center":
+                        var _l = (w * index) + ((w - dw) / 2);
+                        _div.css('left', _l);
+                        break;
+
+                    default:
+                        var arr = val.split('-');
+                        if (val.length > 1) {
+                            switch (attr.toLowerCase()) {
+                                case "right":
+                                    var _r = arr[0];
+                                    _div.css('right', _r).css("position", "absolute");
+
+                                    options.right = arr[1];
+                                    break;
+                                case "left":
+                                default:
+                                    var _l = arr[0];
+                                    _div.css('left', _l).css("position", "absolute");
+                                    options.left = arr[1];
+                                    break;
+                            }
+                        }
+                        else {
+                            if (attr.toLowerCase() == "right")
+                                _div.css('right', val);
+                            else
+                                _div.css('left', val);
+                        }
+                        break;
+                }
+            }
+            else {
+                switch (val.toLowerCase()) {
+                    case "top":
+                        _div.css('top', "0px");
+                        break;
+
+                    case "bottom":
+                        var _b = h - dh;
+                        _div.css('top', _b);
+                        break;
+
+                    case "center":
+                        var _b = (h - dh) / 2;
+                        _div.css('top', _b);
+                        break;
+
+                    default:
+                        var arr = val.split('-');
+                        if (val.length > 1) {
+                            switch (attr.toLowerCase()) {
+                                case "bottom":
+                                    _div.css('bottom', arr[0]).css("position", "absolute");
+                                    options.bottom = arr[1];
+                                    break;
+                                case "top":
+                                default:
+                                    _div.css('top', arr[0]).css("position", "absolute");
+                                    options.top = arr[1];
+                                    break;
+                            }
+
+                        }
+                        else {
+                            if (attr.toLowerCase() == "bottom")
+                                _div.css('bottom', val);
+                            else
+                                _div.css('top', val);
+                        }
+                        break;
+                }
+            }
+            return options;
+        }
+
     };
 
     //  Create a jQuery plugin

@@ -1,0 +1,160 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Unslider &mdash; the super-tiny jQuery slider</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <meta name="viewport" content="width=device-width">
+
+    <style>
+        .inner {
+            padding: 0px !important;
+            background: none;
+            left: 30%;
+            top: 30%;
+            position: absolute;
+        }
+
+        .firstslide {
+            font-family: 'Open Sans';
+            color: rgb(102, 102, 102);
+        }
+        .faster {
+            font-size: 60px;
+            font-weight: 800;
+            line-height: 40px;
+            width: 400px;
+            text-align: left;
+        }
+        .banner {
+            text-shadow:none;
+        }
+    </style>
+
+    <script>try { Typekit.load(); } catch (e) { }</script>
+</head>
+<body style="background-color: #1F1F1F;">
+    <div id="wrapper" style="max-width:1200px;  margin:auto;">
+
+        <div class="banner" style="height:500px;">
+            <ul>
+                <li style="background-image: url('img/slidebg1.jpg'); width:25%">
+                    <div class="inner firstslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
+                        <div class="faster" animate="true" animate-type="linear" animate-delay="0" animate-speed="600" position-left="0%-10%" position-top="10%">
+                            <span> Faster</span>
+                            <span style="font-size:34px; font-weight:300;">&</span>
+                            <span style="font-size:34px; ">More</span><span style="font-size:60px;  padding-left:20px;">Powerful</span>
+                            <div style="background-color: rgba(235, 235, 235, 1); width:300px; height:4px; margin:30px 0 30px 0"></div>
+                            <p class="denek" id="denek" animate="true" animate-type="linear" animate-delay="5000" animate-speed="6000" style="font-size: 18px; font-weight: 300; color: rgb(117, 117, 117); line-height:24px">
+                                Lorem Ipsum is simply dummy text of .
+                            </p>
+                            <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;" >of the printing and typesetting industry</p>
+                            <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">Lorem Ipsum has been the industry's</p>
+                            <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">standard dummy text ever since the 1500s</p>
+                        </div>
+                      
+                        <div  animate="true" animate-type="linear" animate-delay="100" animate-speed="700" position-right="10%-0%" position-bottom="0%-0%">
+                            <img src="img/woman.png" alt="Alternate Text" width="378" height="464" />
+                        </div>
+                        <div style="z-index:1000" animate="true" animate-type="linear" animate-delay="100" animate-speed="500" position-right="0%-5%" position-top="0%-5%">
+                            <div style="font-size: 58px; font-weight: 800; color: rgb(52, 73, 94);">1000's</div>
+                            <div style="font-size: 20px; font-weight: 800; background-color: rgb(52, 73, 94); color:white; margin-top:25px; padding:10px;">Of Happy Users</div>
+                        </div>
+                        
+                    </div>
+                </li>
+
+                <li style="width:25%;  height:400px; position:relative; float:left;">
+                    <video autoplay loop width="100%">
+                        <source src="video.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                    <div class="inner" animate="true" animate-type="linear" animate-delay="0" animate-speed="300" position-top="0%-30%">
+                        <h1>Fluid, flexible, fantastically minimal.</h1>
+                        <p>Use any HTML in your slides, extend with CSS. You have full control.</p>
+
+                        <a class="btn" href="#download">Download</a>
+                    </div>
+                </li>
+
+
+
+                <li style="background-image: url('img/subway.jpg'); width:25%">
+                    <div class="inner" position="center center">
+                        <h1>Open-source.</h1>
+                        <p>Everything to do with Unslider is hosted on GitHub.</p>
+
+                        <a class="btn" href="//github.com/idiot/unslider">Contribute</a>
+                    </div>
+                </li>
+
+                <li style="background-image: url('img/shop.jpg'); width:25%">
+                    <div class="inner" position="center center">
+                        <h1>Uh, that’s about it.</h1>
+                        <p>I just wanted to show you another slide.</p>
+
+                        <a class="btn" href="#download">Download</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <script src="js/jquery.event.move.js"></script>
+    <script src="js/jquery.event.swipe.js"></script>
+
+    <script src="unslider.js"></script>
+    <script>
+        if (window.chrome) {
+            $('.banner li').css('background-size', '100% 100%');
+        }
+
+        $('.banner').unslider({
+            speed: 0,
+            delay: 5000,
+            arrows: true,
+            fluid: true,
+            dots: true,
+            keys: true,
+            textAnimation: true,
+            starting: function (ei, target) {
+                alert("hr");
+            },
+            complete: function (ei, target) {
+
+            }
+        });
+
+        //  Find any element starting with a # in the URL
+        //  And listen to any click events it fires
+        $('a[href^="#"]').click(function () {
+            //  Find the target element
+            var target = $($(this).attr('href'));
+
+            //  And get its position
+            var pos = target.offset(); // fallback to scrolling to top || {left: 0, top: 0};
+
+            //  jQuery will return false if there's no element
+            //  and your code will throw errors if it tries to do .offset().left;
+            if (pos) {
+                //  Scroll the page
+                $('html, body').animate({
+                    scrollTop: pos.top,
+                    scrollLeft: pos.left
+                }, 1000);
+            }
+
+            //  Don't let them visit the url, we'll scroll you there
+            return false;
+        });
+
+
+    </script>
+
+</body>
+</html>

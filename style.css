@@ -81,7 +81,7 @@ h1, h2, h3, h4, b {
 		padding: 160px 0 110px;
 	}
 
-	.banner h1, .banner h2 {
+	_.banner h1, .banner h2 {
 		font-size: 40px;
 		line-height: 52px;
 

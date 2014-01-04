@@ -23,6 +23,7 @@
             prev: '←',      // text or html inside prev button (string)
             next: '→',      // same as for prev option
             fluid: f,       // is it a percentage width? (boolean)
+            before: f,
             starting: f,    // invoke before animation (function with argument)
             complete: f,    // invoke after animation (function with argument)
             items: '>ul',   // slides container selector
@@ -34,13 +35,14 @@
         };
 
         _.init = function (el, o) {
-            //  Check whether we're passing any options in to Unslider
+            //  Check whether we're passing any options in to Unslider            
             _.o = $.extend(_.o, o);
+            $.isFunction(o.before) && o.before(el, o);
 
             _.el = el;
             _.ul = el.find(_.o.items);
             _.max = [el.outerWidth() | 0, el.outerHeight() | 0];
-            var index=0;
+            var index = 0;
             _.li = _.ul.find(_.o.item).each(function (index) {
                 var me = $(this),
 					width = me.outerWidth(),
@@ -55,7 +57,10 @@
                 index++;
             });
 
-            anime(el.find('li:first'), 0);
+            $(window).ready(function () {
+                alert("slider loaded..");
+                anime(el.find('li:first'), 0);
+            });
 
             //  Cached vars
             var o = _.o,
@@ -241,25 +246,43 @@
 
                 speed = speed == null || speed == undefined ? 500 : parseInt(speed);
                 delay = delay == null || delay == undefined ? 100 : parseInt(delay);
-                easings = easings == null || easings == undefined ? "swing" : easings;                
+                easings = easings == null || easings == undefined ? "swing" : easings;
                 height = height == null || height == undefined ? _div.outerHeight() : height;
 
                 //var options = {};
                 var opt = checkPosition(_div, index);
                 opt.height = height;
 
-                //var lf = _div.parent().parent().css('left').replace('-', '');
+                _div.css('display', 'block').css('owerflow', "hidden");
 
-                _div.css('display', 'block');//.css('left', lf);////.css('height', '0');
+                var timer = setTimeout(function () {
+                    window.clearTimeout(timer);
+                    switch (easings) {
+                        case "fadeIn":
+                            _div.fadeIn(speed, function () { checkElements(_div, index); });
+                            break;
 
-                _div.delay(delay).animate(opt, speed,
-                easings,
-                function (datas) {
-                    var d = datas;
-                    _div.find('[animate="true"]').each(function () {
-                        anime($(this), index);
-                    });
-                });
+                        case "fadeOut":
+                            _div.fadeOut(speed, function () { checkElements(_div, index); });
+                            break;
+
+                        case "slideUp":
+                            _div.slideUp(speed, function () { checkElements(_div, index); });
+                            break;
+
+                        case "slideDown":
+                            _div.slideDown(speed, function () { checkElements(_div, index); });
+                            break;
+
+                        default:
+                            _div.animate(opt, speed,
+                            easings,
+                            function () { checkElements(_div, index); });
+                            break;
+                    }
+                     
+
+                }, delay);
             }
             else {
                 checkPosition(_div, index);
@@ -267,6 +290,12 @@
                     anime($(this), index);
                 });
             }
+        }
+
+        function checkElements(_div, index) {
+            _div.find('[animate="true"]').each(function () {
+                anime($(this), index);
+            });
         }
 
         function checkPosition(_div, index) {
@@ -402,6 +431,16 @@
             return options;
         }
 
+        //reload the page when browser size changed
+        var width = $('body').width();
+        $(window).resize(function () {
+
+            if (width != $('body').width()) {
+                width = window.screen.width;
+                window.location.reload();
+            }
+        });
+
     };
 
     //  Create a jQuery plugin
@@ -412,8 +451,8 @@
         return this.each(function (index) {
             //  Cache a copy of $(this), so it
             var me = $(this),
-				key = 'unslider' + (len > 1 ? '-' + ++index : ''),
-				instance = (new Unslider).init(me, o);
+                key = 'unslider' + (len > 1 ? '-' + ++index : ''),
+                instance = (new Unslider).init(me, o);
 
             //  Invoke an Unslider instance
             me.data(key, instance).data('key', key);

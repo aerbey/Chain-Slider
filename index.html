@@ -26,12 +26,11 @@
 					    <source src="video.mp4" type="video/mp4" >
                          Your browser does not support the video tag.
 					</video>
-					 <div class="inner" animate="true" animate-type="linear" animate-delay="0" animate-speed="300" position-top="0%-30%">
-						<h1>Fluid, flexible, fantastically minimal.</h1>
-						<p>Use any HTML in your slides, extend with CSS. You have full control.</p>
-
-						<a class="btn" href="#download">Download</a>
-					</div>					
+                    <div class="inner" animate="true" animate-type="easeInCubic" animate-delay="0" animate-speed="300" position-top="0%-30%">
+                        <h1 animate="true" animate-type="fadeOut" animate-delay="5000" animate-speed="1000">Fluid, flexible, fantastically minimal.</h1>
+                        <p>Use any HTML in your slides, extend with CSS. You have full control.</p>
+                        <a class="btn" href="#download">Download</a>
+                    </div>					
 				</li>
 
 				<li style="background-image: url('img/wood.jpg'); width:25%">
@@ -224,7 +223,7 @@ data.dots();</pre>
 
 		<script src="http://stephband.info/jquery.event.move/js/jquery.event.move.js"></script>
 		<script src="http://stephband.info/jquery.event.swipe/js/jquery.event.swipe.js"></script>
-
+        <script src="js/jquery.easing.1.3.js"></script>
 		<!--<script src="unslider.min.js"></script>-->
 		<script src="unslider.js"></script>
 		<script>
@@ -240,8 +239,14 @@ data.dots();</pre>
 				dots: true,
 				keys: true,
 				textAnimation: true,
+				before: function (el, o) {
+				    alert("before loading slider");
+				},
+				starting: function () {
+				    alert("started");
+				},
 				complete: function (ei, target) {
-
+				    alert("completed");
 				}
 			});
 
@@ -267,8 +272,6 @@ data.dots();</pre>
 				//  Don't let them visit the url, we'll scroll you there
 				return false;
 			});
-
-		
 		</script>
 	
 	</body>

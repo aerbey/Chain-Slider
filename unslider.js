@@ -60,16 +60,10 @@
                 index++;
             });
 
-
             if (_.o.swiper) {
                 var firstleft;
                 var slides = el.find('ul'), i = 0;
                 slides
-                .on('swipeleft', function (e) {
-                    if (i === slides.length - 1) { return; }
-                    slides.eq(i + 1).trigger('activate');
-                })
-
                     .on('movestart', function (e) {
                         firstleft = parseInt(slides[i].style.left.replace('px', ''));
                         if ((e.distX > e.distY && e.distX < -e.distY) ||
@@ -78,34 +72,26 @@
                             return;
                         }
                     })
-
                     .on('move', function (e) {
                         var l = parseInt(slides[i].style.left.replace('px', ''));
-                        var left = 50 * e.distX / width;//100 * e.distX / width;
-                        console.log(l + "$/$" + left);
+                        var left = 50 * e.distX / width;
                         // Move slides with the finger
                         if (e.distX < 0) {
                             if (slides[i + 1]) {
                                 slides[i].style.left = left + '%';
                                 slides[i + 1].style.left = (left + 100) + '%';
-                                console.log("1/" + left);
                             }
                             else {
                                 slides[i].style.left = l + (left / 4) + '%';
-                                console.log("2/" + left);
-                                //_.next();
                             }
                         }
                         if (e.distX > 0) {
                             if (slides[i - 1]) {
                                 slides[i].style.left = left + '%';
                                 slides[i - 1].style.left = (left - 100) + '%';
-                                console.log("3/" + left);
                             }
                             else {
                                 slides[i].style.left = l + (left / 5) + '%';
-                                console.log("4/" + left);
-                                //_.prev();
                             }
                         }
                     })
@@ -242,7 +228,10 @@
 				current = _.i,
 				target = li.eq(index);
 
-            o.textAnimation && el.find('div[animate="true"], h[animate="true"], p[animate="true"], span[animate="true"], i[animate="true"], u[animate="true"]').css('display', 'none');
+            if (o.textAnimation) {
+                el.find('[animate="true"]').css('display', 'none');
+                $('[animate-type="slideUp"], [animate-type="fadeOut"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="SlideUp"], [animate-type="FadeOut"], [animate-type="SLIDEUP"], [animate-type="FADEOUT"]').css('display', 'block');
+            }
 
             $.isFunction(o.starting) && !callback && o.starting(el, li.eq(current));
 
@@ -339,32 +328,32 @@
                 easings = easings == null || easings == undefined ? "swing" : easings;
                 height = height == null || height == undefined ? _div.outerHeight() : height;
 
-                //var options = {};
                 var opt = checkPosition(_div, index);
                 opt.height = height;
 
-                _div.css('display', 'block').css('owerflow', "hidden");
-
                 var timer = setTimeout(function () {
                     window.clearTimeout(timer);
-                    switch (easings) {
-                        case "fadeIn":
+                    switch (easings != undefined ? easings.toLowerCase() : "") {
+                        case "fadein":
                             _div.fadeIn(speed, function () { checkElements(_div, index); });
                             break;
 
-                        case "fadeOut":
+                        case "fadeout":
+                            _div.css('display', 'block');
                             _div.fadeOut(speed, function () { checkElements(_div, index); });
                             break;
 
-                        case "slideUp":
+                        case "slideup":
+                            _div.css('display', 'block');
                             _div.slideUp(speed, function () { checkElements(_div, index); });
                             break;
 
-                        case "slideDown":
+                        case "slidedown":
                             _div.slideDown(speed, function () { checkElements(_div, index); });
                             break;
 
                         default:
+                            _div.css('display', 'block');
                             _div.animate(opt, speed,
                             easings,
                             function () { checkElements(_div, index); });

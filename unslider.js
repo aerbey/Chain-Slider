@@ -31,7 +31,9 @@
             easing: 'swing',// easing function to use for animation
             autoplay: true,  // enable autoplay on initialisation
             textAnimation: false,
-            texContainer: '.inner'
+            texContainer: '.inner',
+            swiper: false,
+            distance: 20
         };
 
         _.init = function (el, o) {
@@ -58,6 +60,79 @@
                 index++;
             });
 
+
+            if (_.o.swiper) {
+                var firstleft;
+                var slides = el.find('ul'), i = 0;
+                slides
+                .on('swipeleft', function (e) {
+                    if (i === slides.length - 1) { return; }
+                    slides.eq(i + 1).trigger('activate');
+                })
+
+                    .on('movestart', function (e) {
+                        firstleft = parseInt(slides[i].style.left.replace('px', ''));
+                        if ((e.distX > e.distY && e.distX < -e.distY) ||
+                            (e.distX < e.distY && e.distX > -e.distY)) {
+                            e.preventDefault();
+                            return;
+                        }
+                    })
+
+                    .on('move', function (e) {
+                        var l = parseInt(slides[i].style.left.replace('px', ''));
+                        var left = 50 * e.distX / width;//100 * e.distX / width;
+                        console.log(l + "$/$" + left);
+                        // Move slides with the finger
+                        if (e.distX < 0) {
+                            if (slides[i + 1]) {
+                                slides[i].style.left = left + '%';
+                                slides[i + 1].style.left = (left + 100) + '%';
+                                console.log("1/" + left);
+                            }
+                            else {
+                                slides[i].style.left = l + (left / 4) + '%';
+                                console.log("2/" + left);
+                                //_.next();
+                            }
+                        }
+                        if (e.distX > 0) {
+                            if (slides[i - 1]) {
+                                slides[i].style.left = left + '%';
+                                slides[i - 1].style.left = (left - 100) + '%';
+                                console.log("3/" + left);
+                            }
+                            else {
+                                slides[i].style.left = l + (left / 5) + '%';
+                                console.log("4/" + left);
+                                //_.prev();
+                            }
+                        }
+                    })
+
+                    .on('moveend', function (e) {
+
+                        var left = parseInt(slides[i].style.left.replace('px', ''));
+                        if (firstleft > left + _.o.distance)
+                            _.next();
+                        else if (firstleft < left - _.o.distance)
+                            _.prev();
+                        else {
+                            var index = parseInt(firstleft / 100) * -1;
+                            _.to(index);
+                        }
+                    });
+
+                jQuery(document)
+                .on('click', '.slide_button', function (e) {
+                    var href = e.currentTarget.hash;
+
+                    jQuery(href).trigger('activate');
+
+                    e.preventDefault();
+                });
+            }
+
             $(window).load(function () {
                 setTimeout(function myfunction() {
 
@@ -65,19 +140,16 @@
                     el.find('li:first [animate]').each(function () {
                         checkPosition($(this), index);
                     });
-                    
+
                     //make banner visible, call animations after fade finish
-                     $(".banner ul").css("visibility", "visible").hide().fadeIn("slow", function myfunction() {
+                    $(".banner ul").css("visibility", "visible").hide().fadeIn("slow", function myfunction() {
                         $(".firstslide [animate]").hide();
                         anime(el.find('li:first'), 0);
                     });
-                  
+
                     //delete loader no longer need.
                     $(".banner .slide-loader:first").remove();
-                },1000)
-             
-                
-
+                }, 1000)
             });
 
             //  Cached vars
@@ -298,7 +370,7 @@
                             function () { checkElements(_div, index); });
                             break;
                     }
-                     
+
 
                 }, delay);
             }

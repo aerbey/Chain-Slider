@@ -37,6 +37,7 @@
         _.init = function (el, o) {
             //  Check whether we're passing any options in to Unslider            
             _.o = $.extend(_.o, o);
+
             $.isFunction(o.before) && o.before(el, o);
 
             _.el = el;
@@ -57,9 +58,26 @@
                 index++;
             });
 
-            $(window).ready(function () {
-                alert("slider loaded..");
-                anime(el.find('li:first'), 0);
+            $(window).load(function () {
+                setTimeout(function myfunction() {
+
+                    //put all elements that will be animated to their first position
+                    el.find('li:first [animate]').each(function () {
+                        checkPosition($(this), index);
+                    });
+                    
+                    //make banner visible, call animations after fade finish
+                     $(".banner ul").css("visibility", "visible").hide().fadeIn("slow", function myfunction() {
+                        $(".firstslide [animate]").hide();
+                        anime(el.find('li:first'), 0);
+                    });
+                  
+                    //delete loader no longer need.
+                    $(".banner .slide-loader:first").remove();
+                },1000)
+             
+                
+
             });
 
             //  Cached vars

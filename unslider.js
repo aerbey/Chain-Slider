@@ -33,7 +33,8 @@
             textAnimation: false,
             texContainer: '.inner',
             swiper: false,
-            distance: 20
+            distance: 20,
+            waitVideo: true
         };
 
         _.init = function (el, o) {
@@ -105,7 +106,7 @@
                             _.prev();
                         else {
                             var index = parseInt(firstleft / 100) * -1;
-                            _.to(index);
+                            _.to(index, null, false);
                         }
                     });
 
@@ -121,11 +122,14 @@
 
             $(window).load(function () {
                 setTimeout(function myfunction() {
+                    el.find('[animate="true"]').css('display', 'none');
+                    $('[animate-type="slideUp"], [animate-type="fadeOut"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="SlideUp"], [animate-type="FadeOut"], [animate-type="SLIDEUP"], [animate-type="FADEOUT"]').css('display', 'block');
 
                     //put all elements that will be animated to their first position
                     el.find('li:first [animate]').each(function () {
                         checkPosition($(this), index);
                     });
+                    el.find('video').get(0).pause();
 
                     //make banner visible, call animations after fade finish
                     $(".banner ul").css("visibility", "visible").hide().fadeIn("slow", function myfunction() {
@@ -216,7 +220,7 @@
         };
 
         //  Move Unslider to a slide index
-        _.to = function (index, callback) {
+        _.to = function (index, callback, playAnimate) {
             if (_.t) {
                 _.stop();
                 _.play();
@@ -228,12 +232,13 @@
 				current = _.i,
 				target = li.eq(index);
 
-            if (o.textAnimation) {
+            if (o.textAnimation && playAnimate != false) {
                 el.find('[animate="true"]').css('display', 'none');
                 $('[animate-type="slideUp"], [animate-type="fadeOut"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="SlideUp"], [animate-type="FadeOut"], [animate-type="SLIDEUP"], [animate-type="FADEOUT"]').css('display', 'block');
             }
 
             $.isFunction(o.starting) && !callback && o.starting(el, li.eq(current));
+            el.find('video').get(0).pause();
 
             //  To slide or not to slide
             if ((!target.length || index < 0) && o.loop == f) return;
@@ -253,11 +258,22 @@
 
                 el.animate(obj, speed, easing) && ul.animate($.extend({ left: '-' + index + '00%' }, obj), speed, easing, function (data) {
                     _.i = index;
-
+                    var id = el.find('.active').text();
+                    var act = el.find('ul li').eq(parseInt(id) - 1);
+                    var video = act.find('video');
+                    if (video.length > 0) {
+                        video.get(0).play();
+                        if (_.o.waitVideo) {
+                            _.stop();
+                            video.bind("ended", function () {
+                                _.play();
+                                _.next();
+                            });
+                        }
+                    }
                     $.isFunction(o.complete) && !callback && o.complete(el, target);
-                    if (o.textAnimation) {
-                        var id = el.find('.active').text();
-                        el.find('ul li').eq(parseInt(id) - 1).find(o.texContainer).each(function () {
+                    if (o.textAnimation && playAnimate != false) {
+                        act.find(o.texContainer).each(function () {
                             var _div = $(this);
                             var len = 0;
                             try {
@@ -335,28 +351,30 @@
                     window.clearTimeout(timer);
                     switch (easings != undefined ? easings.toLowerCase() : "") {
                         case "fadein":
-                            _div.fadeIn(speed, function () { checkElements(_div, index); });
+                            playAnim:
+                                _div.fadeIn(speed, function () { checkElements(_div, index); });
+                            if (opt.left != undefined || opt.right != undefined || opt.top != undefined || opt.bottom != undefined) playAnime(_div, opt, speed, _.o.easing, index);
                             break;
 
                         case "fadeout":
                             _div.css('display', 'block');
                             _div.fadeOut(speed, function () { checkElements(_div, index); });
+                            if (opt.left != undefined || opt.right != undefined || opt.top != undefined || opt.bottom != undefined) playAnime(_div, opt, speed, _.o.easing, index);
                             break;
 
                         case "slideup":
                             _div.css('display', 'block');
                             _div.slideUp(speed, function () { checkElements(_div, index); });
+                            if (opt.left != undefined || opt.right != undefined || opt.top != undefined || opt.bottom != undefined) playAnime(_div, opt, speed, _.o.easing, index);
                             break;
 
                         case "slidedown":
                             _div.slideDown(speed, function () { checkElements(_div, index); });
+                            if (opt.left != undefined || opt.right != undefined || opt.top != undefined || opt.bottom != undefined) playAnime(_div, opt, speed, _.o.easing, index);
                             break;
 
                         default:
-                            _div.css('display', 'block');
-                            _div.animate(opt, speed,
-                            easings,
-                            function () { checkElements(_div, index); });
+                            playAnime(_div, opt, speed, easings, index);
                             break;
                     }
 
@@ -365,10 +383,15 @@
             }
             else {
                 checkPosition(_div, index);
-                _div.find('[animate="true"]').each(function () {
-                    anime($(this), index);
-                });
+                checkElements(_div, index);
             }
+        }
+
+        function playAnime(_div, opt, speed, easings, index) {
+            _div.css('display', 'block');
+            _div.animate(opt, speed,
+            easings,
+            function () { checkElements(_div, index); });
         }
 
         function checkElements(_div, index) {
@@ -440,7 +463,7 @@
                         break;
 
                     default:
-                        var arr = val.split('-');
+                        var arr = val.split(',');
                         if (val.length > 1) {
                             switch (attr.toLowerCase()) {
                                 case "right":
@@ -483,7 +506,7 @@
                         break;
 
                     default:
-                        var arr = val.split('-');
+                        var arr = val.split(',');
                         if (val.length > 1) {
                             switch (attr.toLowerCase()) {
                                 case "bottom":

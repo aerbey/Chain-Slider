@@ -1,185 +1,220 @@
 ﻿<!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-		<title>Unslider &mdash; the super-tiny jQuery slider</title>
+<head>
+    <meta charset="utf-8">
+    <title>Unslider &mdash; the super-tiny jQuery slider</title>
 
-		<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 
-		<meta name="viewport" content="width=device-width">
+    <meta name="viewport" content="width=device-width">
 
-        <style>
-            .inner {
-                padding:0px !important; background:none; left:30%; top:30%; position:absolute;
-            }
+    <style>
+        .inner {
+            padding: 0px !important;
+            background: none;
+            left: 30%;
+            top: 30%;
+            position: absolute;
+        }
 
-            .firstslide {
-                font-family: 'Open Sans';
-                color: rgb(102, 102, 102);
-            }
+        .firstslide {
+            font-family: 'Open Sans';
+            color: rgb(102, 102, 102);
+        }
 
-            .faster {
-                font-size: 60px;
-                font-weight: 800;
-                line-height: 40px;
-                width: 400px;
-                text-align: left;
-            }
+        .faster {
+            font-size: 60px;
+            font-weight: 800;
+            line-height: 40px;
+            width: 400px;
+            text-align: left;
+        }
 
-            .banner {
-                text-shadow: none;
-            }
-        </style>
-		
-		<script>try{Typekit.load();}catch(e){}</script>
-	</head>
-	<body>
-        <div class="menu" style="height: 60px; background-color: rgb(20, 20, 20);"> </div>
+        .banner {
+            text-shadow: none;
+        }
 
-		<div class="banner" style="height:500px;">
-			<ul style="visibility: hidden;">
+        /*video{ position:static;}*/
+    </style>
 
-                <li style="background-image: url('img/slidebg1.jpg'); width:25%">
-                    <div class="inner firstslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
-                        <div class="faster" animate="true" animate-type="slideDown" animate-delay="1000" animate-speed="1000" position-left="0%,10%" position-top="10%">
-                            <span> Faster</span>
-                            <span style="font-size:34px; font-weight:300;">&</span>
-                            <span style="font-size:34px; ">More</span><span style="font-size:60px;  padding-left:20px;">Powerful</span>
-                            <div style="background-color: rgba(235, 235, 235, 1); width:300px; height:4px; margin:30px 0 30px 0"></div>
-                            <p class="denek" id="denek" animate="true" animate-type="slideDown" animate-delay="5000" animate-speed="6000" style="font-size: 18px; font-weight: 300; color: rgb(117, 117, 117); line-height:24px">
-                                Lorem Ipsum is simply dummy text of .
-                            </p>
-                            <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">of the printing and typesetting industry</p>
-                            <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">Lorem Ipsum has been the industry's</p>
-                            <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">standard dummy text ever since the 1500s</p>
-                        </div>
+    <script>try { Typekit.load(); } catch (e) { }</script>
 
-                        <div animate="true" animate-type="slideDown" animate-delay="500" animate-speed="800" position-right="30%" position-bottom="0%">
-                            <img src="img/woman.png" alt="Alternate Text" width="378" height="464" />
-                        </div>
-                        <div style="z-index:1000" animate="true" animate-type="fadeIn" animate-delay="1000" animate-speed="1000" position-right="0%,5%" position-top="0%,5%">
-                            <div style="font-size: 58px; font-weight: 800; color: rgb(52, 73, 94);">1000's</div>
-                            <div style="font-size: 20px; font-weight: 800; background-color: rgb(52, 73, 94); color:white; margin-top:25px; padding:10px;">Of Happy Users</div>
-                        </div>
+    <script src="js/jquery-latest.min.js"></script>
+    <script src="js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/jquery.event.move.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/mediaelement-and-player.min.js"></script>
+    <script src="js/unslider.js"></script>
+
+    <style>
+        .slide-loader {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            z-index: 1000;
+        }
+    </style>
+
+</head>
+<body>
+    <div class="menu" style="height: 60px; background-color: rgb(20, 20, 20);"> </div>
+
+    <div class="banner" style="height:500px;">
+        <ul style="visibility: hidden;">
+
+            <li style="background-image: url('img/slidebg1.jpg'); width:25%">
+                <div class="inner firstslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
+                    <div class="faster" animate="true" animate-type="slideDown" animate-delay="1000" animate-speed="1000" position-left="0%,10%" position-top="10%">
+                        <span> Faster</span>
+                        <span style="font-size:34px; font-weight:300;">&</span>
+                        <span style="font-size:34px; ">More</span><span style="font-size:60px;  padding-left:20px;">Powerful</span>
+                        <div style="background-color: rgba(235, 235, 235, 1); width:300px; height:4px; margin:30px 0 30px 0"></div>
+                        <p class="denek" id="denek" animate="true" animate-type="slideDown" animate-delay="5000" animate-speed="6000" style="font-size: 18px; font-weight: 300; color: rgb(117, 117, 117); line-height:24px">
+                            Lorem Ipsum is simply dummy text of .
+                        </p>
+                        <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">of the printing and typesetting industry</p>
+                        <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">Lorem Ipsum has been the industry's</p>
+                        <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">standard dummy text ever since the 1500s</p>
                     </div>
-                </li>
 
-				<li style="width:25%;  height:400px;">
-					<video autoplay  width="100%"  >
-					    <source src="video.mp4" type="video/mp4" >
-                         Your browser does not support the video tag.
-					</video>
-                    <div class="inner" animate="true" animate-type="easeInCubic" animate-delay="0" animate-speed="300" position-top="0%,50%">
-                        <h1 animate="true" animate-type="fadeIn" animate-delay="3000" animate-speed="2000">Fluid, flexible, fantastically minimal.</h1>
-                        <p animate="true" animate-type="fadeout" animate-delay="3000" animate-speed="1000">Use any HTML in your slides, extend with CSS. You have full control.</p>
-                    </div>					
-				</li>
-	
-				<li style="background-image: url('img/subway.jpg'); width:25%">
-                    <div class="inner" animate="true" animate-type="slideDown" animate-delay="1000" animate-speed="2000" position-right="0%,5%" position-top="0%,30%">
-                        <h1>Open-source.</h1>
-                        <p>Everything to do with Unslider is hosted on GitHub.</p>
-
-                        <a class="btn" href="//github.com/idiot/unslider">Contribute</a>
+                    <div animate="true" animate-type="slideDown" animate-delay="500" animate-speed="800" position-right="30%" position-bottom="0%">
+                        <img src="img/woman.png" alt="Alternate Text" width="378" height="464" />
                     </div>
-				</li>
-
-				<li style="background-image: url('img/shop.jpg'); width:25%">
-                    <div class="inner" animate="true" animate-type="fadeIn" animate-delay="1000" animate-speed="2000" position-left="75%,85%" position-top="0%,30%">
-                        <h1>Uh, that’s about it.</h1>
-                        <p>I just wanted to show you another slide.</p>
-
-                        <a class="btn" href="#download">Download</a>
+                    <div style="z-index:1000" animate="true" animate-type="fadeIn" animate-delay="1000" animate-speed="1000" position-right="0%,5%" position-top="0%,5%">
+                        <div style="font-size: 58px; font-weight: 800; color: rgb(52, 73, 94);">1000's</div>
+                        <div style="font-size: 20px; font-weight: 800; background-color: rgb(52, 73, 94); color:white; margin-top:25px; padding:10px;">Of Happy Users</div>
                     </div>
-				</li>
-			</ul>
-		</div>
+                </div>
+            </li>
 
-		<div class="features">
-			<ul class="wrap">
-				<li class="browser">
-					<b>Cross-browser happy</b>
-					<p>Unslider’s been tested in all the latest browsers, and it falls back magnificently for the not-so-latest ones.</p>
-				</li>
+            <li style="width:25%;  height:400px;">
+                <video autoplay controls width="100%">
+                    <!-- MP4 for Safari, IE9, iPhone, iPad, Android, and Windows Phone 7 -->
+                    <source type="video/mp4" src="video.mp4" />
+                    <!-- WebM/VP8 for Firefox4, Opera, and Chrome -->
+                    <source type="video/webm" src="video.webm" />
+                    <!-- Ogg/Vorbis for older Firefox and Opera versions -->
+                    <source type="video/ogg" src="video.ogv" />
+                    <!-- Flash fallback for non-HTML5 browsers without JavaScript -->
+                    <object width="100%" height="400" type="application/x-shockwave-flash" data="flashmediaelement.swf">
+                        <param name="movie" value="flashmediaelement.swf" />
+                        <param name="flashvars" value="file=video.mp4" />
+                        <!-- Image as a last resort -->
+                        <img src="video.mp4" width="100%" height="400" title="No video playback capabilities" />
+                    </object>
+                    Your browser does not support the video tag.
+                </video>
+                <div class="inner" animate="true" animate-type="easeInCubic" animate-delay="0" animate-speed="300" position-top="0%,50%">
+                    <h1 animate="true" animate-type="fadeIn" animate-delay="3000" animate-speed="2000">Fluid, flexible, fantastically minimal.</h1>
+                    <p animate="true" animate-type="fadeout" animate-delay="3000" animate-speed="1000">Use any HTML in your slides, extend with CSS. You have full control.</p>
+                </div>
+            </li>
 
-				<li class="keyboard">
-					<b>Keyboard support</b>
-					<p>If you want to, you can add keyboard arrow support. Try it: hit left and right arrow keys.</p>
-				</li>
+            <li style="background-image: url('img/subway.jpg'); width:25%">
+                <div class="inner" animate="true" animate-type="slideDown" animate-delay="1000" animate-speed="2000" position-right="0%,5%" position-top="0%,30%">
+                    <h1>Open-source.</h1>
+                    <p>Everything to do with Unslider is hosted on GitHub.</p>
 
-				<li class="height">
-					<b>Adjusts for height</b>
-					<p>Not all slides are created equal, and Unslider knows it. It’ll stylishly transition heights with no extra code.</p>
-				</li>
+                    <a class="btn" href="//github.com/idiot/unslider">Contribute</a>
+                </div>
+            </li>
 
-				<li class="responsive">
-					<b>Yep, it’s responsive</b>
-					<p>You’ll be hard pressed to find a site that’s not responsive these days. Unslider’s got your back.</p>
-				</li>
-			</ul>
-		</div>
+            <li style="background-image: url('img/shop.jpg'); width:25%">
+                <div class="inner" animate="true" animate-type="fadeIn" animate-delay="1000" animate-speed="2000" position-left="75%,85%" position-top="0%,30%">
+                    <h1>Uh, that’s about it.</h1>
+                    <p>I just wanted to show you another slide.</p>
 
-		<div id="howto" class="how wrap">
-			<h2>How to use Unslider</h2>
+                    <a class="btn" href="#download">Download</a>
+                </div>
+            </li>
+        </ul>
+    </div>
 
-			<ol>
-				<li>
-					<div>
-						<h3>Include jQuery and Unslider</h3>
-						<p>To use Unslider, you’ll need to make sure both the Unslider and jQuery scripts are included. If you’ve already got jQuery (you can test by opening your JavaScript console and typing <code>!!window.jQuery</code> — if it says <code>true</code>, you have jQuery), you don’t need to add the first line.</p>
-					</div>
+    <div class="features">
+        <ul class="wrap">
+            <li class="browser">
+                <b>Cross-browser happy</b>
+                <p>Unslider’s been tested in all the latest browsers, and it falls back magnificently for the not-so-latest ones.</p>
+            </li>
 
-					<pre>&lt;script src="//code.jquery.com/jquery-latest.min.js"&gt;&lt;/script&gt;
+            <li class="keyboard">
+                <b>Keyboard support</b>
+                <p>If you want to, you can add keyboard arrow support. Try it: hit left and right arrow keys.</p>
+            </li>
+
+            <li class="height">
+                <b>Adjusts for height</b>
+                <p>Not all slides are created equal, and Unslider knows it. It’ll stylishly transition heights with no extra code.</p>
+            </li>
+
+            <li class="responsive">
+                <b>Yep, it’s responsive</b>
+                <p>You’ll be hard pressed to find a site that’s not responsive these days. Unslider’s got your back.</p>
+            </li>
+        </ul>
+    </div>
+
+    <div id="howto" class="how wrap">
+        <h2>How to use Unslider</h2>
+
+        <ol>
+            <li>
+                <div>
+                    <h3>Include jQuery and Unslider</h3>
+                    <p>To use Unslider, you’ll need to make sure both the Unslider and jQuery scripts are included. If you’ve already got jQuery (you can test by opening your JavaScript console and typing <code>!!window.jQuery</code> — if it says <code>true</code>, you have jQuery), you don’t need to add the first line.</p>
+                </div>
+
+                <pre>&lt;script src="//code.jquery.com/jquery-latest.min.js"&gt;&lt;/script&gt;
 &lt;script src="//unslider.com/unslider.js"&gt;&lt;/script&gt;
 </pre>
-				</li>
+            </li>
 
-				<li>
-					<div>
-						<h3>Ready your HTML</h3>
-						<p>Unslider doesn’t need any really awkward markup. In fact, all you need is a <code>div</code> and an unordered list. An example of some Unslider-friendly HTML is on the right.</p>
-						<p>You can add as many slides as you want: the example on the right just has three for the sake of brevity, but Unslider won’t work properly with one slide (but then it’s just a box).</p>
-					</div>
+            <li>
+                <div>
+                    <h3>Ready your HTML</h3>
+                    <p>Unslider doesn’t need any really awkward markup. In fact, all you need is a <code>div</code> and an unordered list. An example of some Unslider-friendly HTML is on the right.</p>
+                    <p>You can add as many slides as you want: the example on the right just has three for the sake of brevity, but Unslider won’t work properly with one slide (but then it’s just a box).</p>
+                </div>
 
-					<pre>&lt;div class=&quot;banner&quot;&gt;
+                <pre>&lt;div class=&quot;banner&quot;&gt;
     &lt;ul&gt;
         &lt;li&gt;This is a slide.&lt;/li&gt;
         &lt;li&gt;This is another slide.&lt;/li&gt;
         &lt;li&gt;This is a final slide.&lt;/li&gt;
     &lt;/ul&gt;
 &lt;/div&gt;</pre>
-				</li>
+            </li>
 
-				<li>
-					<div>
-						<h3>Make it pretty</h3>
-						<p>You can change, add, and remove as much CSS per slide as you want, but there <i>is</i> a barebones style required by Unslider. It’s on the right (change the class name where .banner is the name of your slider).</p>
-					</div>
+            <li>
+                <div>
+                    <h3>Make it pretty</h3>
+                    <p>You can change, add, and remove as much CSS per slide as you want, but there <i>is</i> a barebones style required by Unslider. It’s on the right (change the class name where .banner is the name of your slider).</p>
+                </div>
 
-					<pre>.banner { position: relative; overflow: auto; }
+                <pre>.banner { position: relative; overflow: auto; }
     .banner li { list-style: none; }
         .banner ul li { float: left; }</pre>
-				</li>
+            </li>
 
-				<li>
-					<div>
-						<h3>Plug it all together</h3>
-						<p>We’ve been through so much together, and I’m pleased to say the finish line is near. Our journey is almost over, just one more thing left to do. The JavaScript is on the right (make sure to put it in a <code>script</code> tag, and change <code>.banner</code> to whatever your slider’s element is).</p>
-					</div>
+            <li>
+                <div>
+                    <h3>Plug it all together</h3>
+                    <p>We’ve been through so much together, and I’m pleased to say the finish line is near. Our journey is almost over, just one more thing left to do. The JavaScript is on the right (make sure to put it in a <code>script</code> tag, and change <code>.banner</code> to whatever your slider’s element is).</p>
+                </div>
 
-					<pre>$(function() {
+                <pre>$(function() {
     $('.banner').unslider();
 });</pre>
-				</li>
-			</ol>
-		</div>
-         
-		<div id="options" class="options">
-			<div class="wrap">
-				<h2>Options</h2>
-				<p>Although it’s lightweight, Unslider comes with a range of options to customise your slider. Here’s the default options provided. You can add, remove, or completely skip out the options object. It’s up to you.</p>
+            </li>
+        </ol>
+    </div>
 
-				<pre>$('.banner').unslider({
+    <div id="options" class="options">
+        <div class="wrap">
+            <h2>Options</h2>
+            <p>Although it’s lightweight, Unslider comes with a range of options to customise your slider. Here’s the default options provided. You can add, remove, or completely skip out the options object. It’s up to you.</p>
+
+            <pre>$('.banner').unslider({
 	speed: 500,               <span>//  The speed to animate each slide (in milliseconds)</span>
 	delay: 3000,              <span>//  The delay between slide animations (in milliseconds)</span>
 	complete: function() {},  <span>//  A function that gets called after every slide animation</span>
@@ -187,136 +222,113 @@
 	dots: true,               <span>//  Display dot navigation</span>
 	fluid: false              <span>//  Support responsive design. May break non-responsive designs</span>
 });</pre>
-<br><br><br>
-				<h2 id="touch">Touch support</h2>
-				<p>If you want to add mobile/touch/swipe/whatever support to Unslider, you’ll need to include the <a href="http://stephband.info/jquery.event.swipe/">jQuery.event.swipe</a> plugin, then it’ll work out the box. Easy!</p>
+            <br><br><br>
+            <h2 id="touch">Touch support</h2>
+            <p>If you want to add mobile/touch/swipe/whatever support to Unslider, you’ll need to include the <a href="http://stephband.info/jquery.event.swipe/">jQuery.event.swipe</a> plugin, then it’ll work out the box. Easy!</p>
 
-<br><br><br>
+            <br><br><br>
 
-				<h2 id="prev-next">Adding previous/next links</h2>
-				<p>A feature that’s often requested in Unslider, but isn’t included in-the-box, is previous/next links. Luckily, they’re easy enough to add with a little script, which utilises Unslider’s <a href="#methods">methods</a>.</p>
+            <h2 id="prev-next">Adding previous/next links</h2>
+            <p>A feature that’s often requested in Unslider, but isn’t included in-the-box, is previous/next links. Luckily, they’re easy enough to add with a little script, which utilises Unslider’s <a href="#methods">methods</a>.</p>
 
-				<pre><span>&lt;!-- The HTML --&gt;</span>
+            <pre><span>&lt;!-- The HTML --&gt;</span>
 &lt;a href="#" class="unslider-arrow prev"&gt;Previous slide&lt;/a&gt;
 &lt;a href="#" class="unslider-arrow next"&gt;Next slide&lt;/a&gt;
-
 <span>&lt;!-- And the JavaScript --&gt;</span>
 &lt;script&gt;
     var unslider = $('.banner').unslider();
-
     $('.unslider-arrow').click(function() {
         var fn = this.className.split(' ')[1];
-
-        <span>//  Either do unslider.data('unslider').next() or .prev() depending on the className</span>
+            <span>//  Either do unslider.data('unslider').next() or .prev() depending on the className</span>
         unslider.data('unslider')[fn]();
     });
 &lt;/script&gt;
 </pre>
 
-<br><br><br>
-				<h2 id="methods">Accessing Unslider properties</h2>
-				<p>Using jQuery’s wonderful <code>data</code> method, you can access and manually override any methods. Here’s a list of what you can do:</p>
+            <br><br><br>
+            <h2 id="methods">Accessing Unslider properties</h2>
+            <p>Using jQuery’s wonderful <code>data</code> method, you can access and manually override any methods. Here’s a list of what you can do:</p>
 
-				<pre>var slidey = $('.banner').unslider(),
+            <pre>var slidey = $('.banner').unslider(),
     data = slidey.data('unslider');
-
 <span>//  Start Unslider</span>
 data.play();
-
 <span>//  Pause Unslider</span>
 data.stop();
-
 <span>//  Move to a slide index, with optional callback</span>
 data.move(2, function() {});
 <span>//  data.move(0);</span>
-
 <span>//  Manually enable keyboard shortcuts</span>
 data.keys();
-
 <span>//  Move to the next slide (or the first slide if there isn't one)</span>
 data.next();
-
 <span>//  Move to the previous slide (or the last slide if there isn't one)</span>
 data.prev();
-
 <span>//  Append the navigation dots manually</span>
 data.dots();</pre>
-			</div>
-		</div>
+        </div>
+    </div>
 
-		<div id="download" class="wrap footer">
-			<a class="btn" href="/unslider.min.js">Download <span>minified (2.6k)</span></a>
-			<a class="btn" href="/unslider.js">Download <span>source (5.1k)</span></a>
-			<br>
-			<a href="//twitter.com/idiot">@idiot</a> &mdash; <a href="//github.com/idiot/unslider">Github</a>
-		</div>
+    <div id="download" class="wrap footer">
+        <a class="btn" href="/unslider.min.js">Download <span>minified (2.6k)</span></a>
+        <a class="btn" href="/unslider.js">Download <span>source (5.1k)</span></a>
+        <br>
+        <a href="//twitter.com/idiot">@idiot</a> &mdash; <a href="//github.com/idiot/unslider">Github</a>
+    </div>
 
-        <script src="js/jquery-latest.min.js"></script>
-        <script src="js/jquery-migrate-1.2.1.min.js"></script>
-		<script src="js/jquery.event.move.js"></script>
-        <script src="js/jquery.easing.1.3.js"></script>	
-        <script src="js/unslider.js"></script>
+    <script type="text/javascript">
 
-        <style>
-            .slide-loader {
-                position: absolute;
-                top: 45%;
-                left: 50%;
-                z-index: 1000;
+        if (window.chrome) {
+            $('.banner li').css('background-size', '100% 100%');
+        }
 
+        var us = $('.banner').unslider({
+            //speed: 30000,
+            delay: 30000,
+            arrows: true,
+            fluid: true,
+            dots: true,
+            keys: true,
+            textAnimation: true,
+            swiper: true,
+            swipeDistance: 35,
+            before: function (el, o) {
+                $(".banner").prepend("<img class=\"slide-loader\" src=\"img/loader.gif\" width=\"24\"  height=\"24\" ></img>");
+            },
+            starting: function () {
+
+            },
+            complete: function (ei, target) {
+                if ($.browser.msie != undefined && parseInt($.browser.version, 10) < 9)
+                    $('video,audio').mediaelementplayer({
+                        defaultVideoWidth: window.screen.width,
+                        defaultVideoHeight: 400
+                    });
             }
-        </style>
+        });
 
-		<script>
+        //  Find any element starting with a # in the URL
+        //  And listen to any click events it fires
+        $('a[href^="#"]').click(function () {
+            //  Find the target element
+            var target = $($(this).attr('href'));
 
-			if(window.chrome) {
-				$('.banner li').css('background-size', '100% 100%');
-			}
+            //  And get its position
+            var pos = target.offset(); // fallback to scrolling to top || {left: 0, top: 0};
 
-			$('.banner').unslider({
-				//speed: 30000,
-				delay:30000,
-				arrows: true,
-				fluid: true,
-				dots: true,
-				keys: true,
-				textAnimation: true,
-				swiper: true,
-                distance: 35,
-				before: function (el, o) {
-				    $(".banner").prepend("<img class=\"slide-loader\" src=\"img/loader.gif\" width=\"24\"  height=\"24\" ></img>");
-				},
-				starting: function () {
-				  
-				},
-				complete: function (ei, target) {
-				
-				}
-			});
+            //  jQuery will return false if there's no element
+            //  and your code will throw errors if it tries to do .offset().left;
+            if (pos) {
+                //  Scroll the page
+                $('html, body').animate({
+                    scrollTop: pos.top,
+                    scrollLeft: pos.left
+                }, 1000);
+            }
 
-			//  Find any element starting with a # in the URL
-			//  And listen to any click events it fires
-			$('a[href^="#"]').click(function() {
-				//  Find the target element
-				var target = $($(this).attr('href'));
-
-				//  And get its position
-				var pos = target.offset(); // fallback to scrolling to top || {left: 0, top: 0};
-
-				//  jQuery will return false if there's no element
-				//  and your code will throw errors if it tries to do .offset().left;
-				if(pos) {
-					//  Scroll the page
-					$('html, body').animate({
-						scrollTop: pos.top,
-						scrollLeft: pos.left
-					}, 1000);
-				}
-
-				//  Don't let them visit the url, we'll scroll you there
-				return false;
-			});
-		</script>
-	
-	</body>
+            //  Don't let them visit the url, we'll scroll you there
+            return false;
+        });
+    </script>
+</body>
 </html>

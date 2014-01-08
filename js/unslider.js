@@ -34,7 +34,7 @@
             texContainer: '.inner',
             swiper: false,
             cursorClass: "cursor",
-            distance: 20,
+            swipeDistance: 20,
             waitVideo: true
         };
 
@@ -77,7 +77,7 @@
                     })
                     .on('move', function (e) {
                         var l = parseInt(slides[i].style.left.replace('px', ''));
-                        var left = e.distX;//50 * e.distX / width;
+                        var left = e.distX;
                         var index = parseInt(firstleft / 100) * -1;
                         
                         // Move slides with the finger
@@ -87,9 +87,7 @@
                                 slides[i + 1].style.left = (left + 100) + '%';
                             }
                             else {
-                                var changes = (-1 * index * width) + left + "px";
-                                console.log(changes);
-                                slides[i].style.left = changes;// (left / 4) + '%';
+                                slides[i].style.left = (-1 * index * width) + left + "px";
                             }
                         }
                         if (e.distX > 0) {
@@ -98,7 +96,7 @@
                                 slides[i - 1].style.left = (left - 100) + 'px';
                             }
                             else {
-                                slides[i].style.left = (-1 * index * width) + left + "px";// (left / 5) + '%';
+                                slides[i].style.left = (-1 * index * width) + left + "px";
                             }
                         }
                     })
@@ -106,7 +104,7 @@
                     .on('moveend', function (e) {
                         slides.removeClass(_.o.cursorClass);
                         var left = parseInt(slides[i].style.left.replace('px', ''));
-                        var distance = width * _.o.distance / 100;
+                        var distance = width * _.o.swipeDistance / 100;
 
                         var cleft = firstleft * width / 100;
                         if (cleft > left + distance)
@@ -248,7 +246,7 @@
             }
 
             $.isFunction(o.starting) && !callback && o.starting(el, li.eq(current));
-            if ($.browser.msie == undefined && parseInt($.browser.version, 10) > 8)
+            if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8)
                 el.find('video').get(0).pause();
 
             //  To slide or not to slide
@@ -271,7 +269,7 @@
                     _.i = index;
                     var id = el.find('.active').text();
                     var act = el.find('ul li').eq(parseInt(id) - 1);
-                    if ($.browser.msie == undefined && parseInt($.browser.version, 10) > 8) {
+                    if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8) {
                         var video = act.find('video');
                         if (video.length > 0) {
                             video.get(0).play();

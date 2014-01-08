@@ -33,6 +33,7 @@
             textAnimation: false,
             texContainer: '.inner',
             swiper: false,
+            cursorClass: "cursor",
             distance: 20,
             waitVideo: true
         };
@@ -66,6 +67,7 @@
                 var slides = el.find('ul'), i = 0;
                 slides
                     .on('movestart', function (e) {
+                        slides.addClass(_.o.cursorClass);
                         firstleft = parseInt(slides[i].style.left.replace('px', ''));
                         if ((e.distX > e.distY && e.distX < -e.distY) ||
                             (e.distX < e.distY && e.distX > -e.distY)) {
@@ -75,7 +77,9 @@
                     })
                     .on('move', function (e) {
                         var l = parseInt(slides[i].style.left.replace('px', ''));
-                        var left = 50 * e.distX / width;
+                        var left = e.distX;//50 * e.distX / width;
+                        var index = parseInt(firstleft / 100) * -1;
+                        
                         // Move slides with the finger
                         if (e.distX < 0) {
                             if (slides[i + 1]) {
@@ -83,26 +87,31 @@
                                 slides[i + 1].style.left = (left + 100) + '%';
                             }
                             else {
-                                slides[i].style.left = l + (left / 4) + '%';
+                                var changes = (-1 * index * width) + left + "px";
+                                console.log(changes);
+                                slides[i].style.left = changes;// (left / 4) + '%';
                             }
                         }
                         if (e.distX > 0) {
                             if (slides[i - 1]) {
                                 slides[i].style.left = left + '%';
-                                slides[i - 1].style.left = (left - 100) + '%';
+                                slides[i - 1].style.left = (left - 100) + 'px';
                             }
                             else {
-                                slides[i].style.left = l + (left / 5) + '%';
+                                slides[i].style.left = (-1 * index * width) + left + "px";// (left / 5) + '%';
                             }
                         }
                     })
 
                     .on('moveend', function (e) {
-
+                        slides.removeClass(_.o.cursorClass);
                         var left = parseInt(slides[i].style.left.replace('px', ''));
-                        if (firstleft > left + _.o.distance)
+                        var distance = width * _.o.distance / 100;
+
+                        var cleft = firstleft * width / 100;
+                        if (cleft > left + distance)
                             _.next();
-                        else if (firstleft < left - _.o.distance)
+                        else if (cleft < left - distance)
                             _.prev();
                         else {
                             var index = parseInt(firstleft / 100) * -1;
@@ -113,7 +122,6 @@
                 jQuery(document)
                 .on('click', '.slide_button', function (e) {
                     var href = e.currentTarget.hash;
-
                     jQuery(href).trigger('activate');
 
                     e.preventDefault();
@@ -129,7 +137,9 @@
                     el.find('li:first [animate]').each(function () {
                         checkPosition($(this), index);
                     });
-                    el.find('video').get(0).pause();
+
+                    if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8)
+                        el.find('video').get(0).pause();
 
                     //make banner visible, call animations after fade finish
                     $(".banner ul").css("visibility", "visible").hide().fadeIn("slow", function myfunction() {
@@ -144,9 +154,9 @@
 
             //  Cached vars
             var o = _.o,
-				ul = _.ul,
-				li = _.li,
-				len = li.length;
+                ul = _.ul,
+                li = _.li,
+                len = li.length;
 
             //  Current indeed
             _.i = 0;
@@ -199,7 +209,7 @@
 
                     _.r = setTimeout(function () {
                         var styl = { height: li.eq(_.i).outerHeight() },
-							width = el.outerWidth();
+                            width = el.outerWidth();
 
                         ul.css(styl);
                         styl['width'] = Math.min(Math.round((width / el.parent().width()) * 100), 100) + '%';
@@ -226,11 +236,11 @@
                 _.play();
             }
             var o = _.o,
-				el = _.el,
-				ul = _.ul,
-				li = _.li,
-				current = _.i,
-				target = li.eq(index);
+                el = _.el,
+                ul = _.ul,
+                li = _.li,
+                current = _.i,
+                target = li.eq(index);
 
             if (o.textAnimation && playAnimate != false) {
                 el.find('[animate="true"]').css('display', 'none');
@@ -238,7 +248,8 @@
             }
 
             $.isFunction(o.starting) && !callback && o.starting(el, li.eq(current));
-            el.find('video').get(0).pause();
+            if ($.browser.msie == undefined && parseInt($.browser.version, 10) > 8)
+                el.find('video').get(0).pause();
 
             //  To slide or not to slide
             if ((!target.length || index < 0) && o.loop == f) return;
@@ -249,8 +260,8 @@
             target = li.eq(index);
 
             var speed = callback ? 5 : o.speed | 0,
-				easing = o.easing,
-				obj = { height: target.outerHeight() };
+                easing = o.easing,
+                obj = { height: target.outerHeight() };
 
             if (!ul.queue('fx').length) {
                 //  Handle those pesky dots
@@ -260,15 +271,17 @@
                     _.i = index;
                     var id = el.find('.active').text();
                     var act = el.find('ul li').eq(parseInt(id) - 1);
-                    var video = act.find('video');
-                    if (video.length > 0) {
-                        video.get(0).play();
-                        if (_.o.waitVideo) {
-                            _.stop();
-                            video.bind("ended", function () {
-                                _.play();
-                                _.next();
-                            });
+                    if ($.browser.msie == undefined && parseInt($.browser.version, 10) > 8) {
+                        var video = act.find('video');
+                        if (video.length > 0) {
+                            video.get(0).play();
+                            if (_.o.waitVideo) {
+                                _.stop();
+                                video.bind("ended", function () {
+                                    _.play();
+                                    _.next();
+                                });
+                            }
                         }
                     }
                     $.isFunction(o.complete) && !callback && o.complete(el, target);

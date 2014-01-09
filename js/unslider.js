@@ -57,7 +57,7 @@
                 if (width > _.max[0]) _.max[0] = width;
                 if (height > _.max[1]) _.max[1] = height;
                 me.find(_.o.texContainer).each(function () {
-                    checkPosition($(this), index);
+                    checkDefaultPosition($(this), index);
                 });
                 index++;
             });
@@ -79,7 +79,7 @@
                         var l = parseInt(slides[i].style.left.replace('px', ''));
                         var left = e.distX;
                         var index = parseInt(firstleft / 100) * -1;
-                        
+
                         // Move slides with the finger
                         if (e.distX < 0) {
                             if (slides[i + 1]) {
@@ -128,21 +128,39 @@
 
             $(window).load(function () {
                 setTimeout(function myfunction() {
+                    el.find('[animate="true"]').stop(true, true);
                     el.find('[animate="true"]').css('display', 'none');
-                    $('[animate-type="slideUp"], [animate-type="fadeOut"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="SlideUp"], [animate-type="FadeOut"], [animate-type="SLIDEUP"], [animate-type="FADEOUT"]').css('display', 'block');
+                    el.find('[animate="true"]').each(function () {
+                        var t = $(this).attr("data-type");
+                        if (t != undefined && t != null && t != "") {
+                            var ta = t.split(',');
+                            var type = ta[0];
+                            switch (type.toLowerCase()) {
+                                case "slideup":
+                                case "fadeout":
+                                    $(this).css('display', 'block');
+                                    break;
+                                default:
+                                    break
+
+                            }
+                        }
+                    });
 
                     //put all elements that will be animated to their first position
                     el.find('li:first [animate]').each(function () {
-                        checkPosition($(this), index);
+                        checkDefaultPosition($(this), index);
                     });
 
-                    if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8)
-                        el.find('video').get(0).pause();
+                    if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8) {
+                        var video = el.find('video');
+                        video.each(function () { $(this).get(0).pause() });
+                    }
 
                     //make banner visible, call animations after fade finish
                     $(".banner ul").css("visibility", "visible").hide().fadeIn("slow", function myfunction() {
                         $(".firstslide [animate]").hide();
-                        anime(el.find('li:first'), 0);
+                        _.animation(el.find('li:first'), 0);
                     });
 
                     //delete loader no longer need.
@@ -241,13 +259,32 @@
                 target = li.eq(index);
 
             if (o.textAnimation && playAnimate != false) {
+                el.find('[animate="true"]').clearQueue().stop(true, false);
                 el.find('[animate="true"]').css('display', 'none');
-                $('[animate-type="slideUp"], [animate-type="fadeOut"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="slideup"], [animate-type="fadeout"], [animate-type="SlideUp"], [animate-type="FadeOut"], [animate-type="SLIDEUP"], [animate-type="FADEOUT"]').css('display', 'block');
+                el.find('[animate="true"]').each(function () {
+                    var t = $(this).attr("data-type");
+                    if (t != undefined && t != null && t != "") {
+                        checkDefaultPosition($(this), index);
+                        var ta = t.split(',');
+                        var type = ta[0];
+                        switch (type.toLowerCase()) {
+                            case "slideup":
+                            case "fadeout":
+                                $(this).css('display', 'block');
+                                break;
+                            default:
+                                break
+
+                        }
+                    }
+                });
             }
 
             $.isFunction(o.starting) && !callback && o.starting(el, li.eq(current));
-            if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8)
-                el.find('video').get(0).pause();
+            if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8) {
+                var video = el.find('video');
+                video.each(function () { $(this).get(0).pause() });
+            }
 
             //  To slide or not to slide
             if ((!target.length || index < 0) && o.loop == f) return;
@@ -293,7 +330,7 @@
                                 len = 0;
                             }
                             if (len > 0) {
-                                anime(_div, index);
+                                _.animation(_div, index);
                             }
                         });
                     }
@@ -310,16 +347,21 @@
 
         //  Stop autoplay
         _.stop = function () {
+            slideChanged = false;
             _.t = clearInterval(_.t);
             return _;
         };
 
         //  Move to previous/next slide
         _.next = function () {
+            slideChanged = true;
+            _.ul.find('[animate="true"]').clearQueue().stop(true, false);
             return _.stop().to(_.i + 1);
         };
 
         _.prev = function () {
+            slideChanged = true;
+            _.ul.find('[animate="true"]').clearQueue().stop(true, false);
             return _.stop().to(_.i - 1);
         };
 
@@ -342,206 +384,258 @@
             });
         };
 
-        function anime(_div, index) {
+        _.animation = function (_div, index) {
             var animate = _div.attr('animate');
             if (animate == "true") {
-                var speed = _div.attr('animate-speed');
-                var delay = _div.attr('animate-delay');
-                var easings = _div.attr('animate-type');
-                var height = _div.attr('animate-height');
-
-                speed = speed == null || speed == undefined ? 500 : parseInt(speed);
-                delay = delay == null || delay == undefined ? 100 : parseInt(delay);
-                easings = easings == null || easings == undefined ? "swing" : easings;
-                height = height == null || height == undefined ? _div.outerHeight() : height;
-
-                var opt = checkPosition(_div, index);
-                opt.height = height;
-
-                var timer = setTimeout(function () {
-                    window.clearTimeout(timer);
-                    switch (easings != undefined ? easings.toLowerCase() : "") {
-                        case "fadein":
-                            playAnim:
-                                _div.fadeIn(speed, function () { checkElements(_div, index); });
-                            if (opt.left != undefined || opt.right != undefined || opt.top != undefined || opt.bottom != undefined) playAnime(_div, opt, speed, _.o.easing, index);
-                            break;
-
-                        case "fadeout":
-                            _div.css('display', 'block');
-                            _div.fadeOut(speed, function () { checkElements(_div, index); });
-                            if (opt.left != undefined || opt.right != undefined || opt.top != undefined || opt.bottom != undefined) playAnime(_div, opt, speed, _.o.easing, index);
-                            break;
-
-                        case "slideup":
-                            _div.css('display', 'block');
-                            _div.slideUp(speed, function () { checkElements(_div, index); });
-                            if (opt.left != undefined || opt.right != undefined || opt.top != undefined || opt.bottom != undefined) playAnime(_div, opt, speed, _.o.easing, index);
-                            break;
-
-                        case "slidedown":
-                            _div.slideDown(speed, function () { checkElements(_div, index); });
-                            if (opt.left != undefined || opt.right != undefined || opt.top != undefined || opt.bottom != undefined) playAnime(_div, opt, speed, _.o.easing, index);
-                            break;
-
-                        default:
-                            playAnime(_div, opt, speed, easings, index);
-                            break;
-                    }
-
-
-                }, delay);
+                var type = _div.attr('data-type');
+                var tArr = type.split('-');
+                playAnimation(_div, tArr, index, 0);
             }
             else {
-                checkPosition(_div, index);
+                checkDefaultPosition(_div, index);
                 checkElements(_div, index);
             }
         }
 
-        function playAnime(_div, opt, speed, easings, index) {
-            _div.css('display', 'block');
-            _div.animate(opt, speed,
-            easings,
-            function () { checkElements(_div, index); });
+        function playAnimation(_div, tArr, index, i) {
+            if (!slideChanged) {
+                _div.css("position", "absolute");
+                var type = tArr[i];
+                var opt = checkPosition(_div, index, type);
+                var timer = setTimeout(function () {
+                    window.clearTimeout(timer);
+                    switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
+                        case "fadein":
+                            _div.fadeIn(opt.speed, function () {
+                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
+                                checkElements(_div, index);
+                            });
+                            break;
+
+                        case "fadeout":
+                            _div.css('display', 'block');
+                            _div.fadeOut(opt.speed, function () {
+                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
+                                checkElements(_div, index);
+                            });
+                            break;
+
+                        case "slideup":
+                            _div.css('display', 'block');
+                            _div.slideUp(opt.speed, function () {
+                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
+                                checkElements(_div, index);
+                            });
+                            break;
+
+                        case "slidedown":
+                            _div.slideDown(opt.speed, function () {
+                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
+                                checkElements(_div, index);
+                            });
+                            break;
+
+                        default:
+                            _div.css('display', 'block');
+                            var option = {};
+                            if (opt.left != undefined) option.left = opt.left;
+                            if (opt.right != undefined) option.right = opt.right;
+                            if (opt.top != undefined) option.top = opt.top;
+                            if (opt.bottom != undefined) option.bottom = opt.bottom;
+
+                            _div.animate(option, opt.speed,
+                            opt.type.trim(),
+                            function () {
+                                checkElements(_div, index);
+                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
+                            });
+                            break;
+                    }
+                }, opt.delay);
+            }
         }
 
         function checkElements(_div, index) {
             _div.find('[animate="true"]').each(function () {
-                anime($(this), index);
+                _.animation($(this), index);
             });
         }
 
-        function checkPosition(_div, index) {
-            var p = _div.attr('position');
-            var p_l = _div.attr('position-left');
-            var p_r = _div.attr('position-right');
-            var p_t = _div.attr('position-top');
-            var p_b = _div.attr('position-bottom');
-
+        function checkPosition(_div, index, type) {
             var options = {};
-            if (p != null && p != "") {
-                var arr = p.split(' ');
-                if (arr.length > 1) {
-                    var left = arr[0];
-                    var top = "";
-                    try {
-                        top = arr[1];
-                    } catch (e) {
-                        top = "top";
-                    }
-
-                    options = calculatePos(_div, index, options, arr[0], true, "left");
-                    options = calculatePos(_div, index, options, arr[1], false, "top");
+            options.type = type.split('(')[0];
+            type = type.replace(' ', '').replace(options.type + '(', '').replace(')', '');
+            var optArr = type.split(',');
+            for (var i = 0; i < optArr.length; i++) {
+                var arr = optArr[i].split(':');
+                if (arr[0].toLowerCase() === "delay") {
+                    options.delay = parseInt(arr[1]);
                 }
-            }
-            else {
-                if (p_l != null && p_l != "")
-                    options = calculatePos(_div, index, options, p_l, true, "left");
+                else if (arr[0] === "speed") {
+                    options.speed = parseInt(arr[1]);
+                }
+                else {
+                    switch (arr[0].toLowerCase().trim()) {
+                        case "left":
+                            var left = arr[1];
+                            var larr = left.split('>');
+                            if (larr.length > 1) {
+                                var left1 = calculatePos(_div, larr[0], index, true);
+                                var left2 = calculatePos(_div, larr[1], index, true);
+                                _div.css('left', left1);
+                                options.left = left2;
+                            }
+                            else
+                                _div.css('left', left);
 
-                if (p_r != null && p_r != "")
-                    options = calculatePos(_div, index, options, p_r, true, "right");
+                            break;
 
-                if (p_t != null && p_t != "")
-                    options = calculatePos(_div, index, options, p_t, false, "top");
+                        case "right":
+                            var right = arr[1];
+                            var rarr = right.split('>');
+                            if (rarr.length > 1) {
+                                var right1 = calculatePos(_div, rarr[0], index, true);
+                                var right2 = calculatePos(_div, rarr[1], index, true);
+                                _div.css('right', right1);
+                                options.right = right2;
+                            }
+                            else
+                                _div.css('right', right);
+                            break;
 
-                if (p_b != null && p_b != "")
-                    options = calculatePos(_div, index, options, p_b, false, "bottom");
+                        case "top":
+                            var top = arr[1];
+                            var tarr = top.split('>');
+                            if (tarr.length > 1) {
+                                var top1 = calculatePos(_div, tarr[0], index, false);
+                                var top2 = calculatePos(_div, tarr[1], index, false);
+                                _div.css('top', top1);
+                                options.top = top2;
+                            }
+                            else
+                                _div.css('top', top);
+                            break;
 
+                        case "bottom":
+                            var bottom = arr[1];
+                            var tarr = bottom.split('>');
+                            if (tarr.length > 1) {
+                                var bottom1 = calculatePos(_div, tarr[0], index, false);
+                                var bottom2 = calculatePos(_div, tarr[1], index, false);
+                                _div.css('bottom', bottom1);
+                                options.bottom = bottom2;
+                            }
+                            else
+                                _div.css('bottom', bottom);
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
             }
             return options;
         }
 
-        function calculatePos(_div, index, options, val, isHorizontal, attr) {
+        function calculatePos(_div, val, index, isHorizontal) {
             var w = window.screen.width;
             var h = _div.parents('li:first').height();
             var dw = _div.width();
             var dh = _div.height();
             if (isHorizontal) {
-                switch (val.toLowerCase()) {
+                switch (val.toLowerCase().trim()) {
                     case "left":
                         var _l = w * index;
-                        _div.css('left', _l);
+                        return _l + "px";
                         break;
 
                     case "right":
                         var _l = (w * (index + 1)) - dw;
-                        _div.css('left', _l);
+                        return _l + "px";
                         break;
 
                     case "center":
                         var _l = (w * index) + ((w - dw) / 2);
-                        _div.css('left', _l);
+                        return _l + "px";
                         break;
 
                     default:
-                        var arr = val.split(',');
-                        if (val.length > 1) {
-                            switch (attr.toLowerCase()) {
-                                case "right":
-                                    var _r = arr[0];
-                                    _div.css('right', _r).css("position", "absolute");
-
-                                    options.right = arr[1];
-                                    break;
-                                case "left":
-                                default:
-                                    var _l = arr[0];
-                                    _div.css('left', _l).css("position", "absolute");
-                                    options.left = arr[1];
-                                    break;
-                            }
-                        }
-                        else {
-                            if (attr.toLowerCase() == "right")
-                                _div.css('right', val);
-                            else
-                                _div.css('left', val);
-                        }
+                        return val;
                         break;
                 }
             }
             else {
-                switch (val.toLowerCase()) {
+                switch (val.toLowerCase().trim()) {
                     case "top":
-                        _div.css('top', "0px");
+                        return "0px";
                         break;
 
                     case "bottom":
                         var _b = h - dh;
-                        _div.css('top', _b);
+                        return _b + "px";
                         break;
 
                     case "center":
                         var _b = (h - dh) / 2;
-                        _div.css('top', _b);
+                        return _b + "px";
                         break;
 
                     default:
-                        var arr = val.split(',');
-                        if (val.length > 1) {
-                            switch (attr.toLowerCase()) {
-                                case "bottom":
-                                    _div.css('bottom', arr[0]).css("position", "absolute");
-                                    options.bottom = arr[1];
-                                    break;
-                                case "top":
-                                default:
-                                    _div.css('top', arr[0]).css("position", "absolute");
-                                    options.top = arr[1];
-                                    break;
-                            }
-
-                        }
-                        else {
-                            if (attr.toLowerCase() == "bottom")
-                                _div.css('bottom', val);
-                            else
-                                _div.css('top', val);
-                        }
-                        break;
+                        return val;
+                        break
                 }
             }
-            return options;
+        }
+
+        function checkDefaultPosition(_div, index) {
+            var position = _div.attr('position');
+            if (position != undefined) {
+                var posArr = position.split(',');
+                var css = _div.attr('style');
+                var style = "";
+                if (css != undefined) {
+                    var cssArr = css.split(';');
+                    for (var i = 0; i < cssArr.length; i++) {
+                        if (cssArr[i].trim() != "") {
+                            var arr = cssArr[i].split(':');
+                            switch (arr[0].trim()) {
+                                case "left":
+                                case "right":
+                                case "bottom":
+                                case "top":
+                                    break;
+                                default:
+                                    style += cssArr[i] + "; ";
+                                    break;
+                            }
+                        }
+                    }
+                }
+                for (var i = 0; i < posArr.length; i++) {
+                    var arr = posArr[i].split(':');
+                    switch (arr[0].trim()) {
+                        case "left":
+                            var left = calculatePos(_div, arr[1], index, true);
+                            style += "left:" + left + "; ";
+                            break;
+                        case "right":
+                            var right = calculatePos(_div, arr[1], index, true);
+                            style += "right:" + right + "; ";
+                            break;
+                        case "bottom":
+                            var bottom = calculatePos(_div, arr[1], index, false);
+                            style += "bottom:" + bottom + "; ";
+                            break;
+                        case "top":
+                            var top = calculatePos(_div, arr[1], index, false);
+                            style += "top:" + top + "; ";
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                _div.attr('style', style);
+            }
         }
 
         //reload the page when browser size changed
@@ -553,9 +647,9 @@
                 window.location.reload();
             }
         });
-
     };
 
+    var slideChanged = false;
     //  Create a jQuery plugin
     $.fn.unslider = function (o) {
         var len = this.length;

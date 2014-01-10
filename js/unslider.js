@@ -100,7 +100,6 @@
                             }
                         }
                     })
-
                     .on('moveend', function (e) {
                         slides.removeClass(_.o.cursorClass);
                         var left = parseInt(slides[i].style.left.replace('px', ''));
@@ -146,6 +145,25 @@
                             }
                         }
                     });
+
+                    var bw = $('body').width();
+                    if (bw <= 1200) {
+                        var size = 0;
+                        if (1200 >= bw && bw >= 992)
+                            size = 992 / bw;
+                        else if (992 > bw && bw >= 768)
+                            size = 768 / bw;
+                        else
+                            size = 320 / bw;
+                        
+                        el.find('[resizable]').each(function () {
+                            var w = $(this).width();
+                            w > 0 && $(this).css('width', (w * size) + 'px');
+                            var h = $(this).height();
+                            h > 0 && $(this).css('height', (h * size) + 'px');
+                        });
+                    }
+
 
                     //put all elements that will be animated to their first position
                     el.find('li:first [animate]').each(function () {
@@ -538,7 +556,7 @@
         }
 
         function calculatePos(_div, val, index, isHorizontal) {
-            var w = window.screen.width;
+            var w = $('body').width();//window.screen.width;
             var h = _div.parents('li:first').height();
             var dw = _div.width();
             var dh = _div.height();
@@ -653,6 +671,13 @@
     //  Create a jQuery plugin
     $.fn.unslider = function (o) {
         var len = this.length;
+
+        //ie 7-8 does not support the trim function. The code is fixing it
+        if (typeof String.prototype.trim !== 'function') {
+            String.prototype.trim = function () {
+                return this.replace(/^\s+|\s+$/g, '');
+            }
+        }
 
         //  Enable multiple-slider support
         return this.each(function (index) {

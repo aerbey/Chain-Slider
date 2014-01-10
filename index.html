@@ -22,13 +22,13 @@
             color: rgb(102, 102, 102);
         }
 
-        .faster {
+        /*.faster {
             font-size: 60px;
             font-weight: 800;
             line-height: 40px;
             width: 400px;
             text-align: left;
-        }
+        }*/
 
         .banner {
             text-shadow: none;
@@ -64,7 +64,7 @@
 
             <li style="background-image: url('img/slidebg1.jpg'); width:25%">
                 <div class="inner firstslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
-                    <div class="faster" animate="true" data-type="slideDown(delay:1000, speed:1000)-swing(delay:1000, speed:1000, left:left>10%)" animate-delay="1000" animate-speed="1000" position="left:left, top:10%">
+                    <div class="faster" animate="true" data-type="slideDown(delay:1000, speed:1000)-swing(delay:1000, speed:1000, left:left>10%)"  position="left:left, top:10%">
                         <span> Faster</span>
                         <span style="font-size:34px; font-weight:300;">&</span>
                         <span style="font-size:34px; ">More</span><span style="font-size:60px;  padding-left:20px;">Powerful</span>
@@ -77,8 +77,8 @@
                         <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">standard dummy text ever since the 1500s</p>
                     </div>
 
-                    <div animate="true" data-type="slidedown(delay:500, speed:1000)" animate-delay="500" animate-speed="800" position="right:30%, bottom:0%">
-                        <img src="img/woman.png" alt="Alternate Text" width="378" height="464" />
+                    <div animate="true" data-type="slidedown(delay:500, speed:1000)" position="right:30%, bottom:bottom">
+                        <img resizable="true" src="img/woman.png" alt="Alternate Text" width="378" height="464" />
                     </div>
                     <div style="z-index:1000" animate="true" data-type="fadeIn(delay:1000,speed:1000)" position="right:5%, top:5%">
                         <div style="font-size: 58px; font-weight: 800; color: rgb(52, 73, 94);">1000's</div>
@@ -88,7 +88,7 @@
             </li>
 
             <li style="width:25%;  height:400px;">
-                <video autoplay controls width="100%">
+                <video autoplay width="100%">
                      <!--MP4 for Safari, IE9, iPhone, iPad, Android, and Windows Phone 7--> 
                     <source type="video/mp4" src="video.mp4" />
                      <!--WebM/VP8 for Firefox4, Opera, and Chrome--> 
@@ -104,14 +104,14 @@
                     </object>
                     Your browser does not support the video tag.
                 </video>
-                <div class="inner" style="width:300px; height:200px;" animate="true" data-type="easeInCubic(delat:0,speed:300)-linear(delay:0, speed:200, top:0%>center)" position="left:center, top:0%">
-                    <h1 animate="true" data-type="fadeIn(delay:3000, speed:2000)" position="left:center, top:center">Fluid, flexible, fantastically minimal.</h1>
-                    <p animate="true" data-type="fadeout(delay:3000, speed:2000)" position="left:center, top:center">Use any HTML in your slides, extend with CSS. You have full control.</p>
+                <div class="inner" animate="true" data-type="easeInCubic(delat:0,speed:300)-linear(delay:0, speed:200, top:top>center, left:left>center)" position="left:center, top:top">
+                    <h1>Fluid, flexible, fantastically minimal.</h1>
+                    <p>Use any HTML in your slides, extend with CSS. You have full control.</p>
                 </div>
             </li>
 
             <li style="background-image: url('img/subway.jpg'); width:25%">
-                <div class="inner" animate="true" data-type="fadeIn(delay:1000, speed:2000)-swing(delay:2000, speed:2000, left:0%>30%, top:0%>30%)-linear(delay:1000, speed:2000, left:30%>18%, top:30%>35%)-slideup(delay:1000, speed:1000)-slidedown(delay:2000, speed:2000)-slideup(delay:1000, speed:1000)-slidedown(delay:2000, speed:2000)" position="left:left, top:top">
+                <div class="inner" animate="true" data-type="fadeIn(delay:1000, speed:2000)-swing(delay:2000, speed:2000, left:left>center, top:top>center)-linear(delay:1000, speed:2000, left:center>left, top:center>top)-slideup(delay:1000, speed:1000)-slidedown(delay:2000, speed:2000)-slideup(delay:1000, speed:1000)-slidedown(delay:2000, speed:2000)" position="left:left, top:top">
                     <!--<div class="inner" animate="true" data-type="swing(delay:0, speed:2000, left:0%>30%, top:0%>30%)-fadeIn(delay:0, speed:600)-linear(delay:1000, speed:2000, left:30%>18%, top:30%>35%)-slideup(delay:1000, speed:1000)-slidedown(delay:2000, speed:2000)" position="left:left, top:top">-->
                     <h1>Open-source.</h1>
                     <p>Everything to do with Unslider is hosted on GitHub.</p>
@@ -124,7 +124,6 @@
                 <div class="inner" animate="true" data-type="slidedown(delay: 500, speed:1000)-linear(delay:1500, speed:1000, left:left>left, top:top>center)-swing(delay:1000, speed:1000, left:left>center)-slideup(delay:1000, speed:2000)-slidedown(delay:2000, speed:2000)" position="left:left, top:0">
                     <h1>Uh, that’s about it.</h1>
                     <p>I just wanted to show you another slide.</p>
-
                     <a class="btn" href="#download">Download</a>
                 </div>
             </li>

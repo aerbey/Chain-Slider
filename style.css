@@ -62,7 +62,8 @@ h1, h2, h3, h4, b {
 	.banner ul {
 		list-style: none;
 		width: 300%;
-         cursor:-webkit-grab;
+         /*cursor:-webkit-grab;*/
+         cursor: url('/img/cursor_hand.ico'), auto;
 	}
 	.banner ul li {
 		display: block;
@@ -354,6 +355,73 @@ h1, h2, h3, h4, b {
 	width: 960px;
 }
 
+/* Large desktop */
+@media (min-width: 1200px) { 
+    .banner h1, .banner h2 {
+		font-size: 24px !important;
+		line-height: 30px;
+	}
+
+    .banner p {
+		font-size: 20px !important;
+		width: 80%;
+		margin: 0 auto;
+	}
+
+     .faster {
+            font-size: 60px;
+            font-weight: 800;
+            line-height: 40px;
+            width: 400px;
+            text-align: left;
+        }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { 
+    .banner h1, .banner h2 {
+		font-size: 20px !important;
+		line-height: 30px !important;
+	}
+
+    .banner p {
+		font-size: 15px !important;
+		width: 80%;
+		margin: 0 auto;
+	}
+
+     .faster {
+            font-size: 40px;
+            font-weight: 600;
+            line-height: 20px;
+            width: 300px;
+            text-align: left;
+        }
+}
+
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) { 
+    .banner h1, .banner h2 {
+		font-size: 18px !important;
+		line-height: 30px;
+	}
+
+    .banner p {
+		font-size: 12px !important;
+		width: 80%;
+		margin: 0 auto;
+	}
+
+     .faster {
+            font-size: 20px;
+            font-weight: 400;
+            line-height: 10px;
+            width: 200px;
+            text-align: left;
+        }
+}
+
+/* Landscape phones and down */
 @media only screen and (min-device-width: 320px) and (max-device-width: 480px), (max-width: 900px) {
 	.wrap {
 		width: 90%;
@@ -396,6 +464,7 @@ h1, h2, h3, h4, b {
 	}
 }
 
+
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
 	.features li:before {
 		background: url('img/icons@2x.png');
@@ -404,5 +473,5 @@ h1, h2, h3, h4, b {
 }
 
 .cursor {
-    cursor:-webkit-grabbing !important;
+    cursor: url('/img/cursor_drag_hand.ico'), auto !important;
 }

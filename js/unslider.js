@@ -453,6 +453,19 @@
                             });
                             break;
 
+                        case "rotate":
+                            _div.rotate({
+                                duration: opt.duration,
+                                angle: opt.angle,
+                                animateTo: opt.animateTo,
+                                easing: $.easing[opt.easing],
+                                callback: function () {
+                                    checkElements(_div, index);
+                                }
+                            });
+                            tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
+                            break;
+
                         default:
                             _div.css('display', 'block');
                             var option = {};
@@ -465,8 +478,8 @@
                             opt.type.trim(),
                             function () {
                                 checkElements(_div, index);
-                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                             });
+                            tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                             break;
                     }
                 }, opt.delay);
@@ -486,16 +499,35 @@
             var optArr = type.split(',');
             for (var i = 0; i < optArr.length; i++) {
                 var arr = optArr[i].split(':');
-                if (arr[0].toLowerCase() === "delay") {
-                    options.delay = parseInt(arr[1]);
+                var key = arr[0].toLowerCase().trim();
+                var val = arr[1].toLowerCase().trim();
+                if (key === "delay") {
+                    var d = parseInt(val);
+                    options.delay = d == 0 || d == null || d == "" ? 600 : d;
                 }
-                else if (arr[0] === "speed") {
-                    options.speed = parseInt(arr[1]);
+                else if (key === "speed") {
+                    var s = parseInt(val);
+                    options.speed = s == 0 || s == null || s == "" ? 600 : s;
+                }
+                else if (key === "angle") {
+                    var a = parseInt(val);
+                    options.angle = a == null || a == "" ? 45 : a;
+                }
+                else if (key === "animateto") {
+                    var a = parseInt(val);
+                    options.animateTo = a == null || a == "" ? 180 : a;
+                }
+                else if (key === "duration") {
+                    var d = parseInt(val);
+                    options.duration = d == 0 || d == null || d == "" ? 1000 : d;
+                }
+                else if (key === "easing") {
+                    options.easing = val == 0 || val == null || val == "" ? "swing" : val;
                 }
                 else {
-                    switch (arr[0].toLowerCase().trim()) {
+                    switch (key) {
                         case "left":
-                            var left = arr[1];
+                            var left = val;
                             var larr = left.split('>');
                             if (larr.length > 1) {
                                 var left1 = calculatePos(_div, larr[0], index, true);
@@ -509,7 +541,7 @@
                             break;
 
                         case "right":
-                            var right = arr[1];
+                            var right = val;
                             var rarr = right.split('>');
                             if (rarr.length > 1) {
                                 var right1 = calculatePos(_div, rarr[0], index, true);
@@ -522,7 +554,7 @@
                             break;
 
                         case "top":
-                            var top = arr[1];
+                            var top = val;
                             var tarr = top.split('>');
                             if (tarr.length > 1) {
                                 var top1 = calculatePos(_div, tarr[0], index, false);
@@ -535,7 +567,7 @@
                             break;
 
                         case "bottom":
-                            var bottom = arr[1];
+                            var bottom = val;
                             var tarr = bottom.split('>');
                             if (tarr.length > 1) {
                                 var bottom1 = calculatePos(_div, tarr[0], index, false);
@@ -621,6 +653,9 @@
                                 case "right":
                                 case "bottom":
                                 case "top":
+                                case "-webkit-transform":
+                                case "-webkit-transform-origin":
+
                                     break;
                                 default:
                                     style += cssArr[i] + "; ";
@@ -654,7 +689,7 @@
                 }
                 _div.attr('style', style);
             }
-        }
+        }        
 
         //reload the page when browser size changed
         var width = $('body').width();
@@ -662,7 +697,7 @@
 
             if (width != $('body').width()) {
                 width = window.screen.width;
-                window.location.reload();
+                window.location.href = window.location.href;
             }
         });
     };

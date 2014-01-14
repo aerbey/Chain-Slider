@@ -1,12 +1,12 @@
 /**
- *   Unslider by @idiot and @damirfoy
+ *   Chain by @idiot and @damirfoy
  *   Contributors:
  *   - @ShamoX
  *
  */
 
 (function ($, f) {
-    var Unslider = function () {
+    var Chain = function () {
         //  Object clone
         var _ = this;
 
@@ -35,11 +35,12 @@
             swiper: false,
             cursorClass: "cursor",
             swipeDistance: 20,
-            waitVideo: true
+            waitVideo: true,
+            animations: null
         };
 
         _.init = function (el, o) {
-            //  Check whether we're passing any options in to Unslider            
+            //  Check whether we're passing any options in to Chain            
             _.o = $.extend(_.o, o);
 
             $.isFunction(o.before) && o.before(el, o);
@@ -127,9 +128,31 @@
 
             $(window).load(function () {
                 setTimeout(function myfunction() {
-                    el.find('[animate="true"]').stop(true, true);
-                    el.find('[animate="true"]').css('display', 'none');
-                    el.find('[animate="true"]').each(function () {
+                    if (_.o.animations !== undefined) {
+                        var animations = _.o.animations;//window.JSON.parse(_.o.animations);
+                        for (var an in animations[0]) {
+                            var key = an;
+                            var skey = animations[0][an];
+                            for (var sv in skey) {
+                                var attr = $(key).attr(sv);
+                                var val = skey[sv];
+                                if ($.isArray(val)) {
+                                    for (var i = 0; i < val.length; i++) {
+                                        attr = attr !== undefined ? attr + "-" : "";
+                                        attr += val[i];
+                                    }
+                                }
+                                else
+                                    attr = val;
+
+                                $(key).removeAttr(sv).attr(sv, attr);
+                            }
+                        }
+                    }
+
+                    _.el.find('[animate="true"]').stop(true, true);
+                    _.el.find('[animate="true"]').css('display', 'none');
+                    _.el.find('[animate="true"]').each(function () {
                         var t = $(this).attr("data-type");
                         if (t != undefined && t != null && t != "") {
                             var ta = t.split(',');
@@ -148,15 +171,8 @@
 
                     var bw = $('body').width();
                     if (bw <= 1200) {
-                        var size = 0;
-                        if (1200 >= bw && bw >= 992)
-                            size = 992 / bw;
-                        else if (992 > bw && bw >= 768)
-                            size = 768 / bw;
-                        else
-                            size = 320 / bw;
-                        
-                        el.find('[resizable]').each(function () {
+                        var size = bw / window.screen.width;
+                        _.el.find('[resizable]').each(function () {
                             var w = $(this).width();
                             w > 0 && $(this).css('width', (w * size) + 'px');
                             var h = $(this).height();
@@ -164,21 +180,20 @@
                         });
                     }
 
-
                     //put all elements that will be animated to their first position
-                    el.find('li:first [animate]').each(function () {
-                        checkDefaultPosition($(this), index);
+                    _.el.find('li:first [animate]').each(function () {
+                        checkDefaultPosition($(this), _.index);
                     });
 
                     if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8) {
-                        var video = el.find('video');
+                        var video = _.el.find('video');
                         video.each(function () { $(this).get(0).pause() });
                     }
 
                     //make banner visible, call animations after fade finish
                     $(".banner ul").css("visibility", "visible").hide().fadeIn("slow", function myfunction() {
                         $(".firstslide [animate]").hide();
-                        _.animation(el.find('li:first'), 0);
+                        _.animation(_.el.find('li:first'), 0);
                     });
 
                     //delete loader no longer need.
@@ -240,14 +255,24 @@
             if (o.fluid) {
                 $(window).resize(function () {
                     _.r && clearTimeout(_.r);
-
                     _.r = setTimeout(function () {
                         var styl = { height: li.eq(_.i).outerHeight() },
-                            width = el.outerWidth();
-
+                            bw = $('body').width();//el.outerWidth();
+                        el.find('ul li').css('width', bw);
                         ul.css(styl);
-                        styl['width'] = Math.min(Math.round((width / el.parent().width()) * 100), 100) + '%';
+                        styl['width'] = Math.min(Math.round((bw / el.parent().width()) * 100), 100) + '%';
                         el.css(styl);
+                        var size = bw / width;
+                        width = bw;
+                        _.el.find('[resizable]').each(function () {
+                            var w = $(this).width();
+                            w > 0 && $(this).css('width', (w * size) + 'px');
+                            var h = $(this).height();
+                            h > 0 && $(this).css('height', (h * size) + 'px');
+                        });
+                        _.el.find('li:first [animate]').each(function () {
+                            checkDefaultPosition($(this), _.index);
+                        });
                     }, 50);
                 }).resize();
             };
@@ -263,7 +288,7 @@
             return _;
         };
 
-        //  Move Unslider to a slide index
+        //  Move Chain to a slide index
         _.to = function (index, callback, playAnimate) {
             if (_.t) {
                 _.stop();
@@ -689,22 +714,14 @@
                 }
                 _div.attr('style', style);
             }
-        }        
+        }
 
-        //reload the page when browser size changed
         var width = $('body').width();
-        $(window).resize(function () {
-
-            if (width != $('body').width()) {
-                width = window.screen.width;
-                window.location.href = window.location.href;
-            }
-        });
     };
 
     var slideChanged = false;
     //  Create a jQuery plugin
-    $.fn.unslider = function (o) {
+    $.fn.chain = function (o) {
         var len = this.length;
 
         //ie 7-8 does not support the trim function. The code is fixing it
@@ -718,13 +735,13 @@
         return this.each(function (index) {
             //  Cache a copy of $(this), so it
             var me = $(this),
-                key = 'unslider' + (len > 1 ? '-' + ++index : ''),
-                instance = (new Unslider).init(me, o);
+                key = 'Chain' + (len > 1 ? '-' + ++index : ''),
+                instance = (new Chain).init(me, o);
 
-            //  Invoke an Unslider instance
+            //  Invoke an Chain instance
             me.data(key, instance).data('key', key);
         });
     };
 
-    Unslider.version = "1.0.0";
+    Chain.version = "1.0.0";
 })(jQuery, false);

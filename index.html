@@ -41,9 +41,8 @@
                         <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">Lorem Ipsum has been the industry's</p>
                         <p style="font-size: 18px; font-weight: 300; text-align: left; color: rgb(117, 117, 117); line-height:24px;">standard dummy text ever since the 1500s</p>
                     </div>
-
-                    <div animate="true" data-type="slidedown(delay:500, speed:1000)" position="right:30%, top:bottom">
-                        <img resizable="true" src="img/woman.png" alt="Alternate Text" width="378" height="464" />
+                    <div style="width:378px; height:464px; position:absolute; bottom:0px; left: 40%;">
+                        <img resizable="true" src="img/woman.png" alt="Alternate Text" animate="true" data-type="swing(delay:0, speed:3000, width:378, height:464, opacity:1)" position="width: 178px, height:264px, opacity:0.3"/>
                     </div>
                     <div style="z-index:1000" animate="true" data-type="fadeIn(delay:1000,speed:1000)" position="right:5%, top:5%">
                         <div style="font-size: 58px; font-weight: 800; color: rgb(52, 73, 94);">1000's</div>
@@ -69,7 +68,7 @@
                     </object>
                     Your browser does not support the video tag.
                 </video>
-                <div class="inner" animate="true" data-type="rotate(delay:1000, angle: 0, animateTo: 360, duration: 3000, easing:swing)-swing(delay:0, speed:3000, left:left>center, top:center>center)" position="left:left, top:center">
+                <div class="inner" animate="true" data-type="rotate(delay:0, angle: 0, animateTo: 360, duration: 3000, easing:swing)-swing(delay:0, speed:3000, left:left>center, top:top>center, opacity: 0.4)-swing(delay:0, speed:3000, left:center>right, top:center>bottom, opacity:1)-rotate(delay:2500, angle: 0, animateTo: 360, duration: 3000, easing:swing)" position="left:left, top:center">
                     <h1>Fluid, flexible, fantastically minimal.</h1>
                     <p>Use any HTML in your slides, extend with CSS. You have full control.</p>
                 </div>
@@ -124,6 +123,10 @@
                         defaultVideoWidth: window.screen.width,
                         defaultVideoHeight: 400
                     });
+
+                if (target == 3) {
+                    $('.lastLi .inner').animate({}, {duration: 3000})
+                }
             },
             animations: [
                 {
@@ -131,10 +134,10 @@
                         "animate" : "true",
                         "position": "left:left, top:0%",
                         "data-type": [
-                            "slidedown(delay: 500, speed:1000)",
-                            "linear(delay:1500, speed:1000, left:left>left, top:top>center)",
-                            "swing(delay:1000, speed:1000, left:left>center)",
-                            "slideup(delay:1000, speed:2000)-slidedown(delay:2000, speed:2000)"
+                            //"slidedown(delay: 500, speed:1000)",
+                            "linear(delay:0, speed:3000, left:left>left, top:top>center)",
+                            "swing(delay:0, speed:1000, left:left>center)",
+                            //"slideup(delay:1000, speed:2000)-slidedown(delay:2000, speed:2000)"
                         ]
                     }
                 }

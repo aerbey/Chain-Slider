@@ -126,8 +126,10 @@
                 });
             }
 
+            var hasLoaded = false;
             $(window).load(function () {
                 setTimeout(function myfunction() {
+                    hasLoaded = true;
                     if (_.o.animations !== undefined) {
                         var animations = _.o.animations;//window.JSON.parse(_.o.animations);
                         for (var an in animations[0]) {
@@ -270,9 +272,16 @@
                             var h = $(this).height();
                             h > 0 && $(this).css('height', (h * size) + 'px');
                         });
+
                         _.el.find('li:first [animate]').each(function () {
                             checkDefaultPosition($(this), _.index);
                         });
+
+                        if (hasLoaded) {
+                             el.find('[animate="true"]').clearQueue().stop(true, false);
+                            _.animation(_.el.find('li').eq(_.i), _.i);
+                        }
+
                     }, 50);
                 }).resize();
             };
@@ -498,9 +507,12 @@
                             if (opt.right != undefined) option.right = opt.right;
                             if (opt.top != undefined) option.top = opt.top;
                             if (opt.bottom != undefined) option.bottom = opt.bottom;
-
+                            if (opt.width != undefined) option.width = opt.width;
+                            if (opt.height != undefined) option.height = opt.height;
+                            if (opt.opacity != undefined) option.opacity = opt.opacity;
+                            
                             _div.animate(option, opt.speed,
-                            opt.type.trim(),
+                            opt.type.trim(),                            
                             function () {
                                 checkElements(_div, index);
                             });
@@ -604,6 +616,18 @@
                                 _div.css('bottom', bottom);
                             break;
 
+                        case "width":
+                            options.width = val;
+                            break;
+
+                        case "height":
+                            options.height = val;
+                            break;
+
+                        case "opacity":
+                            options.opacity = val;
+                            break;
+
                         default:
                             break;
                     }
@@ -680,9 +704,13 @@
                                 case "top":
                                 case "-webkit-transform":
                                 case "-webkit-transform-origin":
-
                                     break;
+
+                                case "width":
+                                case "height":
+                                case "opacity":
                                 default:
+                                    if(posArr.indexOf(arr[0].trim()) == -1)
                                     style += cssArr[i] + "; ";
                                     break;
                             }
@@ -707,6 +735,15 @@
                         case "top":
                             var top = calculatePos(_div, arr[1], index, false);
                             style += "top:" + top + "; ";
+                            break;
+                        case "width":
+                            style += "width:" + arr[1] + "; ";
+                            break;
+                        case "height":
+                            style += "height:" + arr[1] + "; ";
+                            break;
+                        case "opacity":
+                            style += "opacity:" + arr[1] + "; ";
                             break;
                         default:
                             break;

@@ -710,7 +710,7 @@
                                 case "height":
                                 case "opacity":
                                 default:
-                                    if(posArr.indexOf(arr[0].trim()) == -1)
+                                    if ($.inArray(arr[0].trim(), posArr) == -1)
                                     style += cssArr[i] + "; ";
                                     break;
                             }

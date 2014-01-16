@@ -459,7 +459,7 @@
                 var delay = getDelay(type);
                 var timer = setTimeout(function () {
                     window.clearTimeout(timer);
-                    var opt = checkPosition(_div, index, type);
+                    var opt = checkPosition(_div, _.i, type);
                     switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
                         case "fadein":
                             _div.fadeIn(opt.speed, function () {
@@ -513,6 +513,7 @@
                         case "css":
                             var css = _div.attr('style');
                             var style = "";
+                            opt.style = opt.style.replace('zindex', 'z-index');
                             if (css != undefined) {
                                 var cssArr = css.split(';');
                                 var oArr = opt.style.split(';')
@@ -532,6 +533,7 @@
                                     }
                                 }
                                 style = css + opt.style;
+                                opt.style = opt.style.replace('zindex', 'z-index');
                                 _div.attr('style', style);
                             }
                             break;

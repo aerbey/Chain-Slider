@@ -511,7 +511,29 @@
 
 
                         case "css":
-                            _div.attr('style', opt.style);
+                            var css = _div.attr('style');
+                            var style = "";
+                            if (css != undefined) {
+                                var cssArr = css.split(';');
+                                var oArr = opt.style.split(';')
+                                for (var i = 0; i < oArr.length; i++) {
+                                    if (oArr[i] != "") {
+                                        var oarr = oArr[i].split(':');
+                                        var index = css.indexOf(oarr[0]);
+                                        if (index > -1) {
+                                            var enter = false;
+                                            var rmv = "";
+                                            for (var j = index; j < css.length; j++) {
+                                                rmv += css[j];
+                                                if (css[j] == ";") break;
+                                            }
+                                            css = css.replace(rmv, "");
+                                        }
+                                    }
+                                }
+                                style = css + opt.style;
+                                _div.attr('style', style);
+                            }
                             break;
 
                         case "zoom":
@@ -541,7 +563,7 @@
                             if (opt.ratio != undefined) {
                                 var w = _div.width();
                                 var h = _div.height();
-                                opt.type = opt.type != "zoom" ? opt.easing != undefined  ? opt.easing : opt.type : "swing";
+                                opt.type = opt.type != "zoom" ? opt.easing != undefined ? opt.easing : opt.type : "swing";
                                 option.width = Math.floor(w * opt.ratio);
                                 option.height = Math.floor(h * opt.ratio);
                             }
@@ -596,7 +618,7 @@
                     options.duration = d == 0 || d == null || d == "" ? 1000 : d;
                 }
                 else if (key === "ratio") {
-                    var d = parseInt(val);
+                    var d = parseFloat(val);
                     options.ratio = d == 0 || d == null || d == "" ? 1000 : d;
                 }
                 else if (key === "easing") {
@@ -612,10 +634,7 @@
 
                 }
                 else if (key === "style") {
-                    for (var i = 1; i < arr.length; i++) {
-                        val += arr[i];
-                    }
-                    options.style = val;
+                    options.style = optArr[i].replace('style:', '');
                 }
                 else {
                     switch (key) {

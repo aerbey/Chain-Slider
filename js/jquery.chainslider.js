@@ -162,10 +162,13 @@
                             switch (type.toLowerCase()) {
                                 case "slideup":
                                 case "fadeout":
+                                case "zoom":
                                     $(this).css('display', 'block');
                                     break;
                                 default:
-                                    break
+                                    var eas = $.easing[type];
+                                    eas != undefined && $(this).css('display', 'block');
+                                    break;
 
                             }
                         }
@@ -533,11 +536,12 @@
                             if (opt.width != undefined) option.width = opt.width;
                             if (opt.height != undefined) option.height = opt.height;
                             if (opt.opacity != undefined) option.opacity = opt.opacity;
+                            opt.type == undefined && (opt.type = "swing");
                             //zoom support
                             if (opt.ratio != undefined) {
                                 var w = _div.width();
                                 var h = _div.height();
-                                opt.type = opt.type != "zoom" ? opt.easing != undefined && opt.easing : "swing";
+                                opt.type = opt.type != "zoom" ? opt.easing != undefined  ? opt.easing : opt.type : "swing";
                                 option.width = Math.floor(w * opt.ratio);
                                 option.height = Math.floor(h * opt.ratio);
                             }

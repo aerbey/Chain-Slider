@@ -200,7 +200,7 @@
 
                     //delete loader no longer need.
                     $(".banner .slide-loader:first").remove();
-                }, 1000)
+                }, 100)
             });
 
             //  Cached vars
@@ -278,7 +278,7 @@
                         });
 
                         if (hasLoaded) {
-                             el.find('[animate="true"]').clearQueue().stop(true, false);
+                            el.find('[animate="true"]').clearQueue().stop(true, false);
                             _.animation(_.el.find('li').eq(_.i), _.i);
                         }
 
@@ -500,6 +500,15 @@
                             tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                             break;
 
+                        case "flip":
+                            _div.toggleClass(opt.axis).promise().done(function () {
+                                //run that after toggle class finished. This is how we call callback for toggleClass
+                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
+                                checkElements(_div, index);
+                            });
+
+                            break;
+
                         default:
                             _div.css('display', 'block');
                             var option = {};
@@ -510,9 +519,9 @@
                             if (opt.width != undefined) option.width = opt.width;
                             if (opt.height != undefined) option.height = opt.height;
                             if (opt.opacity != undefined) option.opacity = opt.opacity;
-                            
+
                             _div.animate(option, opt.speed,
-                            opt.type.trim(),                            
+                            opt.type.trim(),
                             function () {
                                 checkElements(_div, index);
                             });
@@ -535,6 +544,7 @@
             type = type.replace(' ', '').replace(options.type + '(', '').replace(')', '');
             var optArr = type.split(',');
             for (var i = 0; i < optArr.length; i++) {
+
                 var arr = optArr[i].split(':');
                 var key = arr[0].toLowerCase().trim();
                 var val = arr[1].toLowerCase().trim();
@@ -560,6 +570,15 @@
                 }
                 else if (key === "easing") {
                     options.easing = val == 0 || val == null || val == "" ? "swing" : val;
+                }
+                else if (key === "axis") {
+                    if (val == "x") {
+                        options.axis = "flipH";
+                    }
+                    else {
+                        options.axis = "flipV";
+                    }
+
                 }
                 else {
                     switch (key) {
@@ -711,7 +730,7 @@
                                 case "opacity":
                                 default:
                                     if ($.inArray(arr[0].trim(), posArr) == -1)
-                                    style += cssArr[i] + "; ";
+                                        style += cssArr[i] + "; ";
                                     break;
                             }
                         }
@@ -779,6 +798,15 @@
             me.data(key, instance).data('key', key);
         });
     };
+
+    //flip horizontal css
+    $("<style type='text/css'> .flipH{ -moz-transform: scaleX(-1);  -webkit-transform: scaleX(-1); -o-transform: scaleX(-1);" +
+      "transform: scaleX(-1); -ms-filter: fliph; /*IE*/  filter: fliph; /*IE*/ } </style>").appendTo("head");
+
+    //flip vertical css
+    $("<style type='text/css'> .flipV{ -moz-transform: scaleY(-1);  -webkit-transform: scaleY(-1);  -o-transform: scaleY(-1);" +
+     "transform: scaleY(-1); -ms-filter: flipv; /*IE*/  filter: flipv; /*IE*/    } </style>").appendTo("head");
+
 
     Chain.version = "1.0.0";
 })(jQuery, false);

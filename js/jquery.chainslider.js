@@ -453,13 +453,13 @@
             if (!slideChanged) {
                 _div.css("position", "absolute");
                 var type = tArr[i];
-                var opt = checkPosition(_div, index, type);
+                var delay = getDelay(type);
                 var timer = setTimeout(function () {
                     window.clearTimeout(timer);
+                    var opt = checkPosition(_div, index, type);
                     switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
                         case "fadein":
                             _div.fadeIn(opt.speed, function () {
-                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                                 checkElements(_div, index);
                             });
                             break;
@@ -467,7 +467,6 @@
                         case "fadeout":
                             _div.css('display', 'block');
                             _div.fadeOut(opt.speed, function () {
-                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                                 checkElements(_div, index);
                             });
                             break;
@@ -475,19 +474,18 @@
                         case "slideup":
                             _div.css('display', 'block');
                             _div.slideUp(opt.speed, function () {
-                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                                 checkElements(_div, index);
                             });
                             break;
 
                         case "slidedown":
                             _div.slideDown(opt.speed, function () {
-                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                                 checkElements(_div, index);
                             });
                             break;
 
                         case "rotate":
+                            _div.css('display', 'block');
                             _div.rotate({
                                 duration: opt.duration,
                                 angle: opt.angle,
@@ -497,14 +495,30 @@
                                     checkElements(_div, index);
                                 }
                             });
-                            tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                             break;
 
                         case "flip":
+                            _div.css('display', 'block');
                             _div.toggleClass(opt.axis).promise().done(function () {
                                 //run that after toggle class finished. This is how we call callback for toggleClass
-                                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                                 checkElements(_div, index);
+                            });
+
+                            break;
+
+
+                        case "css":
+                            _div.attr('style', opt.style);
+                            break;
+
+                        case "zoom":
+                            var w = _div.width();
+                            var h = _div.height();
+                            _div.animate({
+                                width: Math.floor(w * opt.ratio),
+                                height: Math.floor(h * opt.ratio)
+                            }, function callback() {
+
                             });
 
                             break;
@@ -519,16 +533,25 @@
                             if (opt.width != undefined) option.width = opt.width;
                             if (opt.height != undefined) option.height = opt.height;
                             if (opt.opacity != undefined) option.opacity = opt.opacity;
+                            //zoom support
+                            if (opt.ratio != undefined) {
+                                var w = _div.width();
+                                var h = _div.height();
+                                opt.type = opt.type != "zoom" ? opt.easing != undefined && opt.easing : "swing";
+                                option.width = Math.floor(w * opt.ratio);
+                                option.height = Math.floor(h * opt.ratio);
+                            }
 
+                            opt.queue = false,
                             _div.animate(option, opt.speed,
                             opt.type.trim(),
                             function () {
                                 checkElements(_div, index);
                             });
-                            tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
                             break;
                     }
-                }, opt.delay);
+                }, delay);
+                tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
             }
         }
 
@@ -568,6 +591,10 @@
                     var d = parseInt(val);
                     options.duration = d == 0 || d == null || d == "" ? 1000 : d;
                 }
+                else if (key === "ratio") {
+                    var d = parseInt(val);
+                    options.ratio = d == 0 || d == null || d == "" ? 1000 : d;
+                }
                 else if (key === "easing") {
                     options.easing = val == 0 || val == null || val == "" ? "swing" : val;
                 }
@@ -579,6 +606,12 @@
                         options.axis = "flipV";
                     }
 
+                }
+                else if (key === "style") {
+                    for (var i = 1; i < arr.length; i++) {
+                        val += arr[i];
+                    }
+                    options.style = val;
                 }
                 else {
                     switch (key) {
@@ -653,6 +686,21 @@
                 }
             }
             return options;
+        }
+
+        function getDelay(type) {
+            var index = type.indexOf('delay');
+            var enter = false;
+            var delay = "";
+            for (var i = index; i < type.length; i++) {
+                if (enter) {
+                    delay += type[i];
+                }
+
+                if (type[i] == ",") break;
+                if (type[i] == ":") enter = true;
+            }
+            return parseInt(delay);
         }
 
         function calculatePos(_div, val, index, isHorizontal) {

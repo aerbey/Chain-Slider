@@ -276,13 +276,32 @@
                             h > 0 && $(this).css('height', (h * size) + 'px');
                         });
 
-                        _.el.find('li:first [animate]').each(function () {
-                            checkDefaultPosition($(this), _.index);
-                        });
-
-                        if (hasLoaded) {
+                        if (o.textAnimation) {
+                            clearTimeout();
                             el.find('[animate="true"]').clearQueue().stop(true, false);
-                            _.animation(_.el.find('li').eq(_.i), _.i);
+                            el.find('[animate="true"]').css('display', 'none');
+                            el.find('[animate="true"]').each(function () {
+                                var t = $(this).attr("data-type");
+                                if (t != undefined && t != null && t != "") {
+                                    checkDefaultPosition($(this), _.index);
+                                    var ta = t.split(',');
+                                    var type = ta[0];
+                                    switch (type.toLowerCase()) {
+                                        case "slideup":
+                                        case "fadeout":
+                                            $(this).css('display', 'block');
+                                            break;
+                                        default:
+                                            break
+
+                                    }
+                                }
+                            });
+
+                            if (hasLoaded) {
+                                el.find('[animate="true"]').clearQueue().stop(true, false);
+                                _.animation(_.el.find('li').eq(_.i), _.i);
+                            }
                         }
 
                     }, 50);
@@ -314,6 +333,7 @@
                 target = li.eq(index);
 
             if (o.textAnimation && playAnimate != false) {
+                clearTimeout();
                 el.find('[animate="true"]').clearQueue().stop(true, false);
                 el.find('[animate="true"]').css('display', 'none');
                 el.find('[animate="true"]').each(function () {
@@ -410,12 +430,14 @@
         //  Move to previous/next slide
         _.next = function () {
             slideChanged = true;
-            _.ul.find('[animate="true"]').clearQueue().stop(true, false);
+            clearTimeout();
+            el.find('[animate="true"]').clearQueue().stop(true, false);
             return _.stop().to(_.i + 1);
         };
 
         _.prev = function () {
             slideChanged = true;
+            clearTimeout();
             _.ul.find('[animate="true"]').clearQueue().stop(true, false);
             return _.stop().to(_.i - 1);
         };
@@ -452,6 +474,7 @@
             }
         }
 
+        var timeoutCache = {};
         function playAnimation(_div, tArr, index, i) {
             if (!slideChanged) {
                 _div.css("position", "absolute");
@@ -459,126 +482,131 @@
                 var delay = getDelay(type);
                 var timer = setTimeout(function () {
                     window.clearTimeout(timer);
-                    var opt = checkPosition(_div, _.i, type);
-                    switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
-                        case "fadein":
-                            _div.fadeIn(opt.speed, function () {
-                                checkElements(_div, index);
-                            });
-                            break;
+                    delete timeoutCache[timer];
+                    var oi = parseInt(_.el.find('.active').text()) - 1;
+                    if (_.i == oi) {
+                        var opt = checkPosition(_div, _.i, type);
+                        switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
+                            case "fadein":
+                                _div.fadeIn(opt.speed, function () {
+                                    checkElements(_div, _.i);
+                                });
+                                break;
 
-                        case "fadeout":
-                            _div.css('display', 'block');
-                            _div.fadeOut(opt.speed, function () {
-                                checkElements(_div, index);
-                            });
-                            break;
+                            case "fadeout":
+                                _div.css('display', 'block');
+                                _div.fadeOut(opt.speed, function () {
+                                    checkElements(_div, _.i);
+                                });
+                                break;
 
-                        case "slideup":
-                            _div.css('display', 'block');
-                            _div.slideUp(opt.speed, function () {
-                                checkElements(_div, index);
-                            });
-                            break;
+                            case "slideup":
+                                _div.css('display', 'block');
+                                _div.slideUp(opt.speed, function () {
+                                    checkElements(_div, _.i);
+                                });
+                                break;
 
-                        case "slidedown":
-                            _div.slideDown(opt.speed, function () {
-                                checkElements(_div, index);
-                            });
-                            break;
+                            case "slidedown":
+                                _div.slideDown(opt.speed, function () {
+                                    checkElements(_div, _.i);
+                                });
+                                break;
 
-                        case "rotate":
-                            _div.css('display', 'block');
-                            _div.rotate({
-                                duration: opt.duration,
-                                angle: opt.angle,
-                                animateTo: opt.animateTo,
-                                easing: $.easing[opt.easing],
-                                callback: function () {
-                                    checkElements(_div, index);
-                                }
-                            });
-                            break;
+                            case "rotate":
+                                _div.css('display', 'block');
+                                _div.rotate({
+                                    duration: opt.duration,
+                                    angle: opt.angle,
+                                    animateTo: opt.animateTo,
+                                    easing: $.easing[opt.easing],
+                                    callback: function () {
+                                        checkElements(_div, _.i);
+                                    }
+                                });
+                                break;
 
-                        case "flip":
-                            _div.css('display', 'block');
-                            _div.toggleClass(opt.axis).promise().done(function () {
-                                //run that after toggle class finished. This is how we call callback for toggleClass
-                                checkElements(_div, index);
-                            });
+                            case "flip":
+                                _div.css('display', 'block');
+                                _div.toggleClass(opt.axis).promise().done(function () {
+                                    //run that after toggle class finished. This is how we call callback for toggleClass
+                                    checkElements(_div, _.i);
+                                });
 
-                            break;
+                                break;
 
 
-                        case "css":
-                            var css = _div.attr('style');
-                            var style = "";
-                            opt.style = opt.style.replace('zindex', 'z-index');
-                            if (css != undefined) {
-                                var cssArr = css.split(';');
-                                var oArr = opt.style.split(';')
-                                for (var i = 0; i < oArr.length; i++) {
-                                    if (oArr[i] != "") {
-                                        var oarr = oArr[i].split(':');
-                                        var index = css.indexOf(oarr[0]);
-                                        if (index > -1) {
-                                            var enter = false;
-                                            var rmv = "";
-                                            for (var j = index; j < css.length; j++) {
-                                                rmv += css[j];
-                                                if (css[j] == ";") break;
+                            case "css":
+                                var css = _div.attr('style');
+                                var style = "";
+                                opt.style = opt.style.replace('zindex', 'z-index');
+                                if (css != undefined) {
+                                    var cssArr = css.split(';');
+                                    var oArr = opt.style.split(';')
+                                    for (var i = 0; i < oArr.length; i++) {
+                                        if (oArr[i] != "") {
+                                            var oarr = oArr[i].split(':');
+                                            var index = css.indexOf(oarr[0]);
+                                            if (index > -1) {
+                                                var enter = false;
+                                                var rmv = "";
+                                                for (var j = index; j < css.length; j++) {
+                                                    rmv += css[j];
+                                                    if (css[j] == ";") break;
+                                                }
+                                                css = css.replace(rmv, "");
                                             }
-                                            css = css.replace(rmv, "");
                                         }
                                     }
+                                    style = css + opt.style;
+                                    opt.style = opt.style.replace('zindex', 'z-index');
+                                    _div.attr('style', style);
                                 }
-                                style = css + opt.style;
-                                opt.style = opt.style.replace('zindex', 'z-index');
-                                _div.attr('style', style);
-                            }
-                            break;
+                                break;
 
-                        case "zoom":
-                            var w = _div.width();
-                            var h = _div.height();
-                            _div.animate({
-                                width: Math.floor(w * opt.ratio),
-                                height: Math.floor(h * opt.ratio)
-                            }, function callback() {
-
-                            });
-
-                            break;
-
-                        default:
-                            _div.css('display', 'block');
-                            var option = {};
-                            if (opt.left != undefined) option.left = opt.left;
-                            if (opt.right != undefined) option.right = opt.right;
-                            if (opt.top != undefined) option.top = opt.top;
-                            if (opt.bottom != undefined) option.bottom = opt.bottom;
-                            if (opt.width != undefined) option.width = opt.width;
-                            if (opt.height != undefined) option.height = opt.height;
-                            if (opt.opacity != undefined) option.opacity = opt.opacity;
-                            opt.type == undefined && (opt.type = "swing");
-                            //zoom support
-                            if (opt.ratio != undefined) {
+                            case "zoom":
                                 var w = _div.width();
                                 var h = _div.height();
-                                opt.type = opt.type != "zoom" ? opt.easing != undefined ? opt.easing : opt.type : "swing";
-                                option.width = Math.floor(w * opt.ratio);
-                                option.height = Math.floor(h * opt.ratio);
-                            }
+                                _div.animate({
+                                    width: Math.floor(w * opt.ratio),
+                                    height: Math.floor(h * opt.ratio)
+                                }, function callback() {
 
-                            opt.queue = false,
-                            _div.animate(option, opt.speed,
-                            opt.type.trim(),
-                            function () {
-                                checkElements(_div, index);
-                            });
-                            break;
+                                });
+
+                                break;
+
+                            default:
+                                _div.css('display', 'block');
+                                var option = {};
+                                if (opt.left != undefined) option.left = opt.left;
+                                if (opt.right != undefined) option.right = opt.right;
+                                if (opt.top != undefined) option.top = opt.top;
+                                if (opt.bottom != undefined) option.bottom = opt.bottom;
+                                if (opt.width != undefined) option.width = opt.width;
+                                if (opt.height != undefined) option.height = opt.height;
+                                if (opt.opacity != undefined) option.opacity = opt.opacity;
+                                opt.type == undefined && (opt.type = "swing");
+                                //zoom support
+                                if (opt.ratio != undefined) {
+                                    var w = _div.width();
+                                    var h = _div.height();
+                                    opt.type = opt.type != "zoom" ? opt.easing != undefined ? opt.easing : opt.type : "swing";
+                                    option.width = Math.floor(w * opt.ratio);
+                                    option.height = Math.floor(h * opt.ratio);
+                                }
+
+                                opt.queue = false,
+                                _div.animate(option, opt.speed,
+                                opt.type.trim(),
+                                function () {
+                                    checkElements(_div, _.i);
+                                });
+                                break;
+                        }
                     }
                 }, delay);
+                timeoutCache[timer] = timer;
                 tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
             }
         }
@@ -842,6 +870,13 @@
                     }
                 }
                 _div.attr('style', style);
+            }
+        }
+
+        function clearTimeout() {
+            for (var i in timeoutCache) {
+                window.clearTimeout(timeoutCache[i]);
+                delete timeoutCache[i];
             }
         }
 

@@ -807,9 +807,18 @@
         }
 
         function checkDefaultPosition(_div, index) {
+            if (_div.attr('src') != undefined) {
+                var a = "";
+            }
             var position = _div.attr('position');
             if (position != undefined) {
                 var posArr = position.split(',');
+                var chechkArr = {};
+                for (var i = 0; i < posArr.length; i++) {
+                    if (posArr[i] != "") {
+                        chechkArr[i] = posArr[i].split(':')[0].trim();
+                    }
+                }
                 var css = _div.attr('style');
                 var style = "";
                 if (css != undefined) {
@@ -830,7 +839,7 @@
                                 case "height":
                                 case "opacity":
                                 default:
-                                    if ($.inArray(arr[0].trim(), posArr) == -1)
+                                    if ($.inArray(arr[0].trim(), chechkArr) == -1)
                                         style += cssArr[i] + "; ";
                                     break;
                             }
@@ -856,16 +865,9 @@
                             var top = calculatePos(_div, arr[1], index, false);
                             style += "top:" + top + "; ";
                             break;
-                        case "width":
-                            style += "width:" + arr[1] + "; ";
-                            break;
-                        case "height":
-                            style += "height:" + arr[1] + "; ";
-                            break;
-                        case "opacity":
-                            style += "opacity:" + arr[1] + "; ";
-                            break;
+
                         default:
+                            style += arr[0] + ":" + arr[1] + "; ";
                             break;
                     }
                 }

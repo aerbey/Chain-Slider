@@ -764,17 +764,17 @@
             if (isHorizontal) {
                 switch (val.toLowerCase().trim()) {
                     case "left":
-                        var _l = _div.parents('inner').css('position') == "absolute" ? w * index : 0;
+                        var _l = _div.parents(_.o.texContainer).css('position') == "absolute" ? w * index : 0;
                         return _l + "px";
                         break;
 
                     case "right":
-                        var _l = _div.parents('inner').css('position') == "absolute" ? (w * (index + 1)) - dw : w - dw;
+                        var _l = _div.parents(_.o.texContainer).css('position') == "absolute" ? (w * (index + 1)) - dw : w - dw;
                         return _l + "px";
                         break;
 
                     case "center":
-                        var _l = _div.parents('inner').css('position') == "absolute" ? (w * index) + ((w - dw) / 2) : (w - dw) / 2;
+                        var _l = _div.parents(_.o.texContainer).css('position') == "absolute" ? (w * index) + ((w - dw) / 2) : (w - dw) / 2;
                         return _l + "px";
                         break;
 

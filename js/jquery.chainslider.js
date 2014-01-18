@@ -431,7 +431,7 @@
         _.next = function () {
             slideChanged = true;
             clearTimeout();
-            el.find('[animate="true"]').clearQueue().stop(true, false);
+            _.ul.find('[animate="true"]').clearQueue().stop(true, false);
             return _.stop().to(_.i + 1);
         };
 

@@ -34,7 +34,7 @@
         prev: '←',      // text or html inside prev button (string)
         next: '→',      // same as for prev option
         fluid: f,       // is it a percentage width? (boolean)
-        before: f,      //before slide work
+        before: f,      // before slide work
         starting: f,    // invoke before animation (function with argument)
         complete: f,    // invoke after animation (function with argument)
         items: '>ul',   // slides container selector

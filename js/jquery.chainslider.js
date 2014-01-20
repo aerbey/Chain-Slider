@@ -1,17 +1,40 @@
-/**
- *   Chain by @idiot and @damirfoy
- *   Contributors:
- *   - @ShamoX
- *
- */
+﻿(function ($, f) {
 
-(function ($, f) {
-  
-    //  Object clone
-    var _ = this;
 
-    //  Set some options
-    _.o = {
+
+
+    $.fn.chain = function (o) {
+        var len = this.length;
+
+
+
+        //merge the defaults
+        o = $.extend({}, $.fn.chain.defaults, o);
+
+
+
+        //ie 7-8 does not support the trim function. The code is fixing it
+        if (typeof String.prototype.trim !== 'function') {
+            String.prototype.trim = function () {
+                return this.replace(/^\s+|\s+$/g, '');
+            }
+        }
+
+        //  Enable multiple-slider support
+        return this.each(function (index) {
+            //  Cache a copy of $(this), so it
+            var me = $(this);
+            var key = 'Chain' + (len > 1 ? '-' + ++index : '');
+            var instance = init(me, o);
+
+            //  Invoke an Chain instance
+            me.data(key, instance).data('key', key);
+        });
+    };
+
+
+    // Plugin defaults – added as a property on our plugin function.
+    $.fn.chain.defaults = {
         speed: 500,     // animation speed, false for no transition (integer or boolean)
         delay: 3000,    // delay between slides, false for no autoplay (integer or boolean)
         init: 0,        // init delay, false for no delay (integer or boolean)
@@ -23,7 +46,7 @@
         prev: '←',      // text or html inside prev button (string)
         next: '→',      // same as for prev option
         fluid: f,       // is it a percentage width? (boolean)
-        before: f,
+        before: f,      //before slide work
         starting: f,    // invoke before animation (function with argument)
         complete: f,    // invoke after animation (function with argument)
         items: '>ul',   // slides container selector
@@ -32,38 +55,52 @@
         autoplay: true,  // enable autoplay on initialisation
         textAnimation: false,
         texContainer: '.inner',
-        swiper: false,
-        cursorClass: "cursor",
+        swipe: false,
         swipeDistance: 20,
+        cursorClass: "cursor",
         waitVideo: true,
         animations: null
     };
 
-    _.init = function (el, o) {
-        //  Check whether we're passing any options in to Chain            
-        _.o = $.extend(_.o, o);
+    var _ = new Object();
 
-        $.isFunction(o.before) && o.before(el, o);
 
+    var width = $('body').width();
+    var slideChanged = false;
+
+    this.init = function (el, o) {
+
+        //storing all variables in _
+        
+        _.o = o;
         _.el = el;
         _.ul = el.find(_.o.items);
         _.max = [el.outerWidth() | 0, el.outerHeight() | 0];
+      
         var index = 0;
+
+        //if before defined, send parameters to it
+        $.isFunction(_.o.before) && o.before(el, _.o);
+
+
         _.li = _.ul.find(_.o.item).each(function (index) {
-            var me = $(this),
-                width = me.outerWidth(),
-                height = me.outerHeight();
+            var me = $(this);
+            var width = me.outerWidth();
+            var height = me.outerHeight();
 
             //  Set the max values
             if (width > _.max[0]) _.max[0] = width;
             if (height > _.max[1]) _.max[1] = height;
+
             me.find(_.o.texContainer).each(function () {
-                checkDefaultPosition($(this), index);
+                $.fn.chain.checkDefaultPosition(_.o.texContainer,$(this), index);
             });
             index++;
         });
 
-        if (_.o.swiper) {
+
+        //while holding and dragging slide
+        if (_.o.swipe) {
             var firstleft;
             var slides = el.find('ul'), i = 0;
             slides
@@ -108,7 +145,7 @@
 
                     var cleft = firstleft * width / 100;
                     if (cleft > left + distance)
-                        _.next();
+                        _.next(_.ul);
                     else if (cleft < left - distance)
                         _.prev();
                     else {
@@ -117,8 +154,7 @@
                     }
                 });
 
-            jQuery(document)
-            .on('click', '.slide_button', function (e) {
+            jQuery(document).on('click', '.slide_button', function (e) {
                 var href = e.currentTarget.hash;
                 jQuery(href).trigger('activate');
 
@@ -127,11 +163,15 @@
         }
 
         var hasLoaded = false;
+        
+        //Show loader, set the elements position, visibility of elements.
         $(window).load(function () {
             setTimeout(function myfunction() {
                 hasLoaded = true;
-                if (_.o.animations !== undefined) {
-                    var animations = _.o.animations;//window.JSON.parse(_.o.animations);
+
+                //if animations called by javascript
+                if (_.o.animations !== undefined && _.o.animations!== null) {
+                    var animations = _.o.animations;
                     for (var an in animations[0]) {
                         var key = an;
                         var skey = animations[0][an];
@@ -152,6 +192,7 @@
                     }
                 }
 
+                //set initial animatable elements display none
                 _.el.find('[animate="true"]').stop(true, true);
                 _.el.find('[animate="true"]').css('display', 'none');
                 _.el.find('[animate="true"]').each(function () {
@@ -175,6 +216,7 @@
                 });
 
                 var bw = $('body').width();
+                //resize the resizable class images
                 if (bw <= 1200) {
                     var size = bw / window.screen.width;
                     _.el.find('[resizable]').each(function () {
@@ -187,7 +229,7 @@
 
                 //put all elements that will be animated to their first position
                 _.el.find('li:first [animate]').each(function () {
-                    checkDefaultPosition($(this), _.index);
+                    $.fn.chain.checkDefaultPosition(_.o.texContainer,$(this), _.index);
                 });
 
                 if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8) {
@@ -197,8 +239,12 @@
 
                 //make banner visible, call animations after fade finish
                 $(".banner ul").css("visibility", "visible").hide().fadeIn("slow", function myfunction() {
+
+                    //firstly hide all elements that will be animated
                     $(".firstslide [animate]").hide();
-                    _.animation(_.el.find('li:first'), 0);
+
+                    //play the animations
+                    $.fn.chain.animation(_.el.find('li:first'), 0);
                 });
 
                 //delete loader no longer need.
@@ -206,14 +252,13 @@
             }, 100)
         });
 
+
         //  Cached vars
-        var o = _.o,
-            ul = _.ul,
+        var ul = _.ul,
             li = _.li,
             len = li.length;
-
-        //  Current indeed
         _.i = 0;
+
 
         //  Set the main element
         el.css({ width: _.max[0], height: li.first().outerHeight(), overflow: 'hidden' });
@@ -222,6 +267,7 @@
         ul.css({ position: 'relative', left: 0, width: (len * 100) + '%' });
         li.css({ 'float': 'left', width: (_.max[0]) + 'px' });
 
+
         //  Autoslide
         o.autoplay && setTimeout(function () {
             if (o.delay | 0) {
@@ -229,8 +275,8 @@
 
                 if (o.pause) {
                     el.on('mouseover mouseout', function (e) {
-                        _.stop();
-                        e.type == 'mouseout' && _.play();
+                        //$(this).stop();
+                        //e.type == 'mouseout' && _.play();
                     });
                 };
             };
@@ -251,12 +297,12 @@
         };
 
         //  Dot pagination
-        o.dots && nav('dot');
+        o.dots && $.fn.chain.nav(_.el.find("li"),'dot', _.o.prev, _.o.next);
 
         //  Arrows support
-        o.arrows && nav('arrow');
+        o.arrows && $.fn.chain.nav(_.el.find(">li"), 'arrow',  _.o.prev, _.o.next);
 
-        //  Patch for fluid-width sliders. Screw those guys.
+        //  Make slider adaptive to screen. On resize restart animation
         if (o.fluid) {
             $(window).resize(function () {
                 _.r && clearTimeout(_.r);
@@ -283,7 +329,7 @@
                         el.find('[animate="true"]').each(function () {
                             var t = $(this).attr("data-type");
                             if (t != undefined && t != null && t != "") {
-                                checkDefaultPosition($(this), _.index);
+                                $.fn.chain.checkDefaultPosition(_.o.texContainer, $(this), _.index);
                                 var ta = t.split(',');
                                 var type = ta[0];
                                 switch (type.toLowerCase()) {
@@ -300,7 +346,7 @@
 
                         if (hasLoaded) {
                             el.find('[animate="true"]').clearQueue().stop(true, false);
-                            _.animation(_.el.find('li').eq(_.i), _.i);
+                            $.fn.chain.animation(_.el.find('li').eq(_.i), _.i);
                         }
                     }
 
@@ -311,13 +357,450 @@
         //  Swipe support
         if ($.event.special['swipe'] || $.Event('swipe')) {
             el.on('swipeleft swiperight swipeLeft swipeRight', function (e) {
-                e.type.toLowerCase() == 'swipeleft' ? _.next() : _.prev();
+                e.type.toLowerCase() == 'swipeleft' ? $.fn.chain.next(_.ul) : $.fn.chain.prev(_.ul);
             });
         };
 
-
+       
         return _;
+     
+     
+    }
+
+    //set element position according to written value
+    $.fn.chain.checkDefaultPosition = function(container,_div, index) {
+        if (_div.attr('src') != undefined) {
+            var a = "";
+        }
+        var position = _div.attr('position');
+        if (position != undefined) {
+            var posArr = position.split(',');
+            var chechkArr = {};
+            for (var i = 0; i < posArr.length; i++) {
+                if (posArr[i] != "") {
+                    chechkArr[i] = posArr[i].split(':')[0].trim();
+                }
+            }
+            var css = _div.attr('style');
+            var style = "";
+            if (css != undefined) {
+                var cssArr = css.split(';');
+                for (var i = 0; i < cssArr.length; i++) {
+                    if (cssArr[i].trim() != "") {
+                        var arr = cssArr[i].split(':');
+                        switch (arr[0].trim()) {
+                            case "left":
+                            case "right":
+                            case "bottom":
+                            case "top":
+                            case "-webkit-transform":
+                            case "-webkit-transform-origin":
+                                break;
+
+                            case "width":
+                            case "height":
+                            case "opacity":
+                            default:
+                                if ($.inArray(arr[0].trim(), chechkArr) == -1)
+                                    style += cssArr[i] + "; ";
+                                break;
+                        }
+                    }
+                }
+            }
+            for (var i = 0; i < posArr.length; i++) {
+                var arr = posArr[i].split(':');
+                switch (arr[0].trim()) {
+                    case "left":
+                        var left = $.fn.chain.calculatePos(container, _div, arr[1], index, true);
+                        style += "left:" + left + "; ";
+                        break;
+                    case "right":
+                        var right = $.fn.chain.calculatePos(container, _div, arr[1], index, true);
+                        style += "right:" + right + "; ";
+                        break;
+                    case "bottom":
+                        var bottom = $.fn.chain.calculatePos(container, _div, arr[1], index, false);
+                        style += "bottom:" + bottom + "; ";
+                        break;
+                    case "top":
+                        var top = $.fn.chain.calculatePos(container, _div, arr[1], index, false);
+                        style += "top:" + top + "; ";
+                        break;
+
+                    default:
+                        style += arr[0] + ":" + arr[1] + "; ";
+                        break;
+                }
+            }
+            _div.attr('style', style);
+        }
+    }
+
+    //calculate element position
+    $.fn.chain.calculatePos = function (container,_div, val, index, isHorizontal) {
+        var w = $('body').width();//window.screen.width;
+        var h = _div.parents('li:first').height();
+        var dw = _div.width();
+        var dh = _div.height();
+        if (isHorizontal) {
+            switch (val.toLowerCase().trim()) {
+                case "left":
+                    var _l = _div.parents(container).css('position') == "absolute" ? w * index : 0;
+                    return _l + "px";
+                    break;
+
+                case "right":
+                    var _l = _div.parents(container).css('position') == "absolute" ? (w * (index + 1)) - dw : w - dw;
+                    return _l + "px";
+                    break;
+
+                case "center":
+                    var _l = _div.parents(container).css('position') == "absolute" ? (w * index) + ((w - dw) / 2) : (w - dw) / 2;
+                    return _l + "px";
+                    break;
+
+                default:
+                    return val;
+                    break;
+            }
+        }
+        else {
+            switch (val.toLowerCase().trim()) {
+                case "top":
+                    return "0px";
+                    break;
+
+                case "bottom":
+                    var _b = h - dh;
+                    return _b + "px";
+                    break;
+
+                case "center":
+                    var _b = (h - dh) / 2;
+                    return _b + "px";
+                    break;
+
+                default:
+                    return val;
+                    break
+            }
+        }
+    }
+
+    //  Create dots and arrows
+    $.fn.chain.nav = function (container,name, html, prevText, nextText) {
+        if (name == 'dot') {
+            html = '<ol class="dots">';
+            $.each($(container), function (index) {
+                html += '<li class="' + (index == _.i ? name + ' active' : name) + '">' + ++index + '</li>';
+            });
+            html += '</ol>';
+        } else {
+            html = '<div class="';
+            html = html + name + 's">' + html + name + ' prev">' + _.o.prev + '</div>' + html + name + ' next">' + _.o.next + '</div></div>';
+        };
+
+        _.el.addClass('has-' + name + 's').append(html).find('.' + name).click(function () {
+            var me = $(this);
+            me.hasClass('dot') ? _.stop().to(me.index()) : me.hasClass('prev') ? _.prev() : _.next();
+        });
     };
+    
+    //$.fn.chain.animation
+    $.fn.chain.animation = function (_div, index) {
+
+        var animate = _div.attr('animate');
+        if (animate == "true") {
+            var type = _div.attr('data-type');
+            var tArr = type.split('-');
+            applyAnimation(_div, tArr, index, 0);
+        }
+        else {
+            $.fn.chain.checkDefaultPosition(_.o.texContainer, _div, index);
+
+            //call animation for all the animatables inside element
+            _div.find('[animate="true"]').each(function () {
+                $.fn.chain.animation($(this), index);
+            });
+            
+        }
+    }
+
+    function applyAnimation(_div, tArr, index, i) {
+        if (!slideChanged) {
+            _div.css("position", "absolute");
+            var type = tArr[i];
+            var delay = getDelay(type);
+
+            //define timeouts for each animation
+            var timer = setTimeout(function () {
+                window.clearTimeout(timer);
+                delete timeoutCache[timer];
+
+                //for drag and drop mode, too be able to call outside of plugin
+                if (_.el == undefined) {
+                    _ = new Object();
+                    _.i = 0;
+                    _.el = $("body");
+                    _.o = $.fn.chain.defaults;
+                }
+
+                var oi = parseInt(_.el.find('.active').text()) - 1;
+
+                //ensure that we are in active slide
+                if (_.i == oi) {
+                    var opt = checkPosition(_div, _.i, type);
+                    switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
+                        case "fadein":
+                            _div.fadeIn(opt.speed);
+                            break;
+
+                        case "fadeout":
+                            _div.css('display', 'block');
+                            _div.fadeOut(opt.speed);
+                            break;
+
+                        case "slideup":
+                            _div.css('display', 'block');
+                            _div.slideUp(opt.speed);
+                            break;
+
+                        case "slidedown":
+                            _div.slideDown(opt.speed);
+                            break;
+
+                        case "rotate":
+                            _div.css('display', 'block');
+                            _div.rotate({
+                                duration: opt.duration,
+                                angle: opt.angle,
+                                animateTo: opt.animateTo,
+                                easing: $.easing[opt.easing]
+                            });
+                            break;
+
+                        case "flip":
+                            _div.css('display', 'block');
+
+                            //toggle class can not be animated. so we call it with promise
+                            _div.toggleClass(opt.axis).promise().done();
+                            break;
+
+
+                        case "css":
+                            var css = _div.attr('style');
+                            var style = "";
+                            opt.style = opt.style.replace('zindex', 'z-index');
+                            if (css != undefined) {
+                                var cssArr = css.split(';');
+                                var oArr = opt.style.split(';')
+                                for (var i = 0; i < oArr.length; i++) {
+                                    if (oArr[i] != "") {
+                                        var oarr = oArr[i].split(':');
+                                        var index = css.indexOf(oarr[0]);
+                                        if (index > -1) {
+                                            var enter = false;
+                                            var rmv = "";
+                                            for (var j = index; j < css.length; j++) {
+                                                rmv += css[j];
+                                                if (css[j] == ";") break;
+                                            }
+                                            css = css.replace(rmv, "");
+                                        }
+                                    }
+                                }
+                                style = css + opt.style;
+                                opt.style = opt.style.replace('zindex', 'z-index');
+                                _div.attr('style', style);
+                            }
+                            break;
+
+                        case "zoom":
+                            var w = _div.width();
+                            var h = _div.height();
+                            _div.animate({
+                                width: Math.floor(w * opt.ratio),
+                                height: Math.floor(h * opt.ratio)
+                            });
+
+                            break;
+
+                        default:
+                            _div.css('display', 'block');
+                            var option = {};
+                            if (opt.left != undefined) option.left = opt.left;
+                            if (opt.right != undefined) option.right = opt.right;
+                            if (opt.top != undefined) option.top = opt.top;
+                            if (opt.bottom != undefined) option.bottom = opt.bottom;
+                            if (opt.width != undefined) option.width = opt.width;
+                            if (opt.height != undefined) option.height = opt.height;
+                            if (opt.opacity != undefined) option.opacity = opt.opacity;
+                            opt.type == undefined && (opt.type = "swing");
+                            //zoom support
+                            if (opt.ratio != undefined) {
+                                var w = _div.width();
+                                var h = _div.height();
+                                opt.type = opt.type != "zoom" ? opt.easing != undefined ? opt.easing : opt.type : "swing";
+                                option.width = Math.floor(w * opt.ratio);
+                                option.height = Math.floor(h * opt.ratio);
+                            }
+
+                            opt.queue = false,
+                            _div.animate(option, opt.speed,
+                            opt.type.trim());
+                            break;
+                    }
+                }
+            }, delay);
+            timeoutCache[timer] = timer;
+
+            //if element has more than one animation defined
+            tArr.length - 1 > i && applyAnimation(_div, tArr, index, i + 1);
+        }
+    }
+
+    
+    //return delay time from defined animation
+    function getDelay(type) {
+        var index = type.indexOf('delay');
+        var enter = false;
+        var delay = "";
+        for (var i = index; i < type.length; i++) {
+            if (enter) {
+                delay += type[i];
+            }
+
+            if (type[i] == ",") break;
+            if (type[i] == ":") enter = true;
+        }
+        return parseInt(delay);
+    }
+
+    //retun animation properties to be applied in object
+    function checkPosition(_div, index, type) {
+        var options = {};
+        options.type = type.split('(')[0];
+        type = type.replace(' ', '').replace(options.type + '(', '').replace(')', '');
+        var optArr = type.split(',');
+        for (var i = 0; i < optArr.length; i++) {
+
+            var arr = optArr[i].split(':');
+            var key = arr[0].toLowerCase().trim();
+            var val = arr[1].toLowerCase().trim();
+            if (key === "delay") {
+                var d = parseInt(val);
+                options.delay = d == 0 || d == null || d == "" ? 600 : d;
+            }
+            else if (key === "speed") {
+                var s = parseInt(val);
+                options.speed = s == 0 || s == null || s == "" ? 600 : s;
+            }
+            else if (key === "angle") {
+                var a = parseInt(val);
+                options.angle = a == null || a == "" ? 45 : a;
+            }
+            else if (key === "animateto") {
+                var a = parseInt(val);
+                options.animateTo = a == null || a == "" ? 180 : a;
+            }
+            else if (key === "duration") {
+                var d = parseInt(val);
+                options.duration = d == 0 || d == null || d == "" ? 1000 : d;
+            }
+            else if (key === "ratio") {
+                var d = parseFloat(val);
+                options.ratio = d == 0 || d == null || d == "" ? 1000 : d;
+            }
+            else if (key === "easing") {
+                options.easing = val == 0 || val == null || val == "" ? "swing" : val;
+            }
+            else if (key === "axis") {
+                if (val == "x") {
+                    options.axis = "flipH";
+                }
+                else {
+                    options.axis = "flipV";
+                }
+
+            }
+            else if (key === "style") {
+                options.style = optArr[i].replace('style:', '');
+            }
+            else {
+                switch (key) {
+                    case "left":
+                        var left = val;
+                        var larr = left.split('>');
+                        if (larr.length > 1) {
+                            var left1 = $.fn.chain.calculatePos(_.o.texContainer,_div, larr[0], index, true);
+                            var left2 = $.fn.chain.calculatePos(_.o.texContainer, _div, larr[1], index, true);
+                            _div.css('left', left1);
+                            options.left = left2;
+                        }
+                        else
+                            _div.css('left', left);
+
+                        break;
+
+                    case "right":
+                        var right = val;
+                        var rarr = right.split('>');
+                        if (rarr.length > 1) {
+                            var right1 = $.fn.chain.calculatePos(_.o.texContainer, _div, rarr[0], index, true);
+                            var right2 = $.fn.chain.calculatePos(_.o.texContainer, _div, rarr[1], index, true);
+                            _div.css('right', right1);
+                            options.right = right2;
+                        }
+                        else
+                            _div.css('right', right);
+                        break;
+
+                    case "top":
+                        var top = val;
+                        var tarr = top.split('>');
+                        if (tarr.length > 1) {
+                            var top1 = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[0], index, false);
+                            var top2 = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[1], index, false);
+                            _div.css('top', top1);
+                            options.top = top2;
+                        }
+                        else
+                            _div.css('top', top);
+                        break;
+
+                    case "bottom":
+                        var bottom = val;
+                        var tarr = bottom.split('>');
+                        if (tarr.length > 1) {
+                            var bottom1 = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[0], index, false);
+                            var bottom2 = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[1], index, false);
+                            _div.css('bottom', bottom1);
+                            options.bottom = bottom2;
+                        }
+                        else
+                            _div.css('bottom', bottom);
+                        break;
+
+                    case "width":
+                        options.width = val;
+                        break;
+
+                    case "height":
+                        options.height = val;
+                        break;
+
+                    case "opacity":
+                        options.opacity = val;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        }
+        return options;
+    }
 
     //  Move Chain to a slide index
     _.to = function (index, callback, playAnimate) {
@@ -339,7 +822,7 @@
             el.find('[animate="true"]').each(function () {
                 var t = $(this).attr("data-type");
                 if (t != undefined && t != null && t != "") {
-                    checkDefaultPosition($(this), index);
+                    $.fn.chain.checkDefaultPosition(_.o.texContainer,$(this), index);
                     var ta = t.split(',');
                     var type = ta[0];
                     switch (type.toLowerCase()) {
@@ -405,7 +888,7 @@
                             len = 0;
                         }
                         if (len > 0) {
-                            _.animation(_div, index);
+                            $.fn.chain.animation(_div, index);
                         }
                     });
                 }
@@ -442,438 +925,7 @@
         return _.stop().to(_.i - 1);
     };
 
-    //  Create dots and arrows
-    function nav(name, html) {
-        if (name == 'dot') {
-            html = '<ol class="dots">';
-            $.each(_.li, function (index) {
-                html += '<li class="' + (index == _.i ? name + ' active' : name) + '">' + ++index + '</li>';
-            });
-            html += '</ol>';
-        } else {
-            html = '<div class="';
-            html = html + name + 's">' + html + name + ' prev">' + _.o.prev + '</div>' + html + name + ' next">' + _.o.next + '</div></div>';
-        };
-
-        _.el.addClass('has-' + name + 's').append(html).find('.' + name).click(function () {
-            var me = $(this);
-            me.hasClass('dot') ? _.stop().to(me.index()) : me.hasClass('prev') ? _.prev() : _.next();
-        });
-    };
-
-    _.animation = function (_div, index) {
-        var animate = _div.attr('animate');
-        if (animate == "true") {
-            var type = _div.attr('data-type');
-            var tArr = type.split('-');
-            playAnimation(_div, tArr, index, 0);
-        }
-        else {
-            checkDefaultPosition(_div, index);
-            checkElements(_div, index);
-        }
-    }
-
     var timeoutCache = {};
-    function playAnimation(_div, tArr, index, i) {
-        if (!slideChanged) {
-            _div.css("position", "absolute");
-            var type = tArr[i];
-            var delay = getDelay(type);
-            var timer = setTimeout(function () {
-                window.clearTimeout(timer);
-                delete timeoutCache[timer];
-                var oi = parseInt(_.el.find('.active').text()) - 1;
-                if (_.i == oi) {
-                    var opt = checkPosition(_div, _.i, type);
-                    switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
-                        case "fadein":
-                            _div.fadeIn(opt.speed, function () {
-                                checkElements(_div, _.i);
-                            });
-                            break;
-
-                        case "fadeout":
-                            _div.css('display', 'block');
-                            _div.fadeOut(opt.speed, function () {
-                                checkElements(_div, _.i);
-                            });
-                            break;
-
-                        case "slideup":
-                            _div.css('display', 'block');
-                            _div.slideUp(opt.speed, function () {
-                                checkElements(_div, _.i);
-                            });
-                            break;
-
-                        case "slidedown":
-                            _div.slideDown(opt.speed, function () {
-                                checkElements(_div, _.i);
-                            });
-                            break;
-
-                        case "rotate":
-                            _div.css('display', 'block');
-                            _div.rotate({
-                                duration: opt.duration,
-                                angle: opt.angle,
-                                animateTo: opt.animateTo,
-                                easing: $.easing[opt.easing],
-                                callback: function () {
-                                    checkElements(_div, _.i);
-                                }
-                            });
-                            break;
-
-                        case "flip":
-                            _div.css('display', 'block');
-                            _div.toggleClass(opt.axis).promise().done(function () {
-                                //run that after toggle class finished. This is how we call callback for toggleClass
-                                checkElements(_div, _.i);
-                            });
-
-                            break;
-
-
-                        case "css":
-                            var css = _div.attr('style');
-                            var style = "";
-                            opt.style = opt.style.replace('zindex', 'z-index');
-                            if (css != undefined) {
-                                var cssArr = css.split(';');
-                                var oArr = opt.style.split(';')
-                                for (var i = 0; i < oArr.length; i++) {
-                                    if (oArr[i] != "") {
-                                        var oarr = oArr[i].split(':');
-                                        var index = css.indexOf(oarr[0]);
-                                        if (index > -1) {
-                                            var enter = false;
-                                            var rmv = "";
-                                            for (var j = index; j < css.length; j++) {
-                                                rmv += css[j];
-                                                if (css[j] == ";") break;
-                                            }
-                                            css = css.replace(rmv, "");
-                                        }
-                                    }
-                                }
-                                style = css + opt.style;
-                                opt.style = opt.style.replace('zindex', 'z-index');
-                                _div.attr('style', style);
-                            }
-                            break;
-
-                        case "zoom":
-                            var w = _div.width();
-                            var h = _div.height();
-                            _div.animate({
-                                width: Math.floor(w * opt.ratio),
-                                height: Math.floor(h * opt.ratio)
-                            }, function callback() {
-
-                            });
-
-                            break;
-
-                        default:
-                            _div.css('display', 'block');
-                            var option = {};
-                            if (opt.left != undefined) option.left = opt.left;
-                            if (opt.right != undefined) option.right = opt.right;
-                            if (opt.top != undefined) option.top = opt.top;
-                            if (opt.bottom != undefined) option.bottom = opt.bottom;
-                            if (opt.width != undefined) option.width = opt.width;
-                            if (opt.height != undefined) option.height = opt.height;
-                            if (opt.opacity != undefined) option.opacity = opt.opacity;
-                            opt.type == undefined && (opt.type = "swing");
-                            //zoom support
-                            if (opt.ratio != undefined) {
-                                var w = _div.width();
-                                var h = _div.height();
-                                opt.type = opt.type != "zoom" ? opt.easing != undefined ? opt.easing : opt.type : "swing";
-                                option.width = Math.floor(w * opt.ratio);
-                                option.height = Math.floor(h * opt.ratio);
-                            }
-
-                            opt.queue = false,
-                            _div.animate(option, opt.speed,
-                            opt.type.trim(),
-                            function () {
-                                checkElements(_div, _.i);
-                            });
-                            break;
-                    }
-                }
-            }, delay);
-            timeoutCache[timer] = timer;
-            tArr.length - 1 > i && playAnimation(_div, tArr, index, i + 1);
-        }
-    }
-
-    function checkElements(_div, index) {
-        _div.find('[animate="true"]').each(function () {
-            _.animation($(this), index);
-        });
-    }
-
-    function checkPosition(_div, index, type) {
-        var options = {};
-        options.type = type.split('(')[0];
-        type = type.replace(' ', '').replace(options.type + '(', '').replace(')', '');
-        var optArr = type.split(',');
-        for (var i = 0; i < optArr.length; i++) {
-
-            var arr = optArr[i].split(':');
-            var key = arr[0].toLowerCase().trim();
-            var val = arr[1].toLowerCase().trim();
-            if (key === "delay") {
-                var d = parseInt(val);
-                options.delay = d == 0 || d == null || d == "" ? 600 : d;
-            }
-            else if (key === "speed") {
-                var s = parseInt(val);
-                options.speed = s == 0 || s == null || s == "" ? 600 : s;
-            }
-            else if (key === "angle") {
-                var a = parseInt(val);
-                options.angle = a == null || a == "" ? 45 : a;
-            }
-            else if (key === "animateto") {
-                var a = parseInt(val);
-                options.animateTo = a == null || a == "" ? 180 : a;
-            }
-            else if (key === "duration") {
-                var d = parseInt(val);
-                options.duration = d == 0 || d == null || d == "" ? 1000 : d;
-            }
-            else if (key === "ratio") {
-                var d = parseFloat(val);
-                options.ratio = d == 0 || d == null || d == "" ? 1000 : d;
-            }
-            else if (key === "easing") {
-                options.easing = val == 0 || val == null || val == "" ? "swing" : val;
-            }
-            else if (key === "axis") {
-                if (val == "x") {
-                    options.axis = "flipH";
-                }
-                else {
-                    options.axis = "flipV";
-                }
-
-            }
-            else if (key === "style") {
-                options.style = optArr[i].replace('style:', '');
-            }
-            else {
-                switch (key) {
-                    case "left":
-                        var left = val;
-                        var larr = left.split('>');
-                        if (larr.length > 1) {
-                            var left1 = calculatePos(_div, larr[0], index, true);
-                            var left2 = calculatePos(_div, larr[1], index, true);
-                            _div.css('left', left1);
-                            options.left = left2;
-                        }
-                        else
-                            _div.css('left', left);
-
-                        break;
-
-                    case "right":
-                        var right = val;
-                        var rarr = right.split('>');
-                        if (rarr.length > 1) {
-                            var right1 = calculatePos(_div, rarr[0], index, true);
-                            var right2 = calculatePos(_div, rarr[1], index, true);
-                            _div.css('right', right1);
-                            options.right = right2;
-                        }
-                        else
-                            _div.css('right', right);
-                        break;
-
-                    case "top":
-                        var top = val;
-                        var tarr = top.split('>');
-                        if (tarr.length > 1) {
-                            var top1 = calculatePos(_div, tarr[0], index, false);
-                            var top2 = calculatePos(_div, tarr[1], index, false);
-                            _div.css('top', top1);
-                            options.top = top2;
-                        }
-                        else
-                            _div.css('top', top);
-                        break;
-
-                    case "bottom":
-                        var bottom = val;
-                        var tarr = bottom.split('>');
-                        if (tarr.length > 1) {
-                            var bottom1 = calculatePos(_div, tarr[0], index, false);
-                            var bottom2 = calculatePos(_div, tarr[1], index, false);
-                            _div.css('bottom', bottom1);
-                            options.bottom = bottom2;
-                        }
-                        else
-                            _div.css('bottom', bottom);
-                        break;
-
-                    case "width":
-                        options.width = val;
-                        break;
-
-                    case "height":
-                        options.height = val;
-                        break;
-
-                    case "opacity":
-                        options.opacity = val;
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-        }
-        return options;
-    }
-
-    function getDelay(type) {
-        var index = type.indexOf('delay');
-        var enter = false;
-        var delay = "";
-        for (var i = index; i < type.length; i++) {
-            if (enter) {
-                delay += type[i];
-            }
-
-            if (type[i] == ",") break;
-            if (type[i] == ":") enter = true;
-        }
-        return parseInt(delay);
-    }
-
-    function calculatePos(_div, val, index, isHorizontal) {
-        var w = $('body').width();//window.screen.width;
-        var h = _div.parents('li:first').height();
-        var dw = _div.width();
-        var dh = _div.height();
-        if (isHorizontal) {
-            switch (val.toLowerCase().trim()) {
-                case "left":
-                    var _l = _div.parents(_.o.texContainer).css('position') == "absolute" ? w * index : 0;
-                    return _l + "px";
-                    break;
-
-                case "right":
-                    var _l = _div.parents(_.o.texContainer).css('position') == "absolute" ? (w * (index + 1)) - dw : w - dw;
-                    return _l + "px";
-                    break;
-
-                case "center":
-                    var _l = _div.parents(_.o.texContainer).css('position') == "absolute" ? (w * index) + ((w - dw) / 2) : (w - dw) / 2;
-                    return _l + "px";
-                    break;
-
-                default:
-                    return val;
-                    break;
-            }
-        }
-        else {
-            switch (val.toLowerCase().trim()) {
-                case "top":
-                    return "0px";
-                    break;
-
-                case "bottom":
-                    var _b = h - dh;
-                    return _b + "px";
-                    break;
-
-                case "center":
-                    var _b = (h - dh) / 2;
-                    return _b + "px";
-                    break;
-
-                default:
-                    return val;
-                    break
-            }
-        }
-    }
-
-    function checkDefaultPosition(_div, index) {
-        if (_div.attr('src') != undefined) {
-            var a = "";
-        }
-        var position = _div.attr('position');
-        if (position != undefined) {
-            var posArr = position.split(',');
-            var chechkArr = {};
-            for (var i = 0; i < posArr.length; i++) {
-                if (posArr[i] != "") {
-                    chechkArr[i] = posArr[i].split(':')[0].trim();
-                }
-            }
-            var css = _div.attr('style');
-            var style = "";
-            if (css != undefined) {
-                var cssArr = css.split(';');
-                for (var i = 0; i < cssArr.length; i++) {
-                    if (cssArr[i].trim() != "") {
-                        var arr = cssArr[i].split(':');
-                        switch (arr[0].trim()) {
-                            case "left":
-                            case "right":
-                            case "bottom":
-                            case "top":
-                            case "-webkit-transform":
-                            case "-webkit-transform-origin":
-                                break;
-
-                            case "width":
-                            case "height":
-                            case "opacity":
-                            default:
-                                if ($.inArray(arr[0].trim(), chechkArr) == -1)
-                                    style += cssArr[i] + "; ";
-                                break;
-                        }
-                    }
-                }
-            }
-            for (var i = 0; i < posArr.length; i++) {
-                var arr = posArr[i].split(':');
-                switch (arr[0].trim()) {
-                    case "left":
-                        var left = calculatePos(_div, arr[1], index, true);
-                        style += "left:" + left + "; ";
-                        break;
-                    case "right":
-                        var right = calculatePos(_div, arr[1], index, true);
-                        style += "right:" + right + "; ";
-                        break;
-                    case "bottom":
-                        var bottom = calculatePos(_div, arr[1], index, false);
-                        style += "bottom:" + bottom + "; ";
-                        break;
-                    case "top":
-                        var top = calculatePos(_div, arr[1], index, false);
-                        style += "top:" + top + "; ";
-                        break;
-
-                    default:
-                        style += arr[0] + ":" + arr[1] + "; ";
-                        break;
-                }
-            }
-            _div.attr('style', style);
-        }
-    }
 
     function clearTimeout() {
         for (var i in timeoutCache) {
@@ -885,38 +937,6 @@
     var width = $('body').width();
 
 
-    var slideChanged = false;
-    //  Create a jQuery plugin
-    $.fn.chain = function (o) {
-        var len = this.length;
-
-        //ie 7-8 does not support the trim function. The code is fixing it
-        if (typeof String.prototype.trim !== 'function') {
-            String.prototype.trim = function () {
-                return this.replace(/^\s+|\s+$/g, '');
-            }
-        }
-
-        //  Enable multiple-slider support
-        return this.each(function (index) {
-            //  Cache a copy of $(this), so it
-            var me = $(this),
-                key = 'Chain' + (len > 1 ? '-' + ++index : ''),
-                instance = init(me, o);
-
-            //  Invoke an Chain instance
-            me.data(key, instance).data('key', key);
-        });
-    };
-
-    //flip horizontal css
-    $("<style type='text/css'> .flipH{ -moz-transform: scaleX(-1);  -webkit-transform: scaleX(-1); -o-transform: scaleX(-1);" +
-      "transform: scaleX(-1); -ms-filter: fliph; /*IE*/  filter: fliph; /*IE*/ } </style>").appendTo("head");
-
-    //flip vertical css
-    $("<style type='text/css'> .flipV{ -moz-transform: scaleY(-1);  -webkit-transform: scaleY(-1);  -o-transform: scaleY(-1);" +
-     "transform: scaleY(-1); -ms-filter: flipv; /*IE*/  filter: flipv; /*IE*/    } </style>").appendTo("head");
 
 
-    
-})(jQuery, false);
+}(jQuery, false));

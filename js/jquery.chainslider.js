@@ -534,21 +534,21 @@
                 if (_.i == oi) {
                     var opt = checkPosition(_div, _.i, type);
                     switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
-                        case "fadein":
+                        case "fadein" || "fadeIn":
                             _div.fadeIn(opt.speed);
                             break;
 
-                        case "fadeout":
+                        case "fadeout" || "fadeOut":
                             _div.css('display', 'block');
                             _div.fadeOut(opt.speed);
                             break;
 
-                        case "slideup":
+                        case "slideup" || "slideUp":
                             _div.css('display', 'block');
                             _div.slideUp(opt.speed);
                             break;
 
-                        case "slidedown":
+                        case "slidedown" || "slidedown":
                             _div.slideDown(opt.speed);
                             break;
 
@@ -570,7 +570,7 @@
                             break;
 
 
-                        case "css":
+                        case "css" || "style":
                             var css = _div.attr('style');
                             var style = "";
                             if (css != undefined) {
@@ -596,7 +596,7 @@
                             }
                             break;
 
-                        case "toggleclass":
+                        case "toggleclass" || "toggleClass":
                             _div.toggleClass(opt.class);
                             break;
 
@@ -912,7 +912,7 @@
         $.fn.chain.stop();
         return $.fn.chain.to(_.i - 1);
     };
-        
+
     function clearTimeout() {
         for (var i in timeoutCache) {
             window.clearTimeout(timeoutCache[i]);

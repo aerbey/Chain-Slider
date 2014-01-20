@@ -1,25 +1,14 @@
 ﻿(function ($, f) {
-
-
-
-
     $.fn.chain = function (o) {
         var len = this.length;
-
-
-
         //merge the defaults
         o = $.extend({}, $.fn.chain.defaults, o);
-
-
-
         //ie 7-8 does not support the trim function. The code is fixing it
         if (typeof String.prototype.trim !== 'function') {
             String.prototype.trim = function () {
                 return this.replace(/^\s+|\s+$/g, '');
             }
         }
-
         //  Enable multiple-slider support
         return this.each(function (index) {
             //  Cache a copy of $(this), so it
@@ -31,7 +20,6 @@
             me.data(key, instance).data('key', key);
         });
     };
-
 
     // Plugin defaults – added as a property on our plugin function.
     $.fn.chain.defaults = {
@@ -55,28 +43,25 @@
         autoplay: true,  // enable autoplay on initialisation
         textAnimation: false,
         texContainer: '.inner',
-        swipe: false,
+        swiper: false,
         swipeDistance: 20,
         cursorClass: "cursor",
         waitVideo: true,
         animations: null
     };
-
     var _ = new Object();
-
-
     var width = $('body').width();
     var slideChanged = false;
 
     this.init = function (el, o) {
 
         //storing all variables in _
-        
+
         _.o = o;
         _.el = el;
         _.ul = el.find(_.o.items);
         _.max = [el.outerWidth() | 0, el.outerHeight() | 0];
-      
+
         var index = 0;
 
         //if before defined, send parameters to it
@@ -93,14 +78,14 @@
             if (height > _.max[1]) _.max[1] = height;
 
             me.find(_.o.texContainer).each(function () {
-                $.fn.chain.checkDefaultPosition(_.o.texContainer,$(this), index);
+                $.fn.chain.checkDefaultPosition(_.o.texContainer, $(this), index);
             });
             index++;
         });
 
 
         //while holding and dragging slide
-        if (_.o.swipe) {
+        if (_.o.swiper) {
             var firstleft;
             var slides = el.find('ul'), i = 0;
             slides
@@ -145,12 +130,12 @@
 
                     var cleft = firstleft * width / 100;
                     if (cleft > left + distance)
-                        _.next(_.ul);
+                        $.fn.chain.next(_.ul);
                     else if (cleft < left - distance)
-                        _.prev();
+                        $.fn.chain.prev();
                     else {
                         var index = parseInt(firstleft / 100) * -1;
-                        _.to(index, null, false);
+                        $.fn.chain.to(index, null, false);
                     }
                 });
 
@@ -163,14 +148,14 @@
         }
 
         var hasLoaded = false;
-        
+
         //Show loader, set the elements position, visibility of elements.
         $(window).load(function () {
             setTimeout(function myfunction() {
                 hasLoaded = true;
 
                 //if animations called by javascript
-                if (_.o.animations !== undefined && _.o.animations!== null) {
+                if (_.o.animations !== undefined && _.o.animations !== null) {
                     var animations = _.o.animations;
                     for (var an in animations[0]) {
                         var key = an;
@@ -229,7 +214,7 @@
 
                 //put all elements that will be animated to their first position
                 _.el.find('li:first [animate]').each(function () {
-                    $.fn.chain.checkDefaultPosition(_.o.texContainer,$(this), _.index);
+                    $.fn.chain.checkDefaultPosition(_.o.texContainer, $(this), _.index);
                 });
 
                 if ($.browser.msie == undefined || parseInt($.browser.version, 10) > 8) {
@@ -271,7 +256,7 @@
         //  Autoslide
         o.autoplay && setTimeout(function () {
             if (o.delay | 0) {
-                _.play();
+                $.fn.chain.play();
 
                 if (o.pause) {
                     el.on('mouseover mouseout', function (e) {
@@ -288,19 +273,19 @@
                 var key = e.which;
 
                 if (key == 37)
-                    _.prev(); // Left
+                    $.fn.chain.prev(); // Left
                 else if (key == 39)
-                    _.next(); // Right
+                    $.fn.chain.next(); // Right
                 else if (key == 27)
-                    _.stop(); // Esc
+                    $.fn.chainstop(); // Esc
             });
         };
 
         //  Dot pagination
-        o.dots && $.fn.chain.nav(_.el.find("li"),'dot', _.o.prev, _.o.next);
+        o.dots && $.fn.chain.nav(_.el.find("li"), 'dot', _.o.prev, _.o.next);
 
         //  Arrows support
-        o.arrows && $.fn.chain.nav(_.el.find(">li"), 'arrow',  _.o.prev, _.o.next);
+        o.arrows && $.fn.chain.nav(_.el.find(">li"), 'arrow', _.o.prev, _.o.next);
 
         //  Make slider adaptive to screen. On resize restart animation
         if (o.fluid) {
@@ -361,14 +346,12 @@
             });
         };
 
-       
         return _;
-     
-     
+
     }
 
     //set element position according to written value
-    $.fn.chain.checkDefaultPosition = function(container,_div, index) {
+    $.fn.chain.checkDefaultPosition = function (container, _div, index) {
         if (_div.attr('src') != undefined) {
             var a = "";
         }
@@ -438,7 +421,7 @@
     }
 
     //calculate element position
-    $.fn.chain.calculatePos = function (container,_div, val, index, isHorizontal) {
+    $.fn.chain.calculatePos = function (container, _div, val, index, isHorizontal) {
         var w = $('body').width();//window.screen.width;
         var h = _div.parents('li:first').height();
         var dw = _div.width();
@@ -489,7 +472,7 @@
     }
 
     //  Create dots and arrows
-    $.fn.chain.nav = function (container,name, html, prevText, nextText) {
+    $.fn.chain.nav = function (container, name, html, prevText, nextText) {
         if (name == 'dot') {
             html = '<ol class="dots">';
             $.each($(container), function (index) {
@@ -503,17 +486,17 @@
 
         _.el.addClass('has-' + name + 's').append(html).find('.' + name).click(function () {
             var me = $(this);
-            me.hasClass('dot') ? _.stop().to(me.index()) : me.hasClass('prev') ? _.prev() : _.next();
+            if (me.hasClass('dot')) { $.fn.chain.stop(); $.fn.chain.to(me.index()); } else me.hasClass('prev') ? $.fn.chain.prev() : $.fn.chain.next();
         });
     };
-    
+
     //$.fn.chain.animation
     $.fn.chain.animation = function (_div, index) {
 
         var animate = _div.attr('animate');
         if (animate == "true") {
             var type = _div.attr('data-type');
-            var tArr = type.split('-');
+            var tArr = type.split('+');
             applyAnimation(_div, tArr, index, 0);
         }
         else {
@@ -523,7 +506,6 @@
             _div.find('[animate="true"]').each(function () {
                 $.fn.chain.animation($(this), index);
             });
-            
         }
     }
 
@@ -591,7 +573,6 @@
                         case "css":
                             var css = _div.attr('style');
                             var style = "";
-                            opt.style = opt.style.replace('zindex', 'z-index');
                             if (css != undefined) {
                                 var cssArr = css.split(';');
                                 var oArr = opt.style.split(';')
@@ -611,9 +592,12 @@
                                     }
                                 }
                                 style = css + opt.style;
-                                opt.style = opt.style.replace('zindex', 'z-index');
                                 _div.attr('style', style);
                             }
+                            break;
+
+                        case "toggleclass":
+                            _div.toggleClass(opt.class);
                             break;
 
                         case "zoom":
@@ -660,7 +644,6 @@
         }
     }
 
-    
     //return delay time from defined animation
     function getDelay(type) {
         var index = type.indexOf('delay');
@@ -727,13 +710,16 @@
             else if (key === "style") {
                 options.style = optArr[i].replace('style:', '');
             }
+            else if (key === "class") {
+                options.class = optArr[i].replace('class:', '');
+            }
             else {
                 switch (key) {
                     case "left":
                         var left = val;
                         var larr = left.split('>');
                         if (larr.length > 1) {
-                            var left1 = $.fn.chain.calculatePos(_.o.texContainer,_div, larr[0], index, true);
+                            var left1 = $.fn.chain.calculatePos(_.o.texContainer, _div, larr[0], index, true);
                             var left2 = $.fn.chain.calculatePos(_.o.texContainer, _div, larr[1], index, true);
                             _div.css('left', left1);
                             options.left = left2;
@@ -803,10 +789,10 @@
     }
 
     //  Move Chain to a slide index
-    _.to = function (index, callback, playAnimate) {
+    $.fn.chain.to = function (index, callback, playAnimate) {
         if (_.t) {
-            _.stop();
-            _.play();
+            $.fn.chain.stop();
+            $.fn.chain.play();
         }
         var o = _.o,
             el = _.el,
@@ -822,7 +808,7 @@
             el.find('[animate="true"]').each(function () {
                 var t = $(this).attr("data-type");
                 if (t != undefined && t != null && t != "") {
-                    $.fn.chain.checkDefaultPosition(_.o.texContainer,$(this), index);
+                    $.fn.chain.checkDefaultPosition(_.o.texContainer, $(this), index);
                     var ta = t.split(',');
                     var type = ta[0];
                     switch (type.toLowerCase()) {
@@ -869,10 +855,10 @@
                     if (video.length > 0) {
                         video.get(0).play();
                         if (_.o.waitVideo) {
-                            _.stop();
+                            $.fn.chain.stop();
                             video.bind("ended", function () {
-                                _.play();
-                                _.next();
+                                $.fn.chain.play();
+                                $.fn.chain.next();
                             });
                         }
                     }
@@ -897,36 +883,36 @@
     };
 
     //  Autoplay functionality
-    _.play = function () {
+    $.fn.chain.play = function () {
         _.t = setInterval(function () {
-            _.to(_.i + 1);
+            $.fn.chain.to(_.i + 1);
         }, _.o.delay | 0);
     };
 
     //  Stop autoplay
-    _.stop = function () {
+    $.fn.chain.stop = function () {
         slideChanged = false;
         _.t = clearInterval(_.t);
         return _;
     };
 
     //  Move to previous/next slide
-    _.next = function () {
+    $.fn.chain.next = function () {
         slideChanged = true;
         clearTimeout();
         _.ul.find('[animate="true"]').clearQueue().stop(true, false);
-        return _.stop().to(_.i + 1);
+        $.fn.chain.stop();
+        return $.fn.chain.to(_.i + 1);
     };
 
-    _.prev = function () {
+    $.fn.chain.prev = function () {
         slideChanged = true;
         clearTimeout();
         _.ul.find('[animate="true"]').clearQueue().stop(true, false);
-        return _.stop().to(_.i - 1);
+        $.fn.chain.stop();
+        return $.fn.chain.to(_.i - 1);
     };
-
-    var timeoutCache = {};
-
+        
     function clearTimeout() {
         for (var i in timeoutCache) {
             window.clearTimeout(timeoutCache[i]);
@@ -935,8 +921,14 @@
     }
 
     var width = $('body').width();
+    var timeoutCache = {};
 
+    //flip horizontal css
+    $("<style type='text/css'> .flipH{ -moz-transform: scaleX(-1);  -webkit-transform: scaleX(-1); -o-transform: scaleX(-1);" +
+      "transform: scaleX(-1); -ms-filter: fliph; /*IE*/  filter: fliph; /*IE*/ } </style>").appendTo("head");
 
-
+    //flip vertical css
+    $("<style type='text/css'> .flipV{ -moz-transform: scaleY(-1);  -webkit-transform: scaleY(-1);  -o-transform: scaleY(-1);" +
+     "transform: scaleY(-1); -ms-filter: flipv; /*IE*/  filter: flipv; /*IE*/    } </style>").appendTo("head");
 
 }(jQuery, false));

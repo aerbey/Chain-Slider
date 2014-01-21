@@ -725,8 +725,8 @@
                             options.left = left2;
                         }
                         else
-                            _div.css('left', left);
-
+                            options.left = $.fn.chain.calculatePos(_.o.texContainer, _div, larr[0], index, true);
+                        _//div.css('left', left);
                         break;
 
                     case "right":
@@ -739,7 +739,8 @@
                             options.right = right2;
                         }
                         else
-                            _div.css('right', right);
+                            options.right = $.fn.chain.calculatePos(_.o.texContainer, _div, rarr[0], index, true);
+                            //_div.css('right', right);
                         break;
 
                     case "top":
@@ -752,7 +753,8 @@
                             options.top = top2;
                         }
                         else
-                            _div.css('top', top);
+                            options.top = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[0], index, false);
+                           // _div.css('top', top);
                         break;
 
                     case "bottom":
@@ -765,7 +767,8 @@
                             options.bottom = bottom2;
                         }
                         else
-                            _div.css('bottom', bottom);
+                            options.bottom = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[0], index, false);
+                            //_div.css('bottom', bottom);
                         break;
 
                     case "width":

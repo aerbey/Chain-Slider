@@ -532,7 +532,7 @@
 
                 //ensure that we are in active slide
                 if (_.i == oi) {
-                    var opt = checkPosition(_div, _.i, type);
+                    var opt = $.fn.chain.checkPosition(_div, _.i, type);
                     switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
                         case "fadein" || "fadeIn":
                             _div.fadeIn({ duration: opt.speed, easing: opt.easing });
@@ -654,7 +654,7 @@
     }
 
     //retun animation properties to be applied in object
-    function checkPosition(_div, index, type) {
+    $.fn.chain.checkPosition = function (_div, index, type) {
         var options = {};
         options.type = type.split('(')[0];
         type = type.replace(' ', '').replace(options.type + '(', '').replace(')', '');

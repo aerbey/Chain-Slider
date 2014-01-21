@@ -535,21 +535,21 @@
                     var opt = checkPosition(_div, _.i, type);
                     switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
                         case "fadein" || "fadeIn":
-                            _div.fadeIn(opt.speed);
+                            _div.fadeIn({ duration: opt.speed, easing: opt.easing });
                             break;
 
                         case "fadeout" || "fadeOut":
                             _div.css('display', 'block');
-                            _div.fadeOut(opt.speed);
+                            _div.fadeOut({ duration: opt.speed, easing: opt.easing });
                             break;
 
                         case "slideup" || "slideUp":
                             _div.css('display', 'block');
-                            _div.slideUp(opt.speed);
+                            _div.slideUp({ duration: opt.speed, easing: opt.easing });
                             break;
 
                         case "slidedown" || "slidedown":
-                            _div.slideDown(opt.speed);
+                            _div.slideDown({ duration: opt.speed, easing: opt.easing });
                             break;
 
                         case "rotate":
@@ -601,15 +601,7 @@
                             break;
 
                         case "zoom":
-                            var w = _div.width();
-                            var h = _div.height();
-                            _div.animate({
-                                width: Math.floor(w * opt.ratio),
-                                height: Math.floor(h * opt.ratio)
-                            });
-
-                            break;
-
+                        case "move":
                         default:
                             _div.css('display', 'block');
                             var option = {};
@@ -620,7 +612,8 @@
                             if (opt.width != undefined) option.width = opt.width;
                             if (opt.height != undefined) option.height = opt.height;
                             if (opt.opacity != undefined) option.opacity = opt.opacity;
-                            opt.type == undefined && (opt.type = "swing");
+                            opt.easing == undefined && (opt.easing = "swing");
+
                             //zoom support
                             if (opt.ratio != undefined) {
                                 var w = _div.width();
@@ -632,7 +625,7 @@
 
                             opt.queue = false,
                             _div.animate(option, opt.speed,
-                            opt.type.trim());
+                            opt.easing.trim());
                             break;
                     }
                 }

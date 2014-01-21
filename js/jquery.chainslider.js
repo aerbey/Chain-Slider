@@ -178,9 +178,9 @@
                 }
 
                 //set initial animatable elements display none
-                _.el.find('[animate="true"]').stop(true, true);
-                _.el.find('[animate="true"]').css('display', 'none');
-                _.el.find('[animate="true"]').each(function () {
+                _.el.find('[data-animate="true"]').stop(true, true);
+                _.el.find('[data-animate="true"]').css('display', 'none');
+                _.el.find('[data-animate="true"]').each(function () {
                     var t = $(this).attr("data-type");
                     if (t != undefined && t != null && t != "") {
                         var ta = t.split(',');
@@ -204,7 +204,7 @@
                 //resize the resizable class images
                 if (bw <= 1200) {
                     var size = bw / window.screen.width;
-                    _.el.find('[resizable]').each(function () {
+                    _.el.find('[data-resizable]').each(function () {
                         var w = $(this).width();
                         w > 0 && $(this).css('width', (w * size) + 'px');
                         var h = $(this).height();
@@ -213,7 +213,7 @@
                 }
 
                 //put all elements that will be animated to their first position
-                _.el.find('li:first [animate]').each(function () {
+                _.el.find('li:first [data-animate]').each(function () {
                     $.fn.chain.checkDefaultPosition(_.o.texContainer, $(this), _.index);
                 });
 
@@ -226,7 +226,7 @@
                 $(".banner ul").css("visibility", "visible").hide().fadeIn("slow", function myfunction() {
 
                     //firstly hide all elements that will be animated
-                    $(".firstslide [animate]").hide();
+                    $(".firstslide [data-animate]").hide();
 
                     //play the animations
                     $.fn.chain.animation(_.el.find('li:first'), 0);
@@ -300,7 +300,7 @@
                     el.css(styl);
                     var size = bw / width;
                     width = bw;
-                    _.el.find('[resizable]').each(function () {
+                    _.el.find('[data-resizable]').each(function () {
                         var w = $(this).width();
                         w > 0 && $(this).css('width', (w * size) + 'px');
                         var h = $(this).height();
@@ -309,9 +309,9 @@
 
                     if (o.textAnimation) {
                         clearTimeout();
-                        el.find('[animate="true"]').clearQueue().stop(true, false);
-                        el.find('[animate="true"]').css('display', 'none');
-                        el.find('[animate="true"]').each(function () {
+                        el.find('[data-animate="true"]').clearQueue().stop(true, false);
+                        el.find('[data-animate="true"]').css('display', 'none');
+                        el.find('[data-animate="true"]').each(function () {
                             var t = $(this).attr("data-type");
                             if (t != undefined && t != null && t != "") {
                                 $.fn.chain.checkDefaultPosition(_.o.texContainer, $(this), _.index);
@@ -330,7 +330,7 @@
                         });
 
                         if (hasLoaded) {
-                            el.find('[animate="true"]').clearQueue().stop(true, false);
+                            el.find('[data-animate="true"]').clearQueue().stop(true, false);
                             $.fn.chain.animation(_.el.find('li').eq(_.i), _.i);
                         }
                     }
@@ -355,7 +355,7 @@
         if (_div.attr('src') != undefined) {
             var a = "";
         }
-        var position = _div.attr('position');
+        var position = _div.attr('data-position');
         if (position != undefined) {
             var posArr = position.split(',');
             var chechkArr = {};
@@ -493,7 +493,7 @@
     //$.fn.chain.animation
     $.fn.chain.animation = function (_div, index) {
 
-        var animate = _div.attr('animate');
+        var animate = _div.attr('data-animate');
         if (animate == "true") {
             var type = _div.attr('data-type');
             var tArr = type.split('+');
@@ -503,7 +503,7 @@
             $.fn.chain.checkDefaultPosition(_.o.texContainer, _div, index);
 
             //call animation for all the animatables inside element
-            _div.find('[animate="true"]').each(function () {
+            _div.find('[data-animate="true"]').each(function () {
                 $.fn.chain.animation($(this), index);
             });
         }
@@ -689,7 +689,7 @@
                 options.ratio = d == 0 || d == null || d == "" ? 1000 : d;
             }
             else if (key === "easing") {
-                options.easing = val == 0 || val == null || val == "" ? "swing" : val;
+                options.easing = val == 0 || val == null || val == "" ? "swing" : arr[1];
             }
             else if (key === "axis") {
                 if (val == "x") {
@@ -799,9 +799,9 @@
 
         if (o.textAnimation && playAnimate != false) {
             clearTimeout();
-            el.find('[animate="true"]').clearQueue().stop(true, false);
-            el.find('[animate="true"]').css('display', 'none');
-            el.find('[animate="true"]').each(function () {
+            el.find('[data-animate="true"]').clearQueue().stop(true, false);
+            el.find('[data-animate="true"]').css('display', 'none');
+            el.find('[data-animate="true"]').each(function () {
                 var t = $(this).attr("data-type");
                 if (t != undefined && t != null && t != "") {
                     $.fn.chain.checkDefaultPosition(_.o.texContainer, $(this), index);
@@ -896,7 +896,7 @@
     $.fn.chain.next = function () {
         slideChanged = true;
         clearTimeout();
-        _.ul.find('[animate="true"]').clearQueue().stop(true, false);
+        _.ul.find('[data-animate="true"]').clearQueue().stop(true, false);
         $.fn.chain.stop();
         return $.fn.chain.to(_.i + 1);
     };
@@ -904,7 +904,7 @@
     $.fn.chain.prev = function () {
         slideChanged = true;
         clearTimeout();
-        _.ul.find('[animate="true"]').clearQueue().stop(true, false);
+        _.ul.find('[data-animate="true"]').clearQueue().stop(true, false);
         $.fn.chain.stop();
         return $.fn.chain.to(_.i - 1);
     };

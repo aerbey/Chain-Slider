@@ -497,9 +497,13 @@
         if (animate == "true") {
             var type = _div.attr('data-type');
             var tArr = type.split('+');
-            applyAnimation(_div, tArr, index, 0);
+            applyAnimation(_div, tArr, 0);
         }
         else {
+            if (_.o == undefined) {
+                _.o = $.fn.chain.defaults;
+            }
+
             $.fn.chain.checkDefaultPosition(_.o.texContainer, _div, index);
 
             //call animation for all the animatables inside element
@@ -509,7 +513,7 @@
         }
     }
 
-    function applyAnimation(_div, tArr, index, i) {
+    function applyAnimation(_div, tArr, i) {
         if (!slideChanged) {
             _div.css("position", "absolute");
             var type = tArr[i];
@@ -521,119 +525,114 @@
                 delete timeoutCache[timer];
 
                 //for drag and drop mode, too be able to call outside of plugin
-                if (_.el == undefined) {
-                    _ = new Object();
-                    _.i = 0;
-                    _.el = $("body");
+                if (_.o == undefined) {
                     _.o = $.fn.chain.defaults;
                 }
 
-                var oi = parseInt(_.el.find('.active').text()) - 1;
+                var oi = parseInt(_div.parents('ul').eq(0).parent().find('.active').text()) - 1;
 
-                //ensure that we are in active slide
-                if (_.i == oi) {
-                    var opt = $.fn.chain.checkPosition(_div, _.i, type);
-                    switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
-                        case "fadein" || "fadeIn":
-                            _div.fadeIn({ duration: opt.speed, easing: opt.easing });
-                            break;
+                var opt = $.fn.chain.checkPosition(_div, oi, type, _.o.texContainer);
+                switch (opt.type != undefined ? opt.type.toLowerCase().trim() : "") {
+                    case "fadein" || "fadeIn":
+                        _div.fadeIn({ duration: opt.speed, easing: opt.easing });
+                        break;
 
-                        case "fadeout" || "fadeOut":
-                            _div.css('display', 'block');
-                            _div.fadeOut({ duration: opt.speed, easing: opt.easing });
-                            break;
+                    case "fadeout" || "fadeOut":
+                        _div.css('display', 'block');
+                        _div.fadeOut({ duration: opt.speed, easing: opt.easing });
+                        break;
 
-                        case "slideup" || "slideUp":
-                            _div.css('display', 'block');
-                            _div.slideUp({ duration: opt.speed, easing: opt.easing });
-                            break;
+                    case "slideup" || "slideUp":
+                        _div.css('display', 'block');
+                        _div.slideUp({ duration: opt.speed, easing: opt.easing });
+                        break;
 
-                        case "slidedown" || "slidedown":
-                            _div.slideDown({ duration: opt.speed, easing: opt.easing });
-                            break;
+                    case "slidedown" || "slidedown":
+                        _div.slideDown({ duration: opt.speed, easing: opt.easing });
+                        break;
 
-                        case "rotate":
-                            _div.css('display', 'block');
-                            _div.rotate({
-                                duration: opt.duration,
-                                angle: opt.angle,
-                                animateTo: opt.animateTo,
-                                easing: $.easing[opt.easing]
-                            });
-                            break;
+                    case "rotate":
+                        _div.css('display', 'block');
+                        _div.rotate({
+                            duration: opt.duration,
+                            angle: opt.angle,
+                            animateTo: opt.animateTo,
+                            easing: $.easing[opt.easing]
+                        });
+                        break;
 
-                        case "flip":
-                            _div.css('display', 'block');
+                    case "flip":
+                        _div.css('display', 'block');
 
-                            //toggle class can not be animated. so we call it with promise
-                            _div.toggleClass(opt.axis).promise().done();
-                            break;
+                        //toggle class can not be animated. so we call it with promise
+                        _div.toggleClass(opt.axis).promise().done();
+                        break;
 
 
-                        case "css" || "style":
-                            var css = _div.attr('style');
-                            var style = "";
-                            if (css != undefined) {
-                                var cssArr = css.split(';');
-                                var oArr = opt.style.split(';')
-                                for (var i = 0; i < oArr.length; i++) {
-                                    if (oArr[i] != "") {
-                                        var oarr = oArr[i].split(':');
-                                        var index = css.indexOf(oarr[0]);
-                                        if (index > -1) {
-                                            var enter = false;
-                                            var rmv = "";
-                                            for (var j = index; j < css.length; j++) {
-                                                rmv += css[j];
-                                                if (css[j] == ";") break;
-                                            }
-                                            css = css.replace(rmv, "");
+                    case "css" || "style":
+                        var css = _div.attr('style');
+                        var style = "";
+                        if (css != undefined) {
+                            var cssArr = css.split(';');
+                            var oArr = opt.style.split(';')
+                            for (var i = 0; i < oArr.length; i++) {
+                                if (oArr[i] != "") {
+                                    var oarr = oArr[i].split(':');
+                                    var index = css.indexOf(oarr[0]);
+                                    if (index > -1) {
+                                        var enter = false;
+                                        var rmv = "";
+                                        for (var j = index; j < css.length; j++) {
+                                            rmv += css[j];
+                                            if (css[j] == ";") break;
                                         }
+                                        css = css.replace(rmv, "");
                                     }
                                 }
-                                style = css + opt.style;
-                                _div.attr('style', style);
                             }
-                            break;
+                            style = css + opt.style;
+                            _div.attr('style', style);
+                        }
+                        break;
 
-                        case "toggleclass" || "toggleClass":
-                            _div.toggleClass(opt.class);
-                            break;
+                    case "toggleclass" || "toggleClass":
+                        _div.toggleClass(opt.class);
+                        break;
 
-                        case "zoom":
-                        case "move":
-                        default:
-                            _div.css('display', 'block');
-                            var option = {};
-                            if (opt.left != undefined) option.left = opt.left;
-                            if (opt.right != undefined) option.right = opt.right;
-                            if (opt.top != undefined) option.top = opt.top;
-                            if (opt.bottom != undefined) option.bottom = opt.bottom;
-                            if (opt.width != undefined) option.width = opt.width;
-                            if (opt.height != undefined) option.height = opt.height;
-                            if (opt.opacity != undefined) option.opacity = opt.opacity;
-                            opt.easing == undefined && (opt.easing = "swing");
+                    case "zoom":
+                    case "move":
+                    default:
+                        _div.css('display', 'block');
+                        var option = {};
+                        if (opt.left != undefined) option.left = opt.left;
+                        if (opt.right != undefined) option.right = opt.right;
+                        if (opt.top != undefined) option.top = opt.top;
+                        if (opt.bottom != undefined) option.bottom = opt.bottom;
+                        if (opt.width != undefined) option.width = opt.width;
+                        if (opt.height != undefined) option.height = opt.height;
+                        if (opt.opacity != undefined) option.opacity = opt.opacity;
+                        opt.easing == undefined && (opt.easing = "swing");
 
-                            //zoom support
-                            if (opt.ratio != undefined) {
-                                var w = _div.width();
-                                var h = _div.height();
-                                opt.type = opt.type != "zoom" ? opt.easing != undefined ? opt.easing : opt.type : "swing";
-                                option.width = Math.floor(w * opt.ratio);
-                                option.height = Math.floor(h * opt.ratio);
-                            }
+                        //zoom support
+                        if (opt.ratio != undefined) {
+                            var w = _div.width();
+                            var h = _div.height();
+                            opt.type = opt.type != "zoom" ? opt.easing != undefined ? opt.easing : opt.type : "swing";
+                            option.width = Math.floor(w * opt.ratio);
+                            option.height = Math.floor(h * opt.ratio);
+                        }
 
-                            opt.queue = false,
-                            _div.animate(option, opt.speed,
-                            opt.easing.trim());
-                            break;
-                    }
+                        opt.queue = false,
+                        _div.animate(option, opt.speed,
+                        opt.easing.trim());
+                        break;
                 }
+
             }, delay);
             timeoutCache[timer] = timer;
 
             //if element has more than one animation defined
-            tArr.length - 1 > i && applyAnimation(_div, tArr, index, i + 1);
+            tArr.length - 1 > i && applyAnimation(_div, tArr, i + 1);
         }
     }
 
@@ -654,7 +653,7 @@
     }
 
     //retun animation properties to be applied in object
-    $.fn.chain.checkPosition = function (_div, index, type) {
+    $.fn.chain.checkPosition = function (_div, index, type, textContainer) {
         var options = {};
         options.type = type.split('(')[0];
         type = type.replace(' ', '').replace(options.type + '(', '').replace(')', '');
@@ -712,8 +711,8 @@
                         var left = val;
                         var larr = left.split('>');
                         if (larr.length > 1) {
-                            var left1 = $.fn.chain.calculatePos(_.o.texContainer, _div, larr[0], index, true);
-                            var left2 = $.fn.chain.calculatePos(_.o.texContainer, _div, larr[1], index, true);
+                            var left1 = $.fn.chain.calculatePos(textContainer, _div, larr[0], index, true);
+                            var left2 = $.fn.chain.calculatePos(textContainer, _div, larr[1], index, true);
                             _div.css('left', left1);
                             options.left = left2;
                         }
@@ -726,42 +725,42 @@
                         var right = val;
                         var rarr = right.split('>');
                         if (rarr.length > 1) {
-                            var right1 = $.fn.chain.calculatePos(_.o.texContainer, _div, rarr[0], index, true);
-                            var right2 = $.fn.chain.calculatePos(_.o.texContainer, _div, rarr[1], index, true);
+                            var right1 = $.fn.chain.calculatePos(textContainer, _div, rarr[0], index, true);
+                            var right2 = $.fn.chain.calculatePos(textContainer, _div, rarr[1], index, true);
                             _div.css('right', right1);
                             options.right = right2;
                         }
                         else
-                            options.right = $.fn.chain.calculatePos(_.o.texContainer, _div, rarr[0], index, true);
-                            //_div.css('right', right);
+                            options.right = $.fn.chain.calculatePos(textContainer, _div, rarr[0], index, true);
+                        //_div.css('right', right);
                         break;
 
                     case "top":
                         var top = val;
                         var tarr = top.split('>');
                         if (tarr.length > 1) {
-                            var top1 = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[0], index, false);
-                            var top2 = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[1], index, false);
+                            var top1 = $.fn.chain.calculatePos(textContainer, _div, tarr[0], index, false);
+                            var top2 = $.fn.chain.calculatePos(textContainer, _div, tarr[1], index, false);
                             _div.css('top', top1);
                             options.top = top2;
                         }
                         else
-                            options.top = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[0], index, false);
-                           // _div.css('top', top);
+                            options.top = $.fn.chain.calculatePos(textContainer, _div, tarr[0], index, false);
+                        // _div.css('top', top);
                         break;
 
                     case "bottom":
                         var bottom = val;
                         var tarr = bottom.split('>');
                         if (tarr.length > 1) {
-                            var bottom1 = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[0], index, false);
-                            var bottom2 = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[1], index, false);
+                            var bottom1 = $.fn.chain.calculatePos(textContainer, _div, tarr[0], index, false);
+                            var bottom2 = $.fn.chain.calculatePos(textContainer, _div, tarr[1], index, false);
                             _div.css('bottom', bottom1);
                             options.bottom = bottom2;
                         }
                         else
-                            options.bottom = $.fn.chain.calculatePos(_.o.texContainer, _div, tarr[0], index, false);
-                            //_div.css('bottom', bottom);
+                            options.bottom = $.fn.chain.calculatePos(textContainer, _div, tarr[0], index, false);
+                        //_div.css('bottom', bottom);
                         break;
 
                     case "width":

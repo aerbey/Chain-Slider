@@ -16,21 +16,18 @@
     <script src="js/mediaelement-and-player.min.js"></script>
     <script src="js/jQueryRotate.js"></script>
     <script src="js/jquery.chainslider.js"></script>
-     
+    <script src="js/jquery.hiddenbox.min.js"></script>
+
     <style>
-       
     </style>
 
 </head>
 <body>
     <div class="menu" style="height: 60px; background-color: rgb(20, 20, 20);"> </div>
-
     <div class="banner" style="height:500px;">
         <ul style="visibility: hidden;">
-
             <li style="background-image: url('/img/dino/dino-background.jpg'); width:100%">
                 <div class="inner firstslide" style="position:relative; width:100%; height:600px; left:0; top:0;">
-
                     <div style="z-index:40" data-animate="true" data-type="fadein(delay:0, speed:200)" data-position="left:33%, bottom:33%">
                         <img src="/img/dino/screen_top.png" alt="Alternate Text" />
                     </div>
@@ -144,7 +141,7 @@
                         <img data-resizable="true" src="/img/streetfighter/hadouken-text.png" alt="Alternate Text" width="900" height="350" />
                     </div>
                     <div data-animate="true" data-type="fadein(delay:12500, speed:2200)+rotate(delay:13000, angle: 0, animateTo: 360, duration:13500, easing:swing)+move(easing:linear,delay:15000,speed:2480,left:13%>100%,top:14%>14%)+fadeout(delay:16500,speed:100)" data-position="left:10%, top:10%">
-                        <img data-resizable="true" src="/img/streetfighter/hadouken-light.png" alt="Alternate Text" width="400" height="439" /> 
+                        <img data-resizable="true" src="/img/streetfighter/hadouken-light.png" alt="Alternate Text" width="400" height="439" />
                     </div>
 
                     <div data-animate="true" data-type="fadein(delay:15000, speed:100)+move(easing:linear,delay:15000,speed:2400,left:25%>100%,top:19%>19%)" data-position="left:25%, top:19%">
@@ -254,13 +251,34 @@
 
         </ul>
     </div>
+    <div class="settings">
+        <div class="sLeft">
 
+        </div>
+        <div class="sRight">
 
+        </div>
+    </div>
     <script type="text/javascript">
 
         if (window.chrome) {
             $('.banner li').css('background-size', '100% 100%');
         }
+
+
+        $('.settings').hiddenbox({
+            top: '20%',
+            position: "left",
+            method: 'hover',
+            before:  function (el, o, s) {
+                //el : jumper element
+                //o: options
+                //s: this is true it the menu is opening
+            },
+            complete: function (el, o, s) {
+                
+            }
+        });
 
         var us = $('.banner').chain({
             //speed: 30000,
@@ -286,13 +304,13 @@
                     });
 
                 if (target == 3) {
-                    $('.lastLi .inner').animate({}, {duration: 3000})
+                    $('.lastLi .inner').animate({}, { duration: 3000 })
                 }
             },
             animations: [
                 {
                     "ul .lastLi .inner": {
-                        "animate" : "true",
+                        "animate": "true",
                         "position": "left:left, top:0%",
                         "data-type": [
                             //"slidedown(delay: 500, speed:1000)",
@@ -305,6 +323,7 @@
             ]
 
         });
+
 
         //  Find any element starting with a # in the URL
         //  And listen to any click events it fires

@@ -496,17 +496,20 @@ _.banner h1, .banner h2 {
 }
 
     .settings .sLeft {
-        float: left;
-        width: 85%;
+        width: 218px;
         height: 230px;
-        background-color: #fff;
+        background-color:#272525;
+        border: 2px solid #000;
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        -webkit-border-right-radius: 8px;
+        -moz-border-right-radius:8px;
     }
 
     .settings .sRight {
-        float: left;
-        width: 15%;
-        height: 20px;
-        /*margin-top:35%;*/
-        background: url(/img/loader2.GIF) no-repeat;
+        width: 32px;
+        height: 32px;
+        margin-top:35%;
+        background: url(../img/cog2.png) no-repeat center;
         cursor:pointer;
     }

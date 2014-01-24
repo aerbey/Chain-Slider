@@ -596,7 +596,7 @@
                         break;
 
                     case "toggleclass" || "toggleClass":
-                        _div.toggleClass(opt.class);
+                        _div.toggleClass(opt.className);
                         break;
 
                     case "zoom":
@@ -703,7 +703,7 @@
                 options.style = optArr[i].replace('style:', '');
             }
             else if (key === "class") {
-                options.class = optArr[i].replace('class:', '');
+                options.className = optArr[i].replace('class:', '');
             }
             else {
                 switch (key) {

@@ -481,10 +481,10 @@
             html += '</ol>';
         } else {
             html = '<div class="';
-            html = html + name + 's">' + html + name + ' prev">' + _.o.prev + '</div>' + html + name + ' next">' + _.o.next + '</div></div>';
+            html =  html  + 'prev">' + _.o.prev + '</div>' + html + 'next">' + _.o.next + '</div>';
         };
 
-        _.el.addClass('has-' + name + 's').append(html).find('.' + name).click(function () {
+        _.el.addClass('has-' + name + 's').append(html).find('.next, .prev').click(function () {
             var me = $(this);
             if (me.hasClass('dot')) { $.fn.chain.stop(); $.fn.chain.to(me.index()); } else me.hasClass('prev') ? $.fn.chain.prev() : $.fn.chain.next();
         });

@@ -33,6 +33,48 @@ h2 {
     margin-left: -17px;
 }
 
+.navbar-nav {
+    font-family: lato;
+}
+
+a.button-1 {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+    font-family: lato;
+    background-image: url(../img/button-normal.JPG);
+    width: 164px;
+    height: 55px;
+    padding: 15px 35px;
+}
+
+    a.button-1:hover {
+        background-image: url(../img/button-hover.JPG);
+        width: 164px;
+        height: 55px;
+    }
+
+    a.button-1:active {
+        background-image: url(../img/button-active.png);
+        width: 164px;
+        height: 40px;
+    }
+
+.nav-kaps {
+    width: 100%;
+    background: #4AB39F;
+    height: 53px;
+    margin-top: -50px;
+    z-index: 999999;
+}
+
+.footer-1 {
+    height: 30px;
+    background: #dcdcdc;
+}
+
+
 .banner {
     font-family: 'Open Sans';
     position: relative;
@@ -80,6 +122,10 @@ _.banner h1, .banner h2 {
     font-size: 40px;
     line-height: 52px;
     color: #fff;
+}
+
+.carousel {
+    margin-top: 50px;
 }
 
 .banner .btn {
@@ -489,24 +535,28 @@ _.banner h1, .banner h2 {
     height: 250px;
 }
 
-    .settings .container {
-        width: 218px;
-        height: 230px;
-        background-color: #272525;
-        border: 2px solid #000;
-        border-top-right-radius: 8px;
-        border-bottom-right-radius: 8px;
-        -webkit-border-right-radius: 8px;
-        -moz-border-right-radius: 8px;
-    }
+.navbar-wrapper {
+    z-index: 99999999;
+}
 
-    .settings .trigger {
-        width: 32px;
-        height: 32px;
-        margin-top: 35%;
-        background: url(../img/cog2.png) no-repeat center;
-        cursor: pointer;
-    }
+.settings .hbcontainer {
+    width: 218px;
+    height: 230px;
+    background-color: #272525;
+    border: 2px solid #000;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    -webkit-border-right-radius: 8px;
+    -moz-border-right-radius: 8px;
+}
+
+.settings .trigger {
+    width: 32px;
+    height: 32px;
+    margin-top: 35%;
+    background: url(../img/cog2.png) no-repeat center;
+    cursor: pointer;
+}
 
 .selectArrow {
     margin: 20px 10px;
@@ -530,32 +580,41 @@ _.banner h1, .banner h2 {
             display: block;
         }
 
-.next{
+.next {
     z-index: 9999;
     display: block;
     cursor: pointer;
     position: absolute;
 }
 
-.prev{
+.prev {
     z-index: 9999;
     display: block;
     cursor: pointer;
     position: absolute;
-
 }
 
 .arrowN1 {
-    padding-left: 10px;
+    background: #808080;
+    border-radius: 2px;
+    padding-right: 3px;
+    padding-left: 4px;
     bottom: 20px;
-    right: 20px;
+    right: 35px;
+    opacity:0.5;
     color: #fff;
 }
-
+.arrowN1:hover, .arrowP1:hover {
+opacity:1;
+}
 .arrowP1 {
-    padding-left: 10px;
+    opacity:0.5;
+    padding-right: 3px;
+    padding-left: 5px;
     bottom: 20px;
-    right: 40px;
+    right: 65px;
+    background: #808080;
+    border-radius: 2px;
     color: #fff;
 }
 
@@ -563,88 +622,175 @@ _.banner h1, .banner h2 {
     right: 10px;
     top: 35%;
     background: url(../img/Arrows/right2.png) no-repeat center;
-    width: 64px;
-    height: 93px;
-    text-indent:9999px;
+    width: 32px;
+    height: 47px;
+    text-indent: 9999px;
 }
+
+    .arrowN2:hover {
+        opacity: 0.6;
+    }
 
 .arrowP2 {
     left: 10px;
     top: 35%;
     background: url(../img/Arrows/left2.png) no-repeat center;
-    width: 64px;
-    height: 93px;
-    text-indent:9999px;
+    width: 32px;
+    height: 47px;
+    text-indent: 9999px;
 }
+
+    .arrowP2:hover {
+        opacity: 0.6;
+    }
 
 .arrowN3 {
     right: 10px;
     top: 35%;
     background: url(../img/Arrows/right3.png) no-repeat center;
-    width: 64px;
-    height: 64px;
-    text-indent:9999px;
+    width: 32px;
+    height: 32px;
+    text-indent: 9999px;
 }
+
+    .arrowN3:hover {
+        opacity: 0.6;
+    }
 
 .arrowP3 {
     left: 10px;
     top: 35%;
     background: url(../img/Arrows/left3.png) no-repeat center;
-    width: 64px;
-    height: 64px;
-    text-indent:9999px;
+    width: 32px;
+    height: 32px;
+    text-indent: 9999px;
 }
+
+    .arrowP3:hover {
+        opacity: 0.6;
+    }
 
 .arrowN4 {
     right: 10px;
     top: 35%;
     background: url(../img/Arrows/right4.png) no-repeat center;
-    width: 64px;
-    height: 120px;
-    text-indent:9999px;
+    width: 32px;
+    height: 60px;
+    text-indent: 9999px;
 }
+
+    .arrowN4:hover {
+        opacity: 0.7;
+    }
 
 .arrowP4 {
     left: 10px;
     top: 35%;
     background: url(../img/Arrows/left4.png) no-repeat center;
-    width: 64px;
-    height: 120px;
-    text-indent:9999px;
+    width: 32px;
+    height: 60px;
+    text-indent: 9999px;
 }
 
 .arrowN5 {
     right: 10px;
     top: 35%;
     background: url(../img/Arrows/right5.png) no-repeat center;
-    width: 64px;
-    height: 64px;
-    text-indent:9999px;
+    width: 32px;
+    height: 32px;
+    text-indent: 9999px;
 }
+
+    .arrowN5:hover {
+        right: 10px;
+        top: 35%;
+        background: url(../img/Arrows/right5-h.png) no-repeat center;
+        width: 32px;
+        height: 32px;
+        text-indent: 9999px;
+    }
 
 .arrowP5 {
     left: 10px;
     top: 35%;
     background: url(../img/Arrows/left5.png) no-repeat center;
-    width: 64px;
-    height: 64px;
-    text-indent:9999px;
+    width: 32px;
+    height: 32px;
+    text-indent: 9999px;
 }
+
+    .arrowP5:hover {
+        left: 10px;
+        top: 35%;
+        background: url(../img/Arrows/left5-h.png) no-repeat center;
+        width: 32px;
+        height: 32px;
+        text-indent: 9999px;
+    }
 
 .arrowN6 {
     right: 10px;
     top: 35%;
     background: url(../img/Arrows/right6.png) no-repeat center;
-    width: 64px;
-    height: 111px;
-    text-indent:9999px;
+    width: 32px;
+    height: 66px;
+    text-indent: 9999px;
+    opacity: 0.5;
 }
+
+    .arrowN6:hover {
+        opacity: 1;
+    }
 
 .arrowP6 {
     left: 10px;
     top: 35%;
     background: url(../img/Arrows/left6.png) no-repeat center;
-    width: 64px;
+    width: 32px;
     height: 111px;
-    text-indent:9999px;
+    text-indent: 9999px;
+    opacity: 0.5;
+}
+
+    .arrowP6:hover {
+        opacity: 1;
+    }
+
+
+
+/*-One Page-*/
+.featurette-divider {
+    border: none;
+}
+
+.col-md-7 {
+    margin-top: 40px;
+}
+
+.featurette-heading {
+    padding-bottom: 10px;
+}
+
+.row h2 {
+    font-size: 45px;
+    font-family: lato;
+    color: #4AB39F;
+}
+
+.row-2 h2 {
+    font-size: 35px;
+    font-weight: bold;
+    font-family: lato;
+    color: #4AB39F;
+}
+
+.row-2 p {
+    font-family: lato;
+    font-size: 20px;
+}
+
+.row p {
+    color: #565656;
+    font-size: 22px;
+    font-family: lato;
 }

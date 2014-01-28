@@ -484,7 +484,7 @@
             html =  html  + 'prev">' + _.o.prev + '</div>' + html + 'next">' + _.o.next + '</div>';
         };
 
-        _.el.addClass('has-' + name + 's').append(html).find('.next, .prev').click(function () {
+        _.el.addClass('has-' + name + 's').append(html).find('.next, .prev, .dot').click(function () {
             var me = $(this);
             if (me.hasClass('dot')) { $.fn.chain.stop(); $.fn.chain.to(me.index()); } else me.hasClass('prev') ? $.fn.chain.prev() : $.fn.chain.next();
         });

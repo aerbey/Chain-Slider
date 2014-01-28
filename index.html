@@ -1,5 +1,5 @@
-﻿<!doctype html>
-<html lang="en">
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
     <title>Chain Slider &mdash; the Responsive Animative jQuery slider</title>
@@ -10,242 +10,364 @@
 
 
     <script src="js/jquery-latest.min.js"></script>
-    <script src="js/jquery-migrate-1.2.1.min.js"></script>
-    <script src="js/jquery.event.move.js"></script>
-    <script src="js/jquery.easing.1.3.js"></script>
-    <script src="js/mediaelement-and-player.min.js"></script>
-    <script src="js/jQueryRotate.js"></script>
-    <script src="js/jquery.chainslider.js"></script>
-    <script src="js/jquery.hiddenbox.min.js"></script>
+
 
     <style>
     </style>
-
+  
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/hover.css" rel="stylesheet" />
 </head>
-<body>
-    <div class="menu" style="height: 60px; background-color: rgb(20, 20, 20);"> </div>
-    <div class="banner" style="height:500px;">
-        <ul style="visibility: hidden;">
-            <li style="background-image: url('/img/dino/dino-background.jpg'); width:100%">
-                <div class="inner firstslide" style="position:relative; width:100%; height:600px; left:0; top:0;">
-                    <div style="z-index:40" data-animate="true" data-type="fadein(delay:0, speed:200)" data-position="left:33%, bottom:33%">
-                        <img src="/img/dino/screen_top.png" alt="Alternate Text" />
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:0, speed:200)" data-position="left:33%, bottom:12%">
-                        <img src="/img/dino/screen_bottom.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:20" data-animate="true" data-type="fadein(delay:0, speed:200)+fadeout(delay:3200,speed:200)" data-position="left:34.5%, bottom:36.7%">
-                        <img src="/img/dino/grey-screen.jpg" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:30" data-animate="true" data-type="fadein(delay:7000, speed:100)+fadeout(delay:7200,speed:500)" data-position="left:41.6%, bottom:35%">
-                        <img src="/img/dino/screen_broken.png" alt="Alternate Text" />
-                    </div>
+<body data-spy="scroll" data-target=".navbar-collapse " cz-shortcut-listen="true">
+    <div class="navbar-wrapper">
+        <div class="nav-kaps affix navbar-inverse navbar-static-top ">
+            <div class="container">
 
-                    <div style="z-index:50" data-animate="true" data-type="fadein(delay:1000, speed:200)+fadeout  (delay:3100,speed:200)" data-position="right: 36%, top:23%">
-                        <img src="/img/dino/button.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:55" data-animate="true" data-type="fadeIn(delay:1500, speed:200)+easeInOutQuart(delay:1800,speed:900,right:35%>35%,top:55%>42%)+fadeout(delay:2400,speed:200)" data-position="right: 35%, top:55%;">
-                        <img src="/img/dino/arrow.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:50" data-animate="true" data-type="fadeIn(delay:2800, speed:200)+fadeout(delay:2800, speed:100)" data-position="right: 35%, top:38%;">
-                        <img src="/img/dino/circle.png" alt="Alternate Text" />
-                    </div>
+                <div data-spy="affix" class="navbar affix-top navbar-inverse navbar-static-top" role="banner" style="position:fixed;">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
 
-                    <div style="z-index:20" data-animate="true" data-type="fadein(delay:2800, speed:200)+fadeout(delay:7000,speed:200)" data-position="left:33%, bottom:33%">
-                        <img src="/img/dino/screen_protect.png" alt="Alternate Text" />
+                        </div>
+                        <div class="navbar-collapse collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="#scroll-1">Drag & Drop </a></li>
+                                <li><a href="#scroll-2">Fully Responsive</a></li>
+                                <li><a href="#scroll-3">Cross Browser</a></li>
+                                <li><a href="#scroll-4">Touch'n Swipe & Keyboard</a></li>
+                                <li><a href="#scroll-5">Combined Animations</a></li>
+                                <li><a href="#scroll-6">Preloaders & Arrows</a></li>
+                                <li><a href="#scroll-7">Small Footprint</a></li>
+                                <li><a href="#scroll-8">Seo Friendly</a></li>
+                            </ul>
+                        </div>
                     </div>
-
-
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:2800, speed:200)" data-position="left: 32.8%, bottom:33%;">
-                        <img src="/img/dino/dino_bg.png" alt="Alternate Text" />
-                    </div>
-
-                    <div>
-                        <img style="z-index:15" data-animate="true" data-type="fadein(delay:2800, speed:200)+flip(delay:4000, axis:x)+flip(delay:5000, axis:x)+flip(delay:6000, axis:x)+flip(delay:7000, axis:x)+zoom(delay:7000,speed:400,ratio:1.3)+css(delay:7000, style:z-index:70)" data-position="width: 177px, height:271px, left: 43.5%, bottom:38%, z-index:15" class=" dino_head" src="/img/dino/dino_head.png" alt="Alternate Text" />
-                    </div>
-
-
-                    <!--GLASS PIECES-->
-                    <div style="z-index:0" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, right:36%>39%, bottom:35%>0%)+rotate(delay:7000, angle: 0, animateTo: 360, duration:500, easing:swing)" data-position="left: 44%, bottom:35%;">
-                        <img src="/img/dino/g-1.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:41%>0%, bottom:36%>0%)+rotate(delay:7100, angle: 0, animateTo: 180, duration:500, easing:swing)" data-position="left: 41%, bottom:36%;">
-                        <img src="/img/dino/g-2.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:49%>8%, bottom:55%>63%)+rotate(delay:7100, angle: 0, animateTo: 720, duration:1000, easing:swing)" data-position="left: 49%, bottom:55%;">
-                        <img src="/img/dino/g-3.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:33%>18%, bottom:63%>74%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 33%, bottom:63%;">
-                        <img src="/img/dino/g-4.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:44%>30%, bottom:70%>100%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 44%, bottom:70%;">
-                        <img src="/img/dino/g-5.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:51>34%, bottom:69%>74%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 51%, bottom:69%;">
-                        <img src="/img/dino/g-6.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:53.5%>50%, bottom:72%>100%)+rotate(delay:7100, angle: 0, animateTo: 180, duration:1000, easing:swing)" data-position="left: 53.5%, bottom:72%;">
-                        <img src="/img/dino/g-7.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:55%>55%, bottom:69%>92%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 55%, bottom:69%;">
-                        <img src="/img/dino/g-8.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:56%>72%, bottom:66%>91%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left:56%, bottom:66%;">
-                        <img src="/img/dino/g-9.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:300, left:59%>82%, bottom:35.5%>0%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 59%, bottom:35.5%;">
-                        <img src="/img/dino/g-10.png" alt="Alternate Text" />
-                    </div>
-
-                    <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7000, speed:500, left:59%>81%, bottom:34%>2%)+rotate(delay:7000, angle: 0, animateTo: 720, duration:1000, easing:swing)" data-position="left: 59%, bottom:34%;">
-                        <img class="dino_head" src="img/dino/g-11.png" alt="Alternate Text" />
-                    </div>
-                    <div style="z-index:70" data-animate="true" data-type="fadein(delay:7200, speed:200)" data-position="left: 22%, bottom:46%;">
-                        <img src="/img/dino/roar.png" alt="Alternate Text" />
-                    </div>
-
-
-
-
-
-
-                    <div style="z-index:90" data-animate="true" data-type="move(easing:easeInOutQuart, delay:8000,speed:900,left:right,top:50%)" data-position="left:left, top:top;">
-                        <img src="/img/dino/dino-text-1.png" alt="Alternate Text" width="400" height="49" />
-                    </div>
-                    <div style="z-index:90" data-animate="true" data-type="fadeIn(delay:9000, speed:500)+move(easing:easeOutBounce, delay:9000,speed:1900,left:right,top:30%)" data-position="left:left, top:top;">
-                        <img src="/img/dino/dino-text-2.png" alt="Alternate Text" width="400" height="49" />
-                    </div>
-
-
-
-
                 </div>
 
-
-            </li>
-
-            <li style="background-image: url('/img/streetfighter/ryu-background.jpg'); width:25%">
-                <div class="inner secondslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
-
-                    <div data-animate="true" data-type="fadeIn(delay:500, speed:500)+fadeout(delay:800,speed:500)+fadeIn(delay:1000, speed:500)+fadeout(delay:1300,speed:500)+fadeIn(delay:1500, speed:500)+fadeout(delay:1800,speed:500)" data-position="left:center, top:center">
-                        <img data-resizable="true" src="/img/streetfighter/insert-coin.png" alt="Alternate Text" width="800" height="335" />
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:2500, speed:1400)+move(easing:easeOutBounce, delay:2500,speed:2500,left:2%>2%,top:100%>35%)+fadeout(delay:18000,speed:800)" data-position="left:2%, top:100%">
-                        <img data-resizable="true" src="/img/streetfighter/ryu-cast.png" alt="Alternate Text" width="350" height="328" />
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:7000, speed:300)+fadeout(delay:7300,speed:50)+fadein(delay:7400, speed:300)+fadeout(delay:7600,speed:50)+fadein(delay:7700, speed:300)+fadeout(delay:7700,speed:50)+fadein(delay:8000, speed:500)+fadeout(delay:8100,speed:1000)" data-position="left:40%, top:40%">
-
-                        <img data-resizable="true" src="/img/streetfighter/combo.png" alt="Alternate Text" width="600" height="156" />
-                    </div>
-
-                    <div data-animate="true" data-type="fadein(delay:10000, speed:1400)+fadeout(delay:12000, speed:400)" data-position="left:27%, top:23%">
-                        <img data-resizable="true" src="/img/streetfighter/hadouken-text.png" alt="Alternate Text" width="900" height="350" />
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:12500, speed:2200)+rotate(delay:13000, angle: 0, animateTo: 360, duration:13500, easing:swing)+move(easing:linear,delay:15000,speed:2480,left:13%>100%,top:14%>14%)+fadeout(delay:16500,speed:100)" data-position="left:10%, top:10%">
-                        <img data-resizable="true" src="/img/streetfighter/hadouken-light.png" alt="Alternate Text" width="400" height="439" />
-                    </div>
-
-                    <div data-animate="true" data-type="fadein(delay:15000, speed:100)+move(easing:linear,delay:15000,speed:2400,left:25%>100%,top:19%>19%)" data-position="left:25%, top:19%">
-                        <img data-resizable="true" src="/img/streetfighter/hadouken-wave.png" alt="Alternate Text" width="500" height="384" />
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:19000, speed:1400)+fadeout(delay:20000, speed:400)" data-position="left:15%, top:0%">
-                        <img data-resizable="true" src="/img/streetfighter/k.png" alt="Alternate Text" width="960" height="463" />
-
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:21000, speed:1400)" data-position="left:3%, top:33%">
-                        <img data-resizable="true" src="/img/streetfighter/winner-ryu.png" alt="Alternate Text" width="500" height="339" />
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:21500, speed:1200)" data-position="left:12%, top:14%">
-                        <img data-resizable="true" src="/img/streetfighter/win-light.png" alt="Alternate Text" width="400" height="439" />
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:22000, speed:1200)" data-position="left:49%, top:0%">
-                        <img data-resizable="true" src="/img/streetfighter/you-win-text.png" alt="Alternate Text" width="600" height="286" />
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:23000, speed:1200)" data-position="left:55%, top:50%">
-                        <img data-resizable="true" src="/img/streetfighter/because-text.png" alt="Alternate Text" width="500" height="71" />
-                    </div>
-                    <div data-animate="true" data-type="fadein(delay:24000, speed:1200)" data-position="left:62%, top:68%">
-                        <img data-resizable="true" src="/img/streetfighter/logo.png" alt="Alternate Text" width="300" height="120" />
-                    </div>
-                </div>
-            </li>
-
-            <li style="background-image: url('/img/tree/tree-background.jpg'); width:25%">
-                <div class="inner firstslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
-
-                    <div data-animate="true" data-type="fadeIn(delay:1000, speed:3000)" data-position="right:37%, bottom:0,top:0">
-                        <img data-resizable="true" src="/img/tree/tree.png" alt="Alternate Text" width="378" height="500" />
-                    </div>
-
-                    <div data-animate="true" data-type="fadeIn(delay:3000, speed:2000)+rotate(delay:2900, angle: 0, animateTo: 360, duration:10000, easing:swing)+move(easing:swing,delay:2800, speed:10000, right:36%>39%, top:32%>100%)" data-position="right: 36%, top:32%;">
-                        <img data-resizable="true" src="/img/tree/leaf1.png" alt="Alternate Text" width="55" height="46" />
-                    </div>
-                    <div data-animate="true" data-type="fadeIn(delay:8000, speed:2000)+rotate(delay:7900, angle: 0, animateTo: 360, duration:12000, easing:swing)+move(easing:swing,delay:7800, speed:14000, right:66%>40%, top:32%>98%)" data-position="right: 66%, top:32%;">
-                        <img data-resizable="true" src="img/tree/leaf2.png" alt="Alternate Text" />
-                    </div>
-                    <div data-animate="true" data-type="fadeIn(delay:12000, speed:2000)+rotate(delay:11900, angle: 0, animateTo: 360, duration:12000, easing:swing)+move(easing:swing,delay:11800, speed:8000, right:36%>40%, top:32%>98%)" data-position="right: 36%, top:32%;">
-                        <img data-resizable="true" src="img/tree/leaf3.png" alt="Alternate Text" />
-                    </div>
-
-                    <div data-animate="true" data-type="fadeIn(delay:2000, speed:3200)+(delay:15000,speed:800)" data-position="right: 29%, top:84%;">
-                        <img data-resizable="true" src="/img/tree/pile.png" alt="Alternate Text" width="211" height="86" />
-                    </div>
-
-                    <div data-animate="true" data-type="fadeIn(delay:18000, speed:3200)" data-position="right: 66%, top:20%;">
-                        <img data-resizable="true" src="/img/tree/logo.png" alt="Alternate Text" width="350" height="140" />
-                    </div>
-
-                    <div data-animate="true" data-type="fadeIn(delay:21000, speed:3200)" data-position="right: 58%, top:60%;">
-                        <img data-resizable="true" src="/img/tree/tree-text-1.png" alt="Alternate Text" width="506" height="126" />
-                    </div>
-
-                    <div data-animate="true" data-type="fadeIn(delay:25000, speed:3200)" data-position="right: 8%, top:20%;">
-                        <img data-resizable="true" src="/img/tree/tree-text-2.png" alt="Alternate Text" width="504" height="326" />
-                    </div>
-
-                </div>
-            </li>
-
-            <li style="background-image: url('img/responsive/responsive-bg.jpg'); width:25%">
-                <div class="inner firstslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
-
-                    <div data-animate="true" data-type="fadeIn(delay:1000, speed:900)+ easeOutCirc(delay:1000, speed:1000, left:left>89%, top:top>77%)" data-position="left:left, top:TOP">
-                        <img data-resizable="true" src="/img/responsive/iphone5.png" alt="Alternate Text" width="70" height="118" />
-                    </div>
-
-                    <div data-animate="true" data-type="fadeIn(delay:2000, speed:900)+ easeOutCirc(delay:2000, speed:1000, left:left>73%, top:top>63%)" data-position="left:left, top:TOP">
-                        <img data-resizable="true" src="/img/responsive/ipad.png" alt="Alternate Text" width="146" height="185" />
-                    </div>
-
-                    <div data-animate="true" data-type="fadeIn(delay:3000, speed:900)+ easeOutCirc(delay:3000, speed:1000, left:left>41%, top:top>57%)" data-position="left:left, top:TOP">
-                        <img data-resizable="true" src="/img/responsive/macbook.png" alt="Alternate Text" width="381" height="217" />
-                    </div>
-                    <div data-animate="true" data-type="fadeIn(delay:4000, speed:900)+ easeOutCirc(delay:4000, speed:1000, left:left>3%, top:top>37%)" data-position="left:left, top:TOP">
-                        <img data-resizable="true" src="/img/responsive/imac.png" alt="Alternate Text" width="446" height="319" />
-                    </div>
-                    <div data-animate="true" data-type="fadeIn(delay:5000, speed:900)+ easeOutCirc(delay:5000, speed:1000, left:left>80%, top:top>58%)" data-position="left:left, top:TOP">
-                        <img data-resizable="true" src="/img/responsive/badge-2.png" alt="Alternate Text" width="82" height="87" />
-                    </div>
-                    <div data-animate="true" data-type="fadeIn(delay:6000, speed:900)+ easeOutCirc(delay:6000, speed:1000, left:left>63%, top:top>52%)" data-position="left:left, top:TOP">
-                        <img data-resizable="true" src="/img/responsive/badge-1.png" alt="Alternate Text" width="83" height="88" />
-                    </div>
-                    <div data-animate="true" data-type="fadeIn(delay:11000, speed:1400)" data-position="left:70%, top:17%">
-                        <img data-resizable="true" src="img/responsive/logo.png" alt="Alternate Text" width="300" height="120" />
-                    </div>
-                    <div data-animate="true" data-type="fadeIn(delay:8000, speed:1000)+easeOutBounce(delay:8000, speed:2000, left:left>40%, top:10%)" data-position="left:left 5%, top:10%">
-                        <img data-resizable="true" src="/img/responsive/responsive-text.png" alt="Alternate Text" width="296" height="106" />
-                    </div>
-                    <div data-animate="true" data-type="fadeIn(delay:28000, speed:3200)">
-
-                    </div>
-
-                </div>
-            </li>
-
-        </ul>
+            </div>
+        </div>
     </div>
+
+
+    <!-- Carousel
+    ================================================== -->
+    <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+
+        <div class="banner" style="height:500px;">
+            <ul style="visibility: hidden;">
+                <li style="background-image: url('/img/dino/dino-background.jpg'); width:100%">
+                    <div class="inner firstslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
+                        <div class="dino-main-cont">
+                            <div style="z-index:40" data-animate="true" data-type="fadein(delay:0, speed:200)" data-position="left:33%, bottom:33%">
+                                <img src="/img/dino/screen_top.png" alt="Alternate Text" />
+                            </div>
+                            <div data-animate="true" data-type="fadein(delay:0, speed:200)" data-position="left:33%, bottom:12%">
+                                <img src="/img/dino/screen_bottom.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:20" data-animate="true" data-type="fadein(delay:0, speed:200)+fadeout(delay:3200,speed:200)" data-position="left:34.5%, bottom:37.2%">
+                                <img src="/img/dino/grey-screen.jpg" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:30" data-animate="true" data-type="fadein(delay:7000, speed:100)+fadeout(delay:7200,speed:500)" data-position="left:41.6%, bottom:35%">
+                                <img src="/img/dino/screen_broken.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:50" data-animate="true" data-type="fadein(delay:1000, speed:200)+fadeout  (delay:3100,speed:200)" data-position="right: 36%, top:23%">
+                                <img src="/img/dino/button.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:55" data-animate="true" data-type="fadeIn(delay:1500, speed:200)+easeInOutQuart(delay:1800,speed:900,right:35%>35%,top:55%>42%)+fadeout(delay:2400,speed:200)" data-position="right: 35%, top:55%;">
+                                <img src="/img/dino/arrow.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:50" data-animate="true" data-type="fadeIn(delay:2800, speed:200)+fadeout(delay:2800, speed:100)" data-position="right: 35%, top:38%;">
+                                <img src="/img/dino/circle.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:20" data-animate="true" data-type="fadein(delay:2800, speed:200)+fadeout(delay:7000,speed:200)" data-position="left:33%, bottom:33%">
+                                <img src="/img/dino/screen_protect.png" alt="Alternate Text" />
+                            </div>
+
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:2800, speed:200)" data-position="left: 32.8%, bottom:33%;">
+                                <img src="/img/dino/dino_bg.png" alt="Alternate Text" />
+                            </div>
+                            <div>
+                                <img style="z-index:15" data-animate="true" data-type="fadein(delay:2800, speed:200)+flip(delay:4000, axis:x)+flip(delay:5000, axis:x)+flip(delay:6000, axis:x)+flip(delay:7000, axis:x)+zoom(delay:7000,speed:400,ratio:1.3)+css(delay:7000, style:z-index:70)" data-position="width: 177px, height:271px, left: 43.5%, bottom:38%, z-index:15" class=" dino_head" src="/img/dino/dino_head.png" alt="Alternate Text" />
+                            </div>
+
+                            <!--GLASS PIECES-->
+                            <div style="z-index:0" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, right:36%>39%, bottom:35%>0%)+rotate(delay:7000, angle: 0, animateTo: 360, duration:500, easing:swing)" data-position="left: 44%, bottom:35%;">
+                                <img src="/img/dino/g-1.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:41%>0%, bottom:36%>0%)+rotate(delay:7100, angle: 0, animateTo: 180, duration:500, easing:swing)" data-position="left: 41%, bottom:36%;">
+                                <img src="/img/dino/g-2.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:49%>8%, bottom:55%>63%)+rotate(delay:7100, angle: 0, animateTo: 720, duration:1000, easing:swing)" data-position="left: 49%, bottom:55%;">
+                                <img src="/img/dino/g-3.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:33%>18%, bottom:63%>74%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 33%, bottom:63%;">
+                                <img src="/img/dino/g-4.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:44%>30%, bottom:70%>100%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 44%, bottom:70%;">
+                                <img src="/img/dino/g-5.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:51>34%, bottom:69%>74%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 51%, bottom:69%;">
+                                <img src="/img/dino/g-6.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:53.5%>50%, bottom:72%>100%)+rotate(delay:7100, angle: 0, animateTo: 180, duration:1000, easing:swing)" data-position="left: 53.5%, bottom:72%;">
+                                <img src="/img/dino/g-7.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:55%>55%, bottom:69%>92%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 55%, bottom:69%;">
+                                <img src="/img/dino/g-8.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500, left:56%>72%, bottom:66%>91%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left:56%, bottom:66%;">
+                                <img src="/img/dino/g-9.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:300, left:59%>82%, bottom:35.5%>0%)+rotate(delay:7100, angle: 0, animateTo: 360, duration:1000, easing:swing)" data-position="left: 59%, bottom:35.5%;">
+                                <img src="/img/dino/g-10.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:15" data-animate="true" data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7000, speed:500, left:59%>81%, bottom:34%>2%)+rotate(delay:7000, angle: 0, animateTo: 720, duration:1000, easing:swing)" data-position="left: 59%, bottom:34%;">
+                                <img class="dino_head" src="img/dino/g-11.png" alt="Alternate Text" />
+                            </div>
+                            <div style="z-index:70" data-animate="true" data-type="fadein(delay:7200, speed:200)" data-position="left: 22%, bottom:46%;">
+                                <img src="/img/dino/roar.png" alt="Alternate Text" />
+                            </div>
+
+
+
+                            <div style="z-index:90" data-animate="true" data-type="move(easing:easeInOutQuart, delay:8000,speed:900,left:right,top:50%)" data-position="left:left, top:top;">
+                                <img src="/img/dino/dino-text-1.png" alt="Alternate Text" width="400" height="49" />
+                            </div>
+                            <div style="z-index:90" data-animate="true" data-type="fadeIn(delay:9000, speed:500)+move(easing:easeOutBounce, delay:9000,speed:1900,left:right,top:30%)" data-position="left:left, top:top;">
+                                <img src="/img/dino/dino-text-2.png" alt="Alternate Text" width="400" height="49" />
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </li>
+                <li style="background-image: url('/img/streetfighter/ryu-background.jpg'); width:25%">
+                    <div class="inner secondslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
+                        <div data-animate="true" data-type="fadeIn(delay:500, speed:500)+fadeout(delay:800,speed:500)+fadeIn(delay:1000, speed:500)+fadeout(delay:1300,speed:500)+fadeIn(delay:1500, speed:500)+fadeout(delay:1800,speed:500)" data-position="left:center, top:center">
+                            <img data-resizable="true" src="/img/streetfighter/insert-coin.png" alt="Alternate Text" width="800" height="335" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:2500, speed:1400)+move(easing:easeOutBounce, delay:2500,speed:2500,left:2%>2%,top:100%>35%)+fadeout(delay:18000,speed:800)" data-position="left:2%, top:100%">
+                            <img data-resizable="true" src="/img/streetfighter/ryu-cast.png" alt="Alternate Text" width="350" height="328" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:7000, speed:300)+fadeout(delay:7300,speed:50)+fadein(delay:7400, speed:300)+fadeout(delay:7600,speed:50)+fadein(delay:7700, speed:300)+fadeout(delay:7700,speed:50)+fadein(delay:8000, speed:500)+fadeout(delay:8100,speed:1000)" data-position="left:40%, top:40%">
+                            <img data-resizable="true" src="/img/streetfighter/combo.png" alt="Alternate Text" width="600" height="156" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:10000, speed:1400)+fadeout(delay:12000, speed:400)" data-position="left:27%, top:23%">
+                            <img data-resizable="true" src="/img/streetfighter/hadouken-text.png" alt="Alternate Text" width="900" height="350" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:12500, speed:2200)+rotate(delay:13000, angle: 0, animateTo: 360, duration:13500, easing:swing)+move(easing:linear,delay:15000,speed:2480,left:13%>100%,top:14%>14%)+fadeout(delay:16500,speed:100)" data-position="left:10%, top:10%">
+                            <img data-resizable="true" src="/img/streetfighter/hadouken-light.png" alt="Alternate Text" width="400" height="439" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:15000, speed:100)+move(easing:linear,delay:15000,speed:2400,left:25%>100%,top:19%>19%)" data-position="left:25%, top:19%">
+                            <img data-resizable="true" src="/img/streetfighter/hadouken-wave.png" alt="Alternate Text" width="500" height="384" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:19000, speed:1400)+fadeout(delay:20000, speed:400)" data-position="left:15%, top:0%">
+                            <img data-resizable="true" src="/img/streetfighter/k.png" alt="Alternate Text" width="960" height="463" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:21000, speed:1400)" data-position="left:3%, top:33%">
+                            <img data-resizable="true" src="/img/streetfighter/winner-ryu.png" alt="Alternate Text" width="500" height="339" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:21500, speed:1200)" data-position="left:12%, top:14%">
+                            <img data-resizable="true" src="/img/streetfighter/win-light.png" alt="Alternate Text" width="400" height="439" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:22000, speed:1200)" data-position="left:49%, top:0%">
+                            <img data-resizable="true" src="/img/streetfighter/you-win-text.png" alt="Alternate Text" width="600" height="286" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:23000, speed:1200)" data-position="left:55%, top:50%">
+                            <img data-resizable="true" src="/img/streetfighter/because-text.png" alt="Alternate Text" width="500" height="71" />
+                        </div>
+                        <div data-animate="true" data-type="fadein(delay:24000, speed:1200)" data-position="left:62%, top:68%">
+                            <img data-resizable="true" src="/img/streetfighter/logo.png" alt="Alternate Text" width="300" height="120" />
+                        </div>
+                    </div>
+                </li>
+                <li style="background-image: url('/img/tree/tree-background.jpg'); width:25%">
+                    <div class="inner firstslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
+                        <div data-animate="true" data-type="fadeIn(delay:1000, speed:3000)" data-position="right:37%, bottom:0,top:0">
+                            <img data-resizable="true" src="/img/tree/tree.png" alt="Alternate Text" width="378" height="500" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:3000, speed:2000)+rotate(delay:2900, angle: 0, animateTo: 360, duration:10000, easing:swing)+move(easing:swing,delay:2800, speed:10000, right:36%>39%, top:32%>100%)" data-position="right: 36%, top:32%;">
+                            <img data-resizable="true" src="/img/tree/leaf1.png" alt="Alternate Text" width="55" height="46" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:8000, speed:2000)+rotate(delay:7900, angle: 0, animateTo: 360, duration:12000, easing:swing)+move(easing:swing,delay:7800, speed:14000, right:66%>40%, top:32%>98%)" data-position="right: 66%, top:32%;">
+                            <img data-resizable="true" src="img/tree/leaf2.png" alt="Alternate Text" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:12000, speed:2000)+rotate(delay:11900, angle: 0, animateTo: 360, duration:12000, easing:swing)+move(easing:swing,delay:11800, speed:8000, right:36%>40%, top:32%>98%)" data-position="right: 36%, top:32%;">
+                            <img data-resizable="true" src="img/tree/leaf3.png" alt="Alternate Text" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:2000, speed:3200)+(delay:15000,speed:800)" data-position="right: 29%, top:84%;">
+                            <img data-resizable="true" src="/img/tree/pile.png" alt="Alternate Text" width="211" height="86" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:18000, speed:3200)" data-position="right: 66%, top:20%;">
+                            <img data-resizable="true" src="/img/tree/logo.png" alt="Alternate Text" width="350" height="140" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:21000, speed:3200)" data-position="right: 58%, top:60%;">
+                            <img data-resizable="true" src="/img/tree/tree-text-1.png" alt="Alternate Text" width="506" height="126" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:25000, speed:3200)" data-position="right: 8%, top:20%;">
+                            <img data-resizable="true" src="/img/tree/tree-text-2.png" alt="Alternate Text" width="504" height="326" />
+                        </div>
+                    </div>
+                </li>
+                <li style="background-image: url('img/responsive/responsive-bg.jpg'); width:25%">
+                    <div class="inner firstslide" style="position:relative; width:100%; height:500px; left:0; top:0;">
+                        <div data-animate="true" data-type="fadeIn(delay:1000, speed:900)+ easeOutCirc(delay:1000, speed:1000, left:left>89%, top:top>77%)" data-position="left:left, top:TOP">
+                            <img data-resizable="true" src="/img/responsive/iphone5.png" alt="Alternate Text" width="70" height="118" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:2000, speed:900)+ easeOutCirc(delay:2000, speed:1000, left:left>73%, top:top>63%)" data-position="left:left, top:TOP">
+                            <img data-resizable="true" src="/img/responsive/ipad.png" alt="Alternate Text" width="146" height="185" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:3000, speed:900)+ easeOutCirc(delay:3000, speed:1000, left:left>41%, top:top>57%)" data-position="left:left, top:TOP">
+                            <img data-resizable="true" src="/img/responsive/macbook.png" alt="Alternate Text" width="381" height="217" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:4000, speed:900)+ easeOutCirc(delay:4000, speed:1000, left:left>3%, top:top>37%)" data-position="left:left, top:TOP">
+                            <img data-resizable="true" src="/img/responsive/imac.png" alt="Alternate Text" width="446" height="319" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:5000, speed:900)+ easeOutCirc(delay:5000, speed:1000, left:left>80%, top:top>58%)" data-position="left:left, top:TOP">
+                            <img data-resizable="true" src="/img/responsive/badge-2.png" alt="Alternate Text" width="82" height="87" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:6000, speed:900)+ easeOutCirc(delay:6000, speed:1000, left:left>63%, top:top>52%)" data-position="left:left, top:TOP">
+                            <img data-resizable="true" src="/img/responsive/badge-1.png" alt="Alternate Text" width="83" height="88" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:11000, speed:1400)" data-position="left:70%, top:17%">
+                            <img data-resizable="true" src="img/responsive/logo.png" alt="Alternate Text" width="300" height="120" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:8000, speed:1000)+easeOutBounce(delay:8000, speed:2000, left:left>40%, top:10%)" data-position="left:left 5%, top:10%">
+                            <img data-resizable="true" src="/img/responsive/responsive-text.png" alt="Alternate Text" width="296" height="106" />
+                        </div>
+                        <div data-animate="true" data-type="fadeIn(delay:28000, speed:3200)">
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div><!-- /.carousel -->
+    <!-- Marketing messaging and featurettes
+    ================================================== -->
+    <!-- Wrap the rest of the page in another container to center all the content. -->
+
+    <div class="container marketing">
+
+        <!-- Three columns of text below the carousel -->
+        
+        <!-- /.row -->
+        <!-- START THE FEATURETTES -->
+
+        <hr class="featurette-divider">
+
+        <div class="row featurette">
+            <div class="col-md-7">
+
+            </div>
+            <div class="col-md-12" style="margin-top:40px">
+                <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="500x500" src="/img/chain-logo.png">
+            </div>
+        </div>
+
+        <hr class="featurette-divider">
+
+
+
+        <hr class="featurette-divider">
+
+        <div class="row featurette">
+            <div class="col-md-7" id="scroll-1">
+                <h2 class="featurette-heading">Drag & Drop Slide Builder <span class="text-muted"><br />It has never been so easy</span></h2>
+                <p class="lead">Make your own slide with Drag & Drop Slide Builder.You can add images,videos,texts and beautiful effects.It's easy,simple and fast ! </p>
+
+                <a href="#" class="button-1">
+
+                    CLICK FOR PREVIEW
+
+
+
+                </a>
+
+            </div>
+            <div class="col-md-5" style="margin-top:40px">
+                <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="500x500" src="/img/sp-1.png">
+            </div>
+            <div class="col-md-7 " id="scroll-2">
+                <h2 class="featurette-heading">Fully Responsive<span class="text-muted"><br />100% Fit</span></h2>
+                <p class="lead">Chain Slider is 100% Responsive & Fit any screen size</p>
+            </div>
+            <div class="col-md-5" style="margin-top:40px">
+                <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="500x500" src="/img/sp-2.png">
+            </div>
+            <div class="col-md-7" id="scroll-3">
+                <h2 class="featurette-heading">Cross Browser Compatibility <span class="text-muted"><br />Browser friend</span></h2>
+                <p class="lead">Chain slider is support all modern browsers and IE8+ with Cross Browser Compatibility</p>
+            </div>
+            <div class="col-md-5" style="margin-top:40px">
+                <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="500x500" src="/img/sp-3.png">
+            </div>
+            <div class="col-md-7" id="scroll-4">
+                <h2 class="featurette-heading">Touch'n Swipe & Keyboard Support <span class="text-muted"><br />Touch it !</span></h2>
+                <p class="lead">Chain Slider allows ouse drag & touch swipe support for touchable screens.Also you can use your keyboard for making a slide change.Cool !</p>
+            </div>
+            <div class="col-md-5" style="margin-top:40px">
+                <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="500x500" src="/img/sp-4.png">
+            </div>
+
+            <div class="col-md-7" id="scroll-5">
+                <h2 class="featurette-heading">Combined Animations<span class="text-muted"></br>Make an animation chain !</span></h2>
+                <p class="lead">It's a diffrent thing! You can add multiple animations to single layer and you can make awesome combinations of animation</p>
+            </div>
+            <div class="col-md-5" style="margin-top:40px">
+                <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="500x500" src="/img/sp-5.png">
+            </div>
+            <div class="col-md-7" id="scroll-6">
+                <h2 class="featurette-heading">Diffrent Preloaders & Arrows<span class="text-muted"><br />Make your own choice</span></h2>
+                <p class="lead">Chain Slider gives you a customizable slider.You can change your slide arrows,preloaders</p>
+            </div>
+            <div class="col-md-5" style="margin-top:40px">
+                <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="500x500" src="/img/sp-6.png">
+            </div>
+            <div class="col-md-7" id="scroll-7">
+                <h2 class="featurette-heading">Small Footprint<span class="text-muted"><br />Tiny</span></h2>
+                <p class="lead">Chain Slider is a very light and memory friendly slider.It's have a very small size,simple and clear coding</p>
+            </div>
+            <div class="col-md-5" style="margin-top:40px">
+                <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="500x500" src="/img/sp-7.png">
+            </div>
+            <div class="col-md-7" id="scroll-8">
+                <h2 class="featurette-heading">SEO Friendly<span class="text-muted"><br />Hey  Mr.Search</span></h2>
+                <p class="lead">Chain Slider is a search engine optimization friendly slider</p>
+            </div>
+            <div class="col-md-5" style="margin-top:40px">
+                <img class="featurette-image img-responsive" data-src="holder.js/500x500/auto" alt="500x500" src="/img/sp-8.png">
+            </div>
+        </div>
+    </div>
+
+    <hr class="featurette-divider">
+
+    <!-- /END THE FEATURETTES -->
+    <!-- FOOTER -->
+    <footer class="footer-1">
+        
+        <p>© 2013 Şifte Yazılım · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
+    </footer>
+
+    </div><!-- /.container -->
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+
     <div class="settings">
-        <div class="container">
+        <div class="hbcontainer">
             <ul class="selectArrow">
                 <li><a href="#" data-class="prev: arrowP1, next: arrowN1">Arrow 1</a> </li>
                 <li><a href="#" data-class="prev: arrowP2, next: arrowN2">Arrow 2</a> </li>
@@ -256,27 +378,56 @@
             </ul>
         </div>
         <div class="trigger">
-
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+
+    <script src="js/scrollspy.js"></script>
+    <script>
+        $('body').scrollspy({ target: '.navbar-collapse' })
+    </script>
+
+    <script src="js/affix.js"></script>
+
+    <script>
+        $('.affix-top').affix({
+            offset: {
+                top: 100
+            , bottom: function () {
+                return (this.bottom = $('.footer-1').outerHeight(true))
+            }
+            }
+        })
+    </script>
+
+
+
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.chainslider.js"></script>
+    <script src="js/jquery-migrate-1.2.1.min.js"></script>
+    <script src="js/jquery.hiddenbox.min.js"></script>
+    <script src="js/jquery.easing.1.3.js"></script>
+    <script src="js/jquery.event.move.js"></script>
+    <script src="js/jquery.fitvids.js"></script>
+    <script src="js/jQueryRotate.js"></script>
+    <script src="js/mediaelement-and-player.min.js"></script>
+
+
     <script type="text/javascript">
 
         if (window.chrome) {
             $('.banner li').css('background-size', '100% 100%');
         }
 
-
         $('.settings').hiddenbox({
-            top: '20%',
+            top: '52%',
             position: "left",
             method: 'hover',
-            before: function (el, o, s) {
-            },
-            complete: function (el, o, s) {
-            }
+            innerClass: 'hbcontainer'
         });
 
-        $('.banner').chain({
+        var us = $('.banner').chain({
             //speed: 30000,
             delay: 30000,
             arrows: true,
@@ -312,12 +463,35 @@
                             //"slidedown(delay: 500, speed:1000)",
                             "linear(delay:0, speed:3000, left:left>left, top:top>center)",
                             "swing(delay:0, speed:1000, left:left>center)",
-                            //"slideup(delay:1000, speed:2000)+slidedown(delay:2000, speed:2000)"
+                            //"slideup(delay:1000, speed:2000)-slidedown(delay:2000, speed:2000)"
                         ]
                     }
                 }
             ]
 
+        });
+
+        //  Find any element starting with a # in the URL
+        //  And listen to any click events it fires
+        $('a[href^="#"]').click(function () {
+            //  Find the target element
+            var target = $($(this).attr('href'));
+
+            //  And get its position
+            var pos = target.offset(); // fallback to scrolling to top || {left: 0, top: 0};
+
+            //  jQuery will return false if there's no element
+            //  and your code will throw errors if it tries to do .offset().left;
+            if (pos) {
+                //  Scroll the page
+                $('html, body').animate({
+                    scrollTop: pos.top,
+                    scrollLeft: pos.left
+                }, 1000);
+            }
+
+            //  Don't let them visit the url, we'll scroll you there
+            return false;
         });
 
         $('.selectArrow li a').on('click', function () {
@@ -330,7 +504,7 @@
                 for (var i = 0; i < classArr.length; i++) {
                     var arr = classArr[i].split(':');
                     var cs = arr[0].replace(' ', '');
-                    switch (cs) {                       
+                    switch (cs) {
                         case "next":
                             var n = $('.next');
                             n.removeAttr('class').attr('class', 'next ' + arr[1]);
@@ -346,29 +520,10 @@
         });
 
         $('.selectArrow li a:first').click();
-
-        //  Find any element starting with a # in the URL
-        //  And listen to any click events it fires
-        //$('a[href^="#"]').click(function () {
-        //    //  Find the target element
-        //    var target = $($(this).attr('href'));
-
-        //    //  And get its position
-        //    var pos = target.offset(); // fallback to scrolling to top || {left: 0, top: 0};
-
-        //    //  jQuery will return false if there's no element
-        //    //  and your code will throw errors if it tries to do .offset().left;
-        //    if (pos) {
-        //        //  Scroll the page
-        //        $('html, body').animate({
-        //            scrollTop: pos.top,
-        //            scrollLeft: pos.left
-        //        }, 1000);
-        //    }
-
-        //    //  Don't let them visit the url, we'll scroll you there
-        //    return false;
-        //});
+        $('.prev, .next').css('display', 'none');
+        $('.banner').on('mouseover', function () { $('.prev, .next').fadeIn(300); }).on('mouseleave', function () { $('.prev, .next').fadeOut(300);  });
     </script>
+
+    <div id="window-resizer-tooltip" style="display: none;"><a href="#" title="Edit settings" style="background-image: url(chrome-extension://kkelicaakdanhinjdeammmilcgefonfh/images/icon_19.png);"></a><span class="tooltipTitle">Window size: </span><span class="tooltipWidth" id="winWidth">1366</span> x <span class="tooltipHeight" id="winHeight">728</span><br><span class="tooltipTitle">Viewport size: </span><span class="tooltipWidth" id="vpWidth">1366</span> x <span class="tooltipHeight" id="vpHeight">264</span></div>
 </body>
 </html>

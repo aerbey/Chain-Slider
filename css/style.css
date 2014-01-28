@@ -87,6 +87,7 @@ a.button-1 {
 }
 
     .banner ul {
+        margin-top: -21px;
         list-style: none;
         width: 300%;
         /*cursor:-webkit-grab;*/

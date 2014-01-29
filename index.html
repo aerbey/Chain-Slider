@@ -10,11 +10,22 @@
 
 
     <script src="js/jquery-latest.min.js"></script>
-     
 
-    <style>
-    </style>
-  
+
+    
+    <script src="js/cufon-yui.js"></script>
+    <script src="js/Lato_400-Lato_700.font.js"></script>
+    <script>
+        Cufon.replace('.marketing h2', {
+            fontWeight: 'bold'
+            
+        });
+        Cufon.replace('.marketing p,a', {
+            
+
+        });
+    </script>
+
     <link href="css/bootstrap.css" rel="stylesheet" />
     <script src="js/bootstrap.min.js"></script>
     <script src="js/bootstrap.js"></script>
@@ -56,7 +67,7 @@
         </div>
     </div>
 
-     
+
     <!-- Carousel
     ================================================== -->
     <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -73,15 +84,13 @@
                             <div data-animate="true" data-type="fadein(delay:0, speed:200)" data-position="left:33%, bottom:12%">
                                 <img src="img/Dino/screen_bottom.png" alt="Alternate Text" />
                             </div>
-                            <div style="z-index:20" data-animate="true" data-type="fadein(delay:0, speed:200)+fadeout(delay:3200,speed:200)" data-position="left:34.5%, bottom:37.2%">
+                            <div style="z-index:20" data-animate="true" data-type="fadein(delay:0, speed:200)+fadeout(delay:2900,speed:200)" data-position="left:34.5%, bottom:37.2%">
                                 <img src="img/Dino/grey-screen.jpg" alt="Alternate Text" />
                             </div>
                             <div style="z-index:30" data-animate="true" data-type="fadein(delay:7000, speed:100)+fadeout(delay:7200,speed:500)" data-position="left:41.6%, bottom:35%">
                                 <img src="img/Dino/screen_broken.png" alt="Alternate Text" />
                             </div>
-                            <div style="z-index:50" data-animate="true" data-type="fadein(delay:1000, speed:200)+fadeout  (delay:3100,speed:200)" data-position="right: 36%, top:23%">
-                                <img src="img/Dino/button.png" alt="Alternate Text" />
-                            </div>
+
                             <div style="z-index:55" data-animate="true" data-type="fadeIn(delay:1500, speed:200)+easeInOutQuart(delay:1800,speed:900,right:35%>35%,top:55%>42%)+fadeout(delay:2400,speed:200)" data-position="right: 35%, top:55%;">
                                 <img src="img/Dino/arrow.png" alt="Alternate Text" />
                             </div>
@@ -260,7 +269,6 @@
     <div class="container marketing">
 
         <!-- Three columns of text below the carousel -->
-        
         <!-- /.row -->
         <!-- START THE FEATURETTES -->
 
@@ -356,7 +364,7 @@
     <!-- /END THE FEATURETTES -->
     <!-- FOOTER -->
     <footer class="footer-1">
-        
+
         <p>© 2013 Şifte Yazılım · <a href="#">Privacy</a> · <a href="#">Terms</a></p>
     </footer>
 
@@ -521,7 +529,7 @@
 
         $('.selectArrow li a:first').click();
         $('.prev, .next').css('display', 'none');
-        $('.banner').on('mouseover', function () { $('.prev, .next').fadeIn(300); }).on('mouseleave', function () { $('.prev, .next').fadeOut(300);  });
+        $('.banner').on('mouseover', function () { $('.prev, .next').fadeIn(300); }).on('mouseleave', function () { $('.prev, .next').fadeOut(300); });
     </script>
 
     <div id="window-resizer-tooltip" style="display: none;"><a href="#" title="Edit settings" style="background-image: url(chrome-extension://kkelicaakdanhinjdeammmilcgefonfh/images/icon_19.png);"></a><span class="tooltipTitle">Window size: </span><span class="tooltipWidth" id="winWidth">1366</span> x <span class="tooltipHeight" id="winHeight">728</span><br><span class="tooltipTitle">Viewport size: </span><span class="tooltipWidth" id="vpWidth">1366</span> x <span class="tooltipHeight" id="vpHeight">264</span></div>

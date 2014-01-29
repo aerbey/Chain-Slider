@@ -44,14 +44,14 @@ a.button-1 {
     color: white;
     text-decoration: none;
     font-family: lato;
-    background-image: url(../img/button-normal.JPG);
+    background-image: url(../img/button-normal.jpg);
     width: 164px;
     height: 55px;
     padding: 15px 35px;
 }
 
     a.button-1:hover {
-        background-image: url(../img/button-hover.JPG);
+        background-image: url(../img/button-hover.jpg);
         width: 164px;
         height: 55px;
     }

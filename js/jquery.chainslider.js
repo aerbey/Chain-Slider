@@ -200,18 +200,6 @@
                     }
                 });
 
-                var bw = $('body').width();
-                //resize the resizable class images
-                if (bw <= 1200) {
-                    var size = bw / window.screen.width;
-                    _.el.find('[data-resizable]').each(function () {
-                        var w = $(this).width();
-                        w > 0 && $(this).css('width', (w * size) + 'px');
-                        var h = $(this).height();
-                        h > 0 && $(this).css('height', (h * size) + 'px');
-                    });
-                }
-
                 //put all elements that will be animated to their first position
                 _.el.find('li:first [data-animate]').each(function () {
                     $.fn.chain.checkDefaultPosition(_.o.texContainer, $(this), _.index);
@@ -316,15 +304,29 @@
                     el.find(o.texContainer).each(function () { $(this).css('height', elh + "px") });
 
                     _.el.find('[data-resizable]').each(function () {
-                        if ($(this).attr('src') == 'img/Tree/tree.png') {
-                            var a = 0;
-                        }
-
                         var w = 0;
                         w = $(this).attr('width') == undefined ? $(this).prop('width') : parseFloat($(this).attr('width').replace('px', ''));
                         w > 0 && $(this).css('width', (w * size) + 'px');
                         var h = $(this).attr('height') == undefined ? $(this).prop('height') : parseFloat($(this).attr('height').replace('px', ''));
                         h > 0 && $(this).css('height', (h * size) + 'px');
+                        var dps = $(this).attr('data-position');
+                        if (dps != undefined && dps != "") {
+                            var dp = dps.split(',');
+                            var nps = "";
+                            for (var i = 0; i < dp.length; i++) {
+                                if (dp[i] != "") {
+                                    var arr = dp[i].split(':');
+                                    nps != "" && (nps += ",")
+                                    if (arr[0].trim().toLowerCase() == "width")
+                                        nps += "width:" + (w * size) + "px";
+                                    else if (arr[0].trim().toLowerCase() == "height")
+                                        nps += "height:" + (h * size) + "px";
+                                    else
+                                        nps += dp[i];
+                                }
+                                nps != "" && $(this).removeAttr('data-position').attr('data-position', nps);
+                            }
+                        }
                     });
                     width = bw;
                     if (o.textAnimation) {

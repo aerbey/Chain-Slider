@@ -396,6 +396,11 @@ _.banner h1, .banner h2 {
 
 /* Large desktop */
 @media (min-width: 1200px) {
+    .banner {
+        font-size: 24px !important;
+        line-height: 30px;
+    }
+
     .banner h1, .banner h2 {
         font-size: 24px !important;
         line-height: 30px;
@@ -406,18 +411,15 @@ _.banner h1, .banner h2 {
         width: 80%;
         margin: 0 auto;
     }
-
-    .faster {
-        font-size: 60px;
-        font-weight: 800;
-        line-height: 40px;
-        width: 400px;
-        text-align: left;
-    }
 }
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 979px) {
+    .banner {
+        font-size: 20px !important;
+        line-height: 30px !important;
+    }
+
     .banner h1, .banner h2 {
         font-size: 20px !important;
         line-height: 30px !important;
@@ -428,18 +430,15 @@ _.banner h1, .banner h2 {
         width: 80%;
         margin: 0 auto;
     }
-
-    .faster {
-        font-size: 40px;
-        font-weight: 600;
-        line-height: 20px;
-        width: 300px;
-        text-align: left;
-    }
 }
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
+    .banner {
+        font-size: 18px !important;
+        line-height: 30px;
+    }
+
     .banner h1, .banner h2 {
         font-size: 18px !important;
         line-height: 30px;
@@ -449,14 +448,6 @@ _.banner h1, .banner h2 {
         font-size: 12px !important;
         width: 80%;
         margin: 0 auto;
-    }
-
-    .faster {
-        font-size: 20px;
-        font-weight: 400;
-        line-height: 10px;
-        width: 200px;
-        text-align: left;
     }
 }
 

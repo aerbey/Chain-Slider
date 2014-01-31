@@ -246,7 +246,7 @@
 
 
         //  Set the main element
-        el.css({ width: _.max[0], height: li.first().outerHeight(), overflow: 'hidden' });
+        el.css({ width: _.max[0], height: li.first().find(o.texContainer).outerHeight(), overflow: 'hidden' });
 
         //  Set the relative widths
         ul.css({ position: 'relative', left: 0, width: (len * 100) + '%' });
@@ -292,21 +292,55 @@
             $(window).resize(function () {
                 _.r && clearTimeout(_.r);
                 _.r = setTimeout(function () {
-                    var styl = { height: li.eq(_.i).outerHeight() },
+                    var styl = { height: li.eq(_.i).find(o.texContainer).outerHeight() },
                         bw = $('body').width();//el.outerWidth();
                     el.find('ul li').css('width', bw);
                     ul.css(styl);
                     styl['width'] = Math.min(Math.round((bw / el.parent().width()) * 100), 100) + '%';
                     el.css(styl);
                     var size = bw / width;
-                    width = bw;
+                    if (bw == width) {
+                        if (bw > 1200)
+                            size = 1;
+                        else if (bw <= 1200 && bw > 992)
+                            size = 0.9;
+                        else if (bw > 768 && bw <= 992)
+                            size = 0.7;
+                        else
+                            size = 0.5;
+                    }
+
+                    var elh = el.height() * size;
+                    el.css('height', elh + "px");
+                    el.find('ul').css('height', elh + "px");
+                    el.find(o.texContainer).each(function () { $(this).css('height', elh + "px") });
+
                     _.el.find('[data-resizable]').each(function () {
                         var w = $(this).width();
                         w > 0 && $(this).css('width', (w * size) + 'px');
                         var h = $(this).height();
                         h > 0 && $(this).css('height', (h * size) + 'px');
-                    });
 
+                        var dps = $(this).attr('data-position');
+                        if (dps != undefined && dps != "") {
+                            var dp = dps.split(',');
+                            var nps = "";
+                            for (var i = 0; i < dp.length; i++) {
+                                if (dp[i] != "") {
+                                    var arr = dp[i].split(':');
+                                    nps != "" && (nps += ",")
+                                    if (arr[0].trim().toLowerCase() == "width")
+                                        nps += "width:" + (w * size) + "px";
+                                    else if (arr[0].trim().toLowerCase() == "height")
+                                        nps += "height:" + (h * size) + "px";
+                                    else
+                                        nps += dp[i];
+                                }
+                                nps != "" && $(this).removeAttr('data-position').attr('data-position', nps);
+                            }
+                        }
+                    });
+                    width = bw;
                     if (o.textAnimation) {
                         clearTimeout();
                         el.find('[data-animate="true"]').clearQueue().stop(true, false);
@@ -481,7 +515,7 @@
             html += '</ol>';
         } else {
             html = '<div class="';
-            html =  html  + 'prev">' + _.o.prev + '</div>' + html + 'next">' + _.o.next + '</div>';
+            html = html + 'prev">' + _.o.prev + '</div>' + html + 'next">' + _.o.next + '</div>';
         };
 
         _.el.addClass('has-' + name + 's').append(html).find('.next, .prev, .dot').click(function () {
@@ -835,7 +869,7 @@
 
         var speed = callback ? 5 : o.speed | 0,
             easing = o.easing,
-            obj = { height: target.outerHeight() };
+            obj = { height: target.find(o.texContainer).outerHeight() };
 
         if (!ul.queue('fx').length) {
             //  Handle those pesky dots

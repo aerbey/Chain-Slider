@@ -34,6 +34,7 @@
         prev: '←',      // text or html inside prev button (string)
         next: '→',      // same as for prev option
         fluid: f,       // is it a percentage width? (boolean)
+        height: null,   
         before: f,      // before slide work
         starting: f,    // invoke before animation (function with argument)
         complete: f,    // invoke after animation (function with argument)
@@ -63,7 +64,6 @@
         _.max = [el.outerWidth() | 0, el.outerHeight() | 0];
 
         var index = 0;
-
         //if before defined, send parameters to it
         $.isFunction(_.o.before) && o.before(el, _.o);
 
@@ -290,6 +290,7 @@
         //  Make slider adaptive to screen. On resize restart animation
         if (o.fluid) {
             $(window).resize(function () {
+                o.height == null && (o.height = el.height());
                 _.r && clearTimeout(_.r);
                 _.r = setTimeout(function () {
                     var styl = { height: li.eq(_.i).find(o.texContainer).outerHeight() },
@@ -298,47 +299,32 @@
                     ul.css(styl);
                     styl['width'] = Math.min(Math.round((bw / el.parent().width()) * 100), 100) + '%';
                     el.css(styl);
-                    var size = bw / width;
-                    if (bw == width) {
-                        if (bw > 1200)
-                            size = 1;
-                        else if (bw <= 1200 && bw > 992)
-                            size = 0.9;
-                        else if (bw > 768 && bw <= 992)
-                            size = 0.7;
-                        else
-                            size = 0.5;
-                    }
 
-                    var elh = el.height() * size;
+                    var size = 1
+                    if (bw > 1200)
+                        size = 1;
+                    else if (bw <= 1200 && bw > 992)
+                        size = 0.9;
+                    else if (bw > 768 && bw <= 992)
+                        size = 0.7;
+                    else
+                        size = 0.5;
+
+                    var elh = bw > 1024 ? o.height : 350;
                     el.css('height', elh + "px");
                     el.find('ul').css('height', elh + "px");
                     el.find(o.texContainer).each(function () { $(this).css('height', elh + "px") });
 
                     _.el.find('[data-resizable]').each(function () {
-                        var w = $(this).width();
-                        w > 0 && $(this).css('width', (w * size) + 'px');
-                        var h = $(this).height();
-                        h > 0 && $(this).css('height', (h * size) + 'px');
-
-                        var dps = $(this).attr('data-position');
-                        if (dps != undefined && dps != "") {
-                            var dp = dps.split(',');
-                            var nps = "";
-                            for (var i = 0; i < dp.length; i++) {
-                                if (dp[i] != "") {
-                                    var arr = dp[i].split(':');
-                                    nps != "" && (nps += ",")
-                                    if (arr[0].trim().toLowerCase() == "width")
-                                        nps += "width:" + (w * size) + "px";
-                                    else if (arr[0].trim().toLowerCase() == "height")
-                                        nps += "height:" + (h * size) + "px";
-                                    else
-                                        nps += dp[i];
-                                }
-                                nps != "" && $(this).removeAttr('data-position').attr('data-position', nps);
-                            }
+                        if ($(this).attr('src') == 'img/Tree/tree.png') {
+                            var a = 0;
                         }
+
+                        var w = 0;
+                        w = $(this).attr('width') == undefined ? $(this).prop('width') : parseFloat($(this).attr('width').replace('px', ''));
+                        w > 0 && $(this).css('width', (w * size) + 'px');
+                        var h = $(this).attr('height') == undefined ? $(this).prop('height') : parseFloat($(this).attr('height').replace('px', ''));
+                        h > 0 && $(this).css('height', (h * size) + 'px');
                     });
                     width = bw;
                     if (o.textAnimation) {

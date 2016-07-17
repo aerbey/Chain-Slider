@@ -25,5 +25,5 @@ data-type="fadein(delay:7000, speed:200)+move(easing:swing,delay:7100, speed:500
 
 <b>data-position="left:30%, bottom:0%" </b>  (item position where the effect will end)
  
-Example item that will animate:
+Example item that will animate:<br>
 <div data-animate="true" data-type="fadeIn(delay:25000, speed:3200)" data-position="right: 8%, top:20%;">
